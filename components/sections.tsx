@@ -1,6 +1,7 @@
 import { about, contact, faqs, gallery, navLinks, nextEvent, officers, programs, rounds, stats } from "@/lib/content";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
+import { OfficerCarousel } from "./officer-carousel";
 import { Stat } from "./stat";
 import { Button, CheckeredStrip, Chevrons, Container, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
 
@@ -58,14 +59,14 @@ export function Officers() {
     <section id="officers" className="py-20 md:py-28">
       <Container>
         <SectionHeader index="05" eyebrow="Driver lineup" title="Officers" sub="Meet the team. Tap a card to flip it." />
-        {/* Mobile: swipe carousel showing ~1.3 cards. Desktop: 4 x 2 grid. */}
-        <ul className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:grid-cols-4">
+        {/* Mobile: swipe carousel showing ~1.3 cards with position dots. Desktop: 4 x 2 grid. */}
+        <OfficerCarousel count={officers.length}>
           {officers.map((o) => (
             <li key={o.number} className="w-[75%] shrink-0 snap-start md:w-auto">
               <OfficerCard officer={o} />
             </li>
           ))}
-        </ul>
+        </OfficerCarousel>
       </Container>
     </section>
   );
@@ -187,10 +188,14 @@ export function Gallery() {
         <ul className="grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4">
           {gallery.map((g, i) => (
             <li key={i} className={`relative ${i === 0 ? "col-span-2 md:row-span-2" : ""}`}>
-              <PhotoSlot label={g.caption} className={i === 0 ? "aspect-[4/3] md:aspect-auto md:h-full" : "aspect-square"} />
+              <PhotoSlot
+                label={g.caption}
+                tone="surface"
+                className={i === 0 ? "aspect-[4/3] md:aspect-auto md:h-full" : "aspect-square"}
+              />
               {/* Pit-board caption */}
               <span className="type-data absolute bottom-2 left-2 bg-carbon-950 px-2 py-1 text-[11px] text-chevron">
-                P{i + 1} · 📷 {g.credit}
+                P{i + 1} · Photo: {g.credit}
               </span>
             </li>
           ))}
@@ -209,7 +214,13 @@ export function Join() {
   return (
     <section id="join" className="grain overflow-hidden bg-accent text-accent-ink">
       <CheckeredStrip className="[--ink:var(--color-carbon-950)]" />
-      <Container className="py-20 text-center md:py-24">
+      <Container className="relative py-20 text-center md:py-24">
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-display text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08] [font-stretch:62%]"
+        >
+          Box box
+        </span>
         <p className="type-label flex items-center justify-center gap-3">
           <SpeedSlashes /> Get your superlicence <SpeedSlashes />
         </p>
@@ -271,7 +282,7 @@ export function Footer() {
       <Container className="grid gap-10 py-14 md:grid-cols-12">
         <div className="md:col-span-4">
           <div className="flex items-center gap-3">
-            <LogoMark className="[--canvas:var(--color-carbon-950)]" />
+            <LogoMark size={48} />
             <span className="leading-tight">
               <span className="block font-display text-lg font-extrabold italic [font-stretch:125%]">JPCS-TSU</span>
               <span className="block text-xs text-paper-400">College of Computer Studies</span>

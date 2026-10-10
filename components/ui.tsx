@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { ComponentProps, ReactNode } from "react";
 
 type ButtonVariant = "primary" | "outline" | "signal";
@@ -76,43 +77,46 @@ export function SectionHeader({
   );
 }
 
-/** Stand-in for real photos (no AI images allowed, IRR p.8). */
+const viewfinderCorners = [
+  "top-3 left-3 border-t-2 border-l-2",
+  "top-3 right-3 border-t-2 border-r-2",
+  "bottom-3 left-3 border-b-2 border-l-2",
+  "right-3 bottom-3 border-r-2 border-b-2",
+];
+
+/** Stand-in for real photos (no AI images allowed, IRR p.8). Viewfinder corners echo F1 broadcast framing. */
 export function PhotoSlot({
   label,
+  tone = "surface-2",
   className = "",
 }: {
   label: string;
+  /** Use "surface" when the slot sits on a surface-2 section, so it stays visible. */
+  tone?: "surface" | "surface-2";
   className?: string;
 }) {
   return (
     <div
-      className={`relative grid place-items-center overflow-hidden bg-surface-2 text-ink-muted ${className}`}
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(-55deg, transparent 0 14px, var(--grid-line) 14px 28px)",
-      }}
+      className={`relative grid place-items-center overflow-hidden text-ink-muted ${tone === "surface" ? "bg-surface" : "bg-surface-2"} ${className}`}
     >
+      {viewfinderCorners.map((pos) => (
+        <span key={pos} aria-hidden className={`absolute size-4 border-ink-muted ${pos}`} />
+      ))}
       <span className="type-label bg-surface px-2 py-1.5">{label}</span>
     </div>
   );
 }
 
-/** Placeholder lockup. Swap for the official JPCS-TSU logo file. */
-export function LogoMark({ className = "" }: { className?: string }) {
+/** Official JPCS TSU-Chapter logo, shown as a white badge so it reads on both themes. */
+export function LogoMark({ size = 40, className = "" }: { size?: number; className?: string }) {
   return (
-    <span
-      aria-hidden
-      className={`grid size-10 shrink-0 place-items-center rounded-full ${className}`}
-      style={{
-        // Ring split like the official logo: orange / maroon quarters
-        background:
-          "conic-gradient(var(--color-jpcs-maroon) 0 25%, var(--color-jpcs-orange) 0 50%, var(--color-jpcs-maroon) 0 75%, var(--color-jpcs-orange) 0)",
-      }}
-    >
-      <span className="grid size-7 place-items-center rounded-full bg-canvas font-display text-[11px] font-black italic text-accent-text">
-        J
-      </span>
-    </span>
+    <Image
+      src="/brand/jpcs-tsu-logo.png"
+      alt=""
+      width={size}
+      height={size}
+      className={`shrink-0 ${className}`}
+    />
   );
 }
 

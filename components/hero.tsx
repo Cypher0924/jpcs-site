@@ -29,6 +29,14 @@ function StartLights() {
 function HeroVisual() {
   return (
     <div className="telemetry-grid grain relative flex aspect-[4/3] flex-col justify-between overflow-hidden border border-line bg-surface p-5 sm:p-8 lg:aspect-auto lg:h-full">
+      {/* Season mark watermark, sits behind the gantry */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-[12%] -z-10 text-center font-display text-[clamp(9rem,6rem+12vw,18.75rem)] leading-none font-black text-ink opacity-[0.07] [font-stretch:62%]"
+      >
+        26/27
+      </span>
+
       <div className="flex items-start justify-between">
         <span className="type-label text-ink-muted">Race control</span>
         <span className="type-data text-xs text-ink-muted">S26/27 · TSU-CCS</span>
