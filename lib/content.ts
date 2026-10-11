@@ -167,8 +167,8 @@ export const events = [
   {
     slug: "meet-and-greet-booth",
     round: "R3",
-    month: "TBA",
-    day: "--",
+    month: "JUL",
+    day: "29", // July 29, 2026, posted before CCS C.A.R.E.S (same day)
     title: "Meet & Greet Booth",
     venue: "The CS Booth, games and performances",
     done: true,
