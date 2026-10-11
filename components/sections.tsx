@@ -79,7 +79,7 @@ export function Officers() {
               <OfficerCarousel count={g.officers.length}>
                 {g.officers.map((o, i) => (
                   <Fragment key={o.slug}>
-                    <li className="w-[75%] shrink-0 snap-start md:mb-6 md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]">
+                    <li className="flex w-[75%] shrink-0 snap-start md:mb-6 md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]">
                       <OfficerCard officer={o} />
                     </li>
                     {g.breaks?.includes(i) && <li aria-hidden className="hidden basis-full md:block" />}

@@ -14,7 +14,7 @@ export function OfficerCard({ officer }: { officer: Officer }) {
       type="button"
       aria-pressed={flipped}
       onClick={() => setFlipped((v) => !v)}
-      className="group block w-full text-left [perspective:1000px]"
+      className="group grid w-full text-left [perspective:1000px]"
     >
       <span
         className={`relative grid transition-transform duration-500 ease-[var(--ease-launch)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] ${flipped ? "[transform:rotateY(180deg)]" : ""}`}
@@ -32,12 +32,12 @@ export function OfficerCard({ officer }: { officer: Officer }) {
             <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,rgb(0_0_0/0.75),transparent_45%)]" />
             <span className="absolute top-2 left-3 font-display text-[3.5rem] leading-none font-black text-accent [font-stretch:62%]">{officer.number}</span>
           </span>
-          <span className="flex items-end justify-between gap-2 p-4">
+          <span className="flex flex-1 items-start justify-between gap-2 p-4">
             <span>
               <span className="type-heading block text-lg">{officer.name}</span>
               <span className="block text-sm text-ink-muted">{officer.role}</span>
             </span>
-            <span className="type-data bg-ink px-1.5 py-0.5 text-xs text-canvas">{officer.code}</span>
+            <span className="type-data self-end bg-ink px-1.5 py-0.5 text-xs text-canvas">{officer.code}</span>
           </span>
         </span>
 
