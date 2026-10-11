@@ -32,8 +32,10 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
 ];
 
 // From the "Newly elected officer 2026-2027" pubmats in the Officers folder; photos are cropped from them.
-// Codes are the first three letters of the surname. TODO: add a short quote per officer (optional).
+// Codes are the first three letters of the surname. The adviser leads the lineup as team principal ("TP"),
+// and the officers are numbered 01-14 in rank order. TODO: add a short quote per officer (optional).
 const officerList: { name: string; role: string; slug: string; quote?: string }[] = [
+  { name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" },
   { name: "Charles Guevarra", role: "President", slug: "charles-guevarra" },
   { name: "Justin Tiamzon", role: "Vice President", slug: "justin-tiamzon" },
   { name: "Nicole Bartolome", role: "Secretary", slug: "nicole-bartolome" },
@@ -48,12 +50,11 @@ const officerList: { name: string; role: string; slug: string; quote?: string }[
   { name: "Aldrian Valdez", role: "Second Year Representative", slug: "aldrian-valdez" },
   { name: "Shantrelle Reinoso", role: "Third Year Representative", slug: "shantrelle-reinoso" },
   { name: "Allen Torres", role: "Fourth Year Representative", slug: "allen-torres" },
-  { name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" },
 ];
 
 export const officers = officerList.map((o, i) => ({
   ...o,
-  number: String(i + 1).padStart(2, "0"),
+  number: o.role === "Adviser" ? "TP" : String(i).padStart(2, "0"),
   code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
   year: o.role === "Adviser" ? "Chapter adviser · 2026-2027" : "Newly elected · 2026-2027",
 }));
