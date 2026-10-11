@@ -131,7 +131,7 @@ export const nextEvent = {
 };
 
 // Past activities from the competition materials. Each one gets a page at /events/[slug].
-// Ordered by date. TODO: confirm the General Assembly date and same-day order, venues, and replace each
+// Ordered by date. TODO: venues, and replace each
 // summary with official wording. Photos are the curated picks in public/events/<slug>/, named by their
 // number in the original folder.
 const eventPhotos = (slug: string, nums: number[]) =>
@@ -139,8 +139,21 @@ const eventPhotos = (slug: string, nums: number[]) =>
 
 export const events = [
   {
-    slug: "ready-set-join",
+    slug: "general-assembly",
     round: "R1",
+    month: "JUL",
+    day: "03", // July 3, 2026
+    title: "JPCS-TSU General Assembly",
+    venue: "Agenda and officer responsibilities",
+    done: true,
+    summary:
+      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
+    cover: "/photos/general-assembly-group.webp",
+    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
+  },
+  {
+    slug: "ready-set-join",
+    round: "R2",
     month: "JUL",
     day: "27", // July 27, 2026
     title: "Ready, Set, Join: Become a JPCS Member",
@@ -150,19 +163,6 @@ export const events = [
       "Officers set up sign-up tables in classrooms and around campus so new BS Computer Science students could register as JPCS members, pick up freshman stickers and meet the chapter.",
     cover: "/photos/ready-set-join.webp",
     photos: eventPhotos("ready-set-join", [1, 2, 3, 4, 6, 7, 10, 13, 14, 15, 16, 19]),
-  },
-  {
-    slug: "general-assembly",
-    round: "R2",
-    month: "JUL",
-    day: "27", // July 27, 2026 (probably; same day as Ready, Set, Join)
-    title: "JPCS-TSU General Assembly",
-    venue: "Agenda and officer responsibilities",
-    done: true,
-    summary:
-      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
-    cover: "/photos/general-assembly-group.webp",
-    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
   },
   {
     slug: "meet-and-greet-booth",
