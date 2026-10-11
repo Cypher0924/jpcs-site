@@ -71,7 +71,7 @@ export function Hero() {
           </p>
 
           <h1 className="type-display text-ink">
-            {["Lights out.", "Code on.", "Orange CS."].map((line, i) => (
+            {["Lights out.", "Code on.", "CS Community."].map((line, i) => (
               <span
                 key={line}
                 className={`block ${i === 2 ? "text-accent-text" : ""}`}

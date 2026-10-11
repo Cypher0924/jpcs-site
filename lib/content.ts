@@ -172,7 +172,7 @@ export const events = [
     venue: "The CS Booth, games and performances",
     done: true,
     summary:
-      "The jungle-themed CS Booth at the campus fair: balloon giveaways, games on the plaza and performances, with the Orange CS Community out in full orange.",
+      "The jungle-themed CS Booth at the campus fair: balloon giveaways, games on the plaza and performances, with the CS Community out in full orange.",
     cover: "/photos/meet-and-greet-group.webp",
     photos: eventPhotos("meet-and-greet-booth", [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66]),
   },

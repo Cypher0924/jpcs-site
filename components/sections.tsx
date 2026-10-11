@@ -236,7 +236,7 @@ export function Join() {
           Join JPCS-TSU
         </h2>
         <p className="mx-auto mt-4 max-w-xl">
-          Represent the Orange CS Community on and off the track. Membership is open to BS Computer Science students of
+          Represent the CS Community on and off the track. Membership is open to BS Computer Science students of
           TSU.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
