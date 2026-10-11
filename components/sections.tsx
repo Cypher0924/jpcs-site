@@ -70,17 +70,18 @@ export function Officers() {
           title="Driver lineup"
           sub="The JPCS-TSU officers, executive associates and apprentices for A.Y. 2026-2027. Tap a card to flip it."
         />
-        {/* One block per category: the adviser alone on top, then each group under its own heading.
+        {/* One block per category, each under its own heading, starting with the adviser alone on top.
             Mobile: each group is a swipe carousel (~1.3 cards) with position dots. From md up: centred
             rows of 3 / 4, so short rows sit in the middle like a pyramid. */}
         <div className="flex flex-col gap-12 md:gap-14">
           {officerGroups.map((g) => (
             <div key={g.officers[0].slug}>
-              {g.title && (
-                <h3 className="type-heading mb-6 text-center">
-                  {g.title} <span className="type-data text-sm text-ink-muted">· {String(g.officers.length).padStart(2, "0")}</span>
-                </h3>
-              )}
+              <h3 className="type-heading mb-6 text-center">
+                {g.title}
+                {g.officers.length > 1 && (
+                  <span className="type-data text-sm text-ink-muted"> · {String(g.officers.length).padStart(2, "0")}</span>
+                )}
+              </h3>
               <OfficerCarousel count={g.officers.length}>
                 {g.officers.map((o, i) => (
                   <Fragment key={o.slug}>

@@ -39,8 +39,9 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
 // TODO: add a short quote per officer (optional).
 type OfficerEntry = { name: string; role: string; slug: string; quote?: string };
 
-const officerGroupList: { title?: string; label: string; breaks?: number[]; officers: OfficerEntry[] }[] = [
+const officerGroupList: { title: string; label: string; breaks?: number[]; officers: OfficerEntry[] }[] = [
   {
+    title: "Chapter adviser",
     label: "Chapter adviser",
     officers: [{ name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" }],
   },
