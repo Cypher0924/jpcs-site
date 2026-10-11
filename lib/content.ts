@@ -31,13 +31,31 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
   { value: null, label: "Partner orgs" },
 ];
 
-export const officers = Array.from({ length: 8 }, (_, i) => ({
+// From the "Newly elected officer 2026-2027" pubmats in the Officers folder; photos are cropped from them.
+// Codes are the first three letters of the surname. TODO: add a short quote per officer (optional).
+const officerList: { name: string; role: string; slug: string; quote?: string }[] = [
+  { name: "Charles Guevarra", role: "President", slug: "charles-guevarra" },
+  { name: "Justin Tiamzon", role: "Vice President", slug: "justin-tiamzon" },
+  { name: "Nicole Bartolome", role: "Secretary", slug: "nicole-bartolome" },
+  { name: "Sabeena Estabillo", role: "Treasurer", slug: "sabeena-estabillo" },
+  { name: "Jaydeen Gerangaya", role: "Auditor", slug: "jaydeen-gerangaya" },
+  { name: "Fritz Noche", role: "Director on Records", slug: "fritz-noche" },
+  { name: "Roxanne Facun", role: "Director on Projects", slug: "roxanne-facun" },
+  { name: "Kaede Isip", role: "Director on Public Relations", slug: "kaede-isip" },
+  { name: "Cashlyn Florentino", role: "Multimedia Officer", slug: "cashlyn-florentino" },
+  { name: "Jhurena Bautista", role: "Associate Multimedia Officer", slug: "jhurena-bautista" },
+  { name: "Victor Bermudez", role: "First Year Representative", slug: "victor-bermudez" },
+  { name: "Aldrian Valdez", role: "Second Year Representative", slug: "aldrian-valdez" },
+  { name: "Shantrelle Reinoso", role: "Third Year Representative", slug: "shantrelle-reinoso" },
+  { name: "Allen Torres", role: "Fourth Year Representative", slug: "allen-torres" },
+  { name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" },
+];
+
+export const officers = officerList.map((o, i) => ({
+  ...o,
   number: String(i + 1).padStart(2, "0"),
-  code: "XXX", // three-letter driver code, e.g. BOR
-  name: "Officer name",
-  role: i === 0 ? "President" : "Position",
-  year: "BSCS 3",
-  quote: "A short quote from the officer.",
+  code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
+  year: o.role === "Adviser" ? "Chapter adviser · 2026-2027" : "Newly elected · 2026-2027",
 }));
 
 export const nextEvent = {

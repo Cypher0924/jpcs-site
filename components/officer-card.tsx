@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PhotoSlot } from "./ui";
 
-type Officer = { number: string; code: string; name: string; role: string; year: string; quote: string };
+type Officer = { number: string; code: string; name: string; role: string; slug: string; year: string; quote?: string };
 
 /** Driver card: race number + three-letter code. Hover or tap flips to role, year and quote. */
 export function OfficerCard({ officer }: { officer: Officer }) {
@@ -22,7 +22,14 @@ export function OfficerCard({ officer }: { officer: Officer }) {
         {/* front */}
         <span className="cut-corner col-start-1 row-start-1 flex flex-col border border-line bg-surface [backface-visibility:hidden]">
           <span className="relative">
-            <PhotoSlot label="Photo, 1:1" className="aspect-square" />
+            <PhotoSlot
+              label={`${officer.name}, ${officer.role}`}
+              src={`/officers/${officer.slug}.webp`}
+              sizes="(min-width: 1024px) 280px, (min-width: 768px) 33vw, 75vw"
+              className="aspect-square"
+            />
+            {/* Darkens the pubmat's busy top-left corner so the race number stays readable */}
+            <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,rgb(0_0_0/0.75),transparent_45%)]" />
             <span className="absolute top-2 left-3 font-display text-[3.5rem] leading-none font-black text-accent [font-stretch:62%]">{officer.number}</span>
           </span>
           <span className="flex items-end justify-between gap-2 p-4">
@@ -42,7 +49,7 @@ export function OfficerCard({ officer }: { officer: Officer }) {
           <span>
             <span className="type-label block opacity-80">{officer.year}</span>
             <span className="type-heading mt-2 block">{officer.role}</span>
-            <span className="mt-3 block text-sm opacity-90">“{officer.quote}”</span>
+            {officer.quote && <span className="mt-3 block text-sm opacity-90">“{officer.quote}”</span>}
           </span>
         </span>
       </span>
