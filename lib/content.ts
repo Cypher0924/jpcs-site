@@ -180,8 +180,8 @@ export const events = [
   {
     slug: "ccs-cares",
     round: "R4",
-    month: "TBA",
-    day: "--",
+    month: "JUL",
+    day: "29", // July 29, 2026
     title: "Project CCS C.A.R.E.S",
     venue: "Clean-up drive around the CCS building",
     done: true,
