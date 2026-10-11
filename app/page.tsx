@@ -1,7 +1,7 @@
 import { Hero } from "@/components/hero";
 import { Motion } from "@/components/motion";
 import { Nav } from "@/components/nav";
-import { About, Events, Faq, Footer, Gallery, Join, Officers, Programs, Stats } from "@/components/sections";
+import { About, Events, Faq, Footer, Gallery, Join, Officers, Stats } from "@/components/sections";
 
 export default function Home() {
   return (
@@ -18,8 +18,7 @@ export default function Home() {
         <About />
         <Stats />
         <Officers />
-        <Events />
-        <Programs />
+        <Events />
         <Gallery />
         <Join />
         <Faq />

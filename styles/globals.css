@@ -34,11 +34,6 @@
   --color-paper-200: #e6ddcf;
   --color-paper-400: #b9ad9c;
 
-  /* Tyre compounds: soft = beginner, medium, hard = advanced */
-  --color-tyre-soft: #e10600;
-  --color-tyre-medium: #ffc800;
-  --color-tyre-hard: #e9e9e9;
-
   /* Type scale (fluid between 390px and 1440px) */
   --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 7rem);
   --text-display--line-height: 0.88;

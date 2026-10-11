@@ -5,7 +5,6 @@ export const navLinks = [
   { id: "about", label: "About" },
   { id: "officers", label: "Officers" },
   { id: "events", label: "Events" },
-  { id: "programs", label: "Programs" },
   { id: "gallery", label: "Gallery" },
   { id: "faq", label: "FAQ" },
 ] as const;
@@ -193,13 +192,6 @@ export const events = [
 ];
 
 export type Event = (typeof events)[number];
-
-export const programs: { name: string; blurb: string; compound: "soft" | "medium" | "hard" }[] = [
-  { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "soft" },
-  { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "medium" },
-  { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "hard" },
-  { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "medium" },
-];
 
 // TODO: credit the actual photographers. "JPCS-TSU" is used because the photos carry the chapter's frame.
 export const gallery = [

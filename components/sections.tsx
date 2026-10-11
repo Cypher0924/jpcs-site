@@ -1,17 +1,11 @@
 import Link from "next/link";
-import { about, contact, events, faqs, gallery, navLinks, nextEvent, officerGroups, programs, stats, type Event } from "@/lib/content";
+import { about, contact, events, faqs, gallery, navLinks, nextEvent, officerGroups, stats, type Event } from "@/lib/content";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
 import { Stat } from "./stat";
 import { Button, CheckeredStrip, Chevrons, Container, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
-
-const compoundColor = {
-  soft: "var(--color-tyre-soft)",
-  medium: "var(--color-tyre-medium)",
-  hard: "var(--color-tyre-hard)",
-} as const;
 
 export function About() {
   return (
@@ -176,50 +170,13 @@ export function EventRow({ event: e }: { event: Event }) {
   );
 }
 
-export function Programs() {
-  return (
-    <section id="programs" className="py-20 md:py-28">
-      <Container>
-        <SectionHeader title="Garage bays" sub="Programs and committees you can join, tagged by difficulty." />
-        <ul data-anim="launch" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {programs.map((p, i) => (
-            <li key={i} className="cut-corner flex gap-4 border border-line bg-surface p-5 sm:flex-col">
-              <span
-                aria-hidden
-                className="grid size-12 shrink-0 place-items-center rounded-full border-[5px] bg-carbon-900"
-                style={{ borderColor: compoundColor[p.compound] }}
-              >
-                <span className="type-data text-xs text-white">{p.compound[0].toUpperCase()}</span>
-              </span>
-              <span>
-                <span className="type-data text-xs text-ink-muted">BAY {String(i + 1).padStart(2, "0")}</span>
-                <span className="type-heading mt-1 block text-lg">{p.name}</span>
-                <span className="mt-2 block text-sm text-ink-muted">{p.blurb}</span>
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-muted">
-          <span className="type-label">Tyre legend</span>
-          {(["soft", "medium", "hard"] as const).map((c) => (
-            <span key={c} className="inline-flex items-center gap-2 capitalize">
-              <span aria-hidden className="size-3 rounded-full" style={{ background: compoundColor[c] }} />
-              {c} · {c === "soft" ? "beginner" : c === "medium" ? "intermediate" : "advanced"}
-            </span>
-          ))}
-        </p>
-      </Container>
-    </section>
-  );
-}
-
 export function Gallery() {
   return (
     // data-strip="on" is set by components/motion.tsx on desktop (with motion allowed):
     // the grid becomes a horizontal filmstrip that pans while the section is pinned.
     <section
       id="gallery"
-      className="group bg-surface-2 py-20 md:py-28 lg:data-[strip=on]:overflow-hidden lg:data-[strip=on]:py-20"
+      className="group py-20 md:py-28 lg:data-[strip=on]:overflow-hidden lg:data-[strip=on]:py-20"
     >
       <Container>
         <SectionHeader title="Paddock" sub="Photos from JPCS-TSU events, credited to the people who took them." />
@@ -235,7 +192,6 @@ export function Gallery() {
                     label={g.caption}
                     src={g.src}
                     sizes={i === 0 ? "(min-width: 768px) 600px, 100vw" : "(min-width: 768px) 400px, 50vw"}
-                    tone="surface"
                     className={`lg:group-data-[strip=on]:h-[min(48vh,500px)] lg:group-data-[strip=on]:flex-none ${
                       i === 0
                         ? "aspect-[4/3] md:aspect-auto md:min-h-0 md:flex-1 lg:group-data-[strip=on]:aspect-[4/3]"
