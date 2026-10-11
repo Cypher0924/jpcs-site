@@ -1,5 +1,5 @@
-// Placeholder content for the draft. Replace every value marked TODO with
-// JPCS-TSU's real wording and figures before submitting (wireframe notes 03, 04).
+// Site content. About, events and gallery come from the "JPCS Competition Materials" folder; everything
+// else is still placeholder. Replace every value marked TODO before submitting (wireframe notes 03, 04).
 
 export const navLinks = [
   { id: "about", label: "About" },
@@ -10,11 +10,17 @@ export const navLinks = [
   { id: "faq", label: "FAQ" },
 ] as const;
 
+// From "JPCS Description_Mission_Vision.docx", word for word.
 export const about = {
-  // TODO: official wording
-  who: "The Junior Philippine Computer Society, TSU Chapter, is the home of the Orange CS Community: BS Computer Science students at the College of Computer Studies who learn, build and compete together.",
-  mission: "[Official JPCS-TSU mission statement goes here, word for word.]",
-  vision: "[Official JPCS-TSU vision statement goes here, word for word.]",
+  who: "The Junior Philippine Computer Society (JPCS) is an organization of students in the field of Information and Communications Technology. JPCS aims to provide its members with experiences that complement the knowledge they acquire in their respective schools, thus better preparing them for their future roles as world-class ICT professionals.",
+  whoMore:
+    "Through learning opportunities and collaborative activities, JPCS encourages students to enhance their technical knowledge, develop their skills, and prepare for the continuous advancements in the field of technology.",
+  mission:
+    "To promote learning and active involvement in the field of Information and Communications Technology by providing opportunities for students to expand their knowledge and gain experiences beyond the classroom.",
+  vision:
+    "A progressive and recognized student organization that promotes excellence in ICT education and contributes to the development of competent and responsible future ICT professionals.",
+  photo: "/photos/general-assembly-group.webp",
+  photoAlt: "JPCS-TSU members and officers at the General Assembly",
 };
 
 // TODO: real figures only. null renders as "000".
@@ -42,11 +48,13 @@ export const nextEvent = {
   blurb: "One or two lines about the event and who it is for.",
 };
 
+// Past activities from the competition materials. TODO: real dates and venues (the photos carry none),
+// and confirm the order, which is a guess.
 export const rounds = [
-  { round: "R1", month: "OCT", day: "12", title: "Event title", venue: "Venue · time", done: true },
-  { round: "R2", month: "OCT", day: "19", title: "Event title", venue: "Venue · time", done: true },
-  { round: "R3", month: "OCT", day: "26", title: "Event title", venue: "Venue · time", done: false },
-  { round: "R4", month: "NOV", day: "02", title: "Event title", venue: "Venue · time", done: false },
+  { round: "R1", month: "TBA", day: "--", title: "Ready, Set, Join: Become a JPCS Member", venue: "Membership sign-ups for BSCS students", done: true },
+  { round: "R2", month: "TBA", day: "--", title: "JPCS-TSU General Assembly", venue: "Agenda and officer responsibilities", done: true },
+  { round: "R3", month: "TBA", day: "--", title: "Meet & Greet Booth", venue: "The CS Booth, games and performances", done: true },
+  { round: "R4", month: "TBA", day: "--", title: "Project CCS C.A.R.E.S", venue: "Clean-up drive around the CCS building", done: true },
 ];
 
 export const programs: { name: string; blurb: string; compound: "soft" | "medium" | "hard" }[] = [
@@ -56,12 +64,13 @@ export const programs: { name: string; blurb: string; compound: "soft" | "medium
   { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "medium" },
 ];
 
+// TODO: credit the actual photographers. "JPCS-TSU" is used because the photos carry the chapter's frame.
 export const gallery = [
-  { caption: "Event photo", credit: "Photographer" },
-  { caption: "Photo", credit: "Photographer" },
-  { caption: "Photo", credit: "Photographer" },
-  { caption: "Photo", credit: "Photographer" },
-  { caption: "Photo", credit: "Photographer" },
+  { src: "/photos/meet-and-greet-group.webp", caption: "Meet & Greet Booth", credit: "JPCS-TSU" },
+  { src: "/photos/ready-set-join.webp", caption: "Ready, Set, Join", credit: "JPCS-TSU" },
+  { src: "/photos/ccs-cares.webp", caption: "Project CCS C.A.R.E.S", credit: "JPCS-TSU" },
+  { src: "/photos/meet-and-greet-booth.webp", caption: "The CS Booth", credit: "JPCS-TSU" },
+  { src: "/photos/general-assembly-members.webp", caption: "General Assembly", credit: "JPCS-TSU" },
 ];
 
 export const faqs = [

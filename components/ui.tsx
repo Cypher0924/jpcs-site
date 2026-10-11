@@ -90,13 +90,20 @@ const viewfinderCorners = [
   "right-3 bottom-3 border-r-2 border-b-2",
 ];
 
-/** Stand-in for real photos (no AI images allowed, IRR p.8). Viewfinder corners echo F1 broadcast framing. */
+/**
+ * Photo frame with F1 broadcast viewfinder corners. With `src` it shows the real photo (label becomes the
+ * alt text); without it, it is a labelled stand-in (no AI images allowed, IRR p.8).
+ */
 export function PhotoSlot({
   label,
+  src,
+  sizes = "100vw",
   tone = "surface-2",
   className = "",
 }: {
   label: string;
+  src?: string;
+  sizes?: string;
   /** Use "surface" when the slot sits on a surface-2 section, so it stays visible. */
   tone?: "surface" | "surface-2";
   className?: string;
@@ -105,10 +112,11 @@ export function PhotoSlot({
     <div
       className={`relative grid place-items-center overflow-hidden text-ink-muted ${tone === "surface" ? "bg-surface" : "bg-surface-2"} ${className}`}
     >
+      {src && <Image src={src} alt={label} fill sizes={sizes} className="object-cover" />}
       {viewfinderCorners.map((pos) => (
-        <span key={pos} aria-hidden className={`absolute size-4 border-ink-muted ${pos}`} />
+        <span key={pos} aria-hidden className={`absolute size-4 ${src ? "border-white" : "border-ink-muted"} ${pos}`} />
       ))}
-      <span className="type-label bg-surface px-2 py-1.5">{label}</span>
+      {!src && <span className="type-label bg-surface px-2 py-1.5">{label}</span>}
     </div>
   );
 }

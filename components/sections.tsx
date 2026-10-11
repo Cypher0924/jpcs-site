@@ -17,11 +17,17 @@ export function About() {
       <Container>
         <SectionHeader title="Team briefing" sub="Who JPCS-TSU is, and the mission and vision the chapter works toward." />
         <div data-anim="rise" className="grid gap-8 lg:grid-cols-12 lg:gap-6">
-          <PhotoSlot label="Photo: JPCS-TSU members, 4:3" className="aspect-[4/3] lg:col-span-6" />
+          <PhotoSlot
+            label={about.photoAlt}
+            src={about.photo}
+            sizes="(min-width: 1024px) 600px, 100vw"
+            className="aspect-[4/3] lg:col-span-6"
+          />
           <div className="flex flex-col gap-6 lg:col-span-6">
             <div>
               <h3 className="type-heading">Who we are</h3>
               <p className="mt-3 text-ink-muted">{about.who}</p>
+              <p className="mt-3 text-ink-muted">{about.whoMore}</p>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               {[
@@ -198,6 +204,8 @@ export function Gallery() {
                 <figure className="flex h-full flex-col gap-2">
                   <PhotoSlot
                     label={g.caption}
+                    src={g.src}
+                    sizes={i === 0 ? "(min-width: 768px) 600px, 100vw" : "(min-width: 768px) 400px, 50vw"}
                     tone="surface"
                     className={`lg:group-data-[strip=on]:h-[min(48vh,500px)] lg:group-data-[strip=on]:flex-none ${
                       i === 0
@@ -207,7 +215,7 @@ export function Gallery() {
                   />
                   {/* Credit sits under the photo, never on it */}
                   <figcaption className="type-data text-xs text-ink-muted">
-                    P{i + 1} · Photo: {g.credit}
+                    P{i + 1} · {g.caption} · Photo: {g.credit}
                   </figcaption>
                 </figure>
               </li>
