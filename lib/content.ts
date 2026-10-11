@@ -31,9 +31,9 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
   { value: null, label: "Partner orgs" },
 ];
 
-// From the "Newly elected officer 2026-2027" pubmats in the Officers and "EA to Officers" folders; photos
+// From the "Newly elected officer 2026-2027" pubmats in the Officers, "EA to Officers" and Apprentice folders; photos
 // are cropped from them. Grouped by category in rank order. The adviser leads as team principal ("TP"),
-// everyone else is numbered 01-24 across the groups. Codes are the first three letters of the surname.
+// everyone else is numbered 01-30 across the groups. Codes are the first three letters of the surname.
 // `breaks` end a row early on desktop (after those indexes), so rows follow the hierarchy: P + VP together, the
 // three directors together, and each EA row matching the officers they assist.
 // TODO: add a short quote per officer (optional).
@@ -93,6 +93,19 @@ const officerGroupList: { title?: string; label: string; breaks?: number[]; offi
       { name: "Ezekiel Domalanta", role: "EA for Second Year Affairs", slug: "ezekiel-domalanta" },
       { name: "Ivan Pineda", role: "EA for Third Year Affairs", slug: "ivan-pineda" },
       { name: "Reena Golingan", role: "EA for Fourth Year Affairs", slug: "reena-golingan" },
+    ],
+  },
+  {
+    title: "Apprentices",
+    label: "Apprentice",
+    breaks: [3],
+    officers: [
+      { name: "Jewel Pineda", role: "Apprentice to the President", slug: "jewel-pineda" },
+      { name: "Paul Almiron", role: "Apprentice to the Vice President", slug: "paul-almiron" },
+      { name: "Orlando Cunan", role: "Apprentice to the Treasurer", slug: "orlando-cunan" },
+      { name: "Mica Ramos", role: "Apprentice to the Auditor", slug: "mica-ramos" },
+      { name: "Nicole Feliciano", role: "Apprentice for Secretariat & Records", slug: "nicole-feliciano" },
+      { name: "Aira Celerio", role: "Apprentice for Projects & Documentation", slug: "aira-celerio" },
     ],
   },
 ];

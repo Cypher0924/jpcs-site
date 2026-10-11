@@ -68,7 +68,7 @@ export function Officers() {
       <Container>
         <SectionHeader
           title="Driver lineup"
-          sub="The JPCS-TSU officers and executive associates for A.Y. 2026-2027. Tap a card to flip it."
+          sub="The JPCS-TSU officers, executive associates and apprentices for A.Y. 2026-2027. Tap a card to flip it."
         />
         {/* One block per category: the adviser alone on top, then each group under its own heading.
             Mobile: each group is a swipe carousel (~1.3 cards) with position dots. From md up: centred
