@@ -67,14 +67,69 @@ export const nextEvent = {
   blurb: "One or two lines about the event and who it is for.",
 };
 
-// Past activities from the competition materials. TODO: real dates and venues (the photos carry none),
-// and confirm the order, which is a guess.
-export const rounds = [
-  { round: "R1", month: "TBA", day: "--", title: "Ready, Set, Join: Become a JPCS Member", venue: "Membership sign-ups for BSCS students", done: true },
-  { round: "R2", month: "TBA", day: "--", title: "JPCS-TSU General Assembly", venue: "Agenda and officer responsibilities", done: true },
-  { round: "R3", month: "TBA", day: "--", title: "Meet & Greet Booth", venue: "The CS Booth, games and performances", done: true },
-  { round: "R4", month: "TBA", day: "--", title: "Project CCS C.A.R.E.S", venue: "Clean-up drive around the CCS building", done: true },
+// Past activities from the competition materials. Each one gets a page at /events/[slug].
+// TODO: real dates and venues (the photos carry none), confirm the order (a guess), and replace each
+// summary with official wording. Photos are the curated picks in public/events/<slug>/, named by their
+// number in the original folder.
+const eventPhotos = (slug: string, nums: number[]) =>
+  nums.map((n) => `/events/${slug}/${String(n).padStart(2, "0")}.webp`);
+
+export const events = [
+  {
+    slug: "ready-set-join",
+    round: "R1",
+    month: "TBA",
+    day: "--",
+    title: "Ready, Set, Join: Become a JPCS Member",
+    venue: "Membership sign-ups for BSCS students",
+    done: true,
+    summary:
+      "Officers set up sign-up tables in classrooms and around campus so new BS Computer Science students could register as JPCS members, pick up freshman stickers and meet the chapter.",
+    cover: "/photos/ready-set-join.webp",
+    photos: eventPhotos("ready-set-join", [1, 2, 3, 4, 6, 7, 10, 13, 14, 15, 16, 19]),
+  },
+  {
+    slug: "general-assembly",
+    round: "R2",
+    month: "TBA",
+    day: "--",
+    title: "JPCS-TSU General Assembly",
+    venue: "Agenda and officer responsibilities",
+    done: true,
+    summary:
+      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
+    cover: "/photos/general-assembly-group.webp",
+    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
+  },
+  {
+    slug: "meet-and-greet-booth",
+    round: "R3",
+    month: "TBA",
+    day: "--",
+    title: "Meet & Greet Booth",
+    venue: "The CS Booth, games and performances",
+    done: true,
+    summary:
+      "The jungle-themed CS Booth at the campus fair: balloon giveaways, games on the plaza and performances, with the Orange CS Community out in full orange.",
+    cover: "/photos/meet-and-greet-group.webp",
+    photos: eventPhotos("meet-and-greet-booth", [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66]),
+  },
+  {
+    slug: "ccs-cares",
+    round: "R4",
+    month: "TBA",
+    day: "--",
+    title: "Project CCS C.A.R.E.S",
+    venue: "Clean-up drive around the CCS building",
+    done: true,
+    summary:
+      "Members and officers swept, wiped and bagged their way through classrooms, hallways, restrooms and the AVR to leave the College of Computer Studies building clean.",
+    cover: "/photos/ccs-cares.webp",
+    photos: eventPhotos("ccs-cares", [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45]),
+  },
 ];
+
+export type Event = (typeof events)[number];
 
 export const programs: { name: string; blurb: string; compound: "soft" | "medium" | "hard" }[] = [
   { name: "Program name", blurb: "What the committee or program does, in one or two lines.", compound: "soft" },

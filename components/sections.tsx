@@ -1,4 +1,5 @@
-import { about, contact, faqs, gallery, navLinks, nextEvent, officers, programs, rounds, stats } from "@/lib/content";
+import Link from "next/link";
+import { about, contact, events, faqs, gallery, navLinks, nextEvent, officers, programs, stats, type Event } from "@/lib/content";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
@@ -109,47 +110,54 @@ export function Events() {
           </article>
 
           <ol data-anim="launch" className="flex flex-col gap-3 lg:col-span-7">
-            {rounds.map((r) => (
-              <li key={r.round}>
-                <a
-                  href="#"
-                  className="group flex items-stretch border border-line bg-surface transition-colors hover:border-accent"
-                >
-                  <span className="grid w-20 shrink-0 place-items-center bg-surface-2 py-3 text-center">
-                    <span>
-                      <span className="type-label block text-ink-muted">{r.month}</span>
-                      <span className="type-data block text-3xl">{r.day}</span>
-                    </span>
-                  </span>
-                  <span className="flex flex-1 items-center justify-between gap-4 px-5 py-4">
-                    <span>
-                      <span className="type-data mr-2 text-sm text-accent-text">{r.round}</span>
-                      <span className="type-heading text-lg">{r.title}</span>
-                      <span className="block text-sm text-ink-muted">{r.venue}</span>
-                    </span>
-                    {r.done ? (
-                      <span className="flex items-center gap-2">
-                        <span aria-hidden className="checkered block size-6 border border-line [background-size:8px_8px]" />
-                        <span className="type-label hidden text-ink-muted sm:inline">Finished</span>
-                      </span>
-                    ) : (
-                      <span aria-hidden className="text-2xl text-ink-muted transition-transform group-hover:translate-x-1 group-hover:text-accent-text">
-                        ›
-                      </span>
-                    )}
-                  </span>
-                </a>
+            {events.map((e) => (
+              <li key={e.slug}>
+                <EventRow event={e} />
               </li>
             ))}
             <li className="pt-2 text-center lg:text-right">
-              <a href="#" className="type-label text-accent-text hover:underline">
+              <Link href="/events" className="type-label text-accent-text hover:underline">
                 See past rounds →
-              </a>
+              </Link>
             </li>
           </ol>
         </div>
       </Container>
     </section>
+  );
+}
+
+/** Race-calendar row: date block, round, title and venue. Links to the event's page. */
+export function EventRow({ event: e }: { event: Event }) {
+  return (
+    <Link
+      href={`/events/${e.slug}`}
+      className="group flex items-stretch border border-line bg-surface transition-colors hover:border-accent"
+    >
+      <span className="grid w-20 shrink-0 place-items-center bg-surface-2 py-3 text-center">
+        <span>
+          <span className="type-label block text-ink-muted">{e.month}</span>
+          <span className="type-data block text-3xl">{e.day}</span>
+        </span>
+      </span>
+      <span className="flex flex-1 items-center justify-between gap-4 px-5 py-4">
+        <span>
+          <span className="type-data mr-2 text-sm text-accent-text">{e.round}</span>
+          <span className="type-heading text-lg">{e.title}</span>
+          <span className="block text-sm text-ink-muted">{e.venue}</span>
+        </span>
+        {e.done ? (
+          <span className="flex items-center gap-2">
+            <span aria-hidden className="checkered block size-6 border border-line [background-size:8px_8px]" />
+            <span className="type-label hidden text-ink-muted sm:inline">Finished</span>
+          </span>
+        ) : (
+          <span aria-hidden className="text-2xl text-ink-muted transition-transform group-hover:translate-x-1 group-hover:text-accent-text">
+            ›
+          </span>
+        )}
+      </span>
+    </Link>
   );
 }
 
@@ -229,9 +237,9 @@ export function Gallery() {
           </ul>
         </div>
         <p className="mt-6 text-right">
-          <a href={contact.facebook} className="type-label text-accent-text hover:underline">
-            View album →
-          </a>
+          <Link href="/gallery" className="type-label text-accent-text hover:underline">
+            Full gallery →
+          </Link>
         </p>
       </Container>
     </section>
@@ -304,7 +312,7 @@ export function Faq() {
   );
 }
 
-export function Footer() {
+export function Footer({ base = "" }: { base?: string }) {
   return (
     <footer className="bg-carbon-950 text-paper-100">
       <CheckeredStrip className="[--ink:var(--color-paper-100)]" />
@@ -329,7 +337,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm">
             {navLinks.map(({ id, label }) => (
               <li key={id}>
-                <a href={`#${id}`} className="text-paper-400 hover:text-white">
+                <a href={`${base}#${id}`} className="text-paper-400 hover:text-white">
                   {label}
                 </a>
               </li>

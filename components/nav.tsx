@@ -6,7 +6,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { Button, Container, LogoMark } from "./ui";
 
 /** Pit-wall nav: links read like a timing tower, active section gets a slanted bar. */
-export function Nav() {
+export function Nav({ base = "" }: { base?: string }) {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -39,7 +39,7 @@ export function Nav() {
         style={{ transform: "scaleX(0)" }}
       />
       <Container className="flex h-18 items-center justify-between gap-6">
-        <a href="#top" className="flex items-center gap-3">
+        <a href={`${base}#top`} className="flex items-center gap-3">
           <LogoMark />
           <span className="leading-tight whitespace-nowrap">
             <span className="block font-display text-lg font-extrabold italic [font-stretch:125%]">JPCS-TSU</span>
@@ -54,7 +54,7 @@ export function Nav() {
               return (
                 <li key={id}>
                   <a
-                    href={`#${id}`}
+                    href={`${base}#${id}`}
                     aria-current={isActive ? "true" : undefined}
                     className={`group relative flex items-center gap-2 px-3 py-2 text-sm font-semibold transition-colors ${isActive ? "text-ink" : "text-ink-muted hover:text-ink"}`}
                   >
@@ -76,7 +76,7 @@ export function Nav() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <span className="hidden sm:block">
-            <Button href="#join">Join JPCS</Button>
+            <Button href={`${base}#join`}>Join JPCS</Button>
           </span>
           <button
             type="button"
@@ -96,13 +96,13 @@ export function Nav() {
       {open && (
         <div id="mobile-menu" className="fixed inset-x-0 top-18 bottom-0 z-40 overflow-y-auto bg-canvas lg:hidden">
           <Container className="py-6">
-            <Button href="#join" className="w-full" onClick={() => setOpen(false)}>
+            <Button href={`${base}#join`} className="w-full" onClick={() => setOpen(false)}>
               Box, box: join now
             </Button>
             <ol className="mt-6 divide-y divide-line border-y border-line">
               {navLinks.map(({ id, label }, i) => (
                 <li key={id} className="animate-[slide-in_400ms_var(--ease-launch)_both]" style={{ animationDelay: `${i * 40}ms` }}>
-                  <a href={`#${id}`} onClick={() => setOpen(false)} className="flex items-center gap-4 py-4">
+                  <a href={`${base}#${id}`} onClick={() => setOpen(false)} className="flex items-center gap-4 py-4">
                     <span className="type-data w-8 text-sm text-accent-text">P{i + 1}</span>
                     <span className="font-display text-[1.75rem] font-extrabold uppercase italic [font-stretch:125%]">{label}</span>
                   </a>
