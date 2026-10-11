@@ -131,7 +131,7 @@ export const nextEvent = {
 };
 
 // Past activities from the competition materials. Each one gets a page at /events/[slug].
-// TODO: real dates and venues (the photos carry none), confirm the order (a guess), and replace each
+// Ordered by date. TODO: the General Assembly date (placed last until known), venues, and replace each
 // summary with official wording. Photos are the curated picks in public/events/<slug>/, named by their
 // number in the original folder.
 const eventPhotos = (slug: string, nums: number[]) =>
@@ -141,8 +141,8 @@ export const events = [
   {
     slug: "ready-set-join",
     round: "R1",
-    month: "TBA",
-    day: "--",
+    month: "JUL",
+    day: "27", // July 27, 2026
     title: "Ready, Set, Join: Become a JPCS Member",
     venue: "Membership sign-ups for BSCS students",
     done: true,
@@ -152,21 +152,8 @@ export const events = [
     photos: eventPhotos("ready-set-join", [1, 2, 3, 4, 6, 7, 10, 13, 14, 15, 16, 19]),
   },
   {
-    slug: "general-assembly",
-    round: "R2",
-    month: "TBA",
-    day: "--",
-    title: "JPCS-TSU General Assembly",
-    venue: "Agenda and officer responsibilities",
-    done: true,
-    summary:
-      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
-    cover: "/photos/general-assembly-group.webp",
-    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
-  },
-  {
     slug: "meet-and-greet-booth",
-    round: "R3",
+    round: "R2",
     month: "JUL",
     day: "28", // July 28, 2026
     title: "Meet & Greet Booth",
@@ -179,7 +166,7 @@ export const events = [
   },
   {
     slug: "ccs-cares",
-    round: "R4",
+    round: "R3",
     month: "JUL",
     day: "29", // July 29, 2026
     title: "Project CCS C.A.R.E.S",
@@ -189,6 +176,19 @@ export const events = [
       "Members and officers swept, wiped and bagged their way through classrooms, hallways, restrooms and the AVR to leave the College of Computer Studies building clean.",
     cover: "/photos/ccs-cares.webp",
     photos: eventPhotos("ccs-cares", [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45]),
+  },
+  {
+    slug: "general-assembly",
+    round: "R4",
+    month: "TBA",
+    day: "--",
+    title: "JPCS-TSU General Assembly",
+    venue: "Agenda and officer responsibilities",
+    done: true,
+    summary:
+      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
+    cover: "/photos/general-assembly-group.webp",
+    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
   },
 ];
 
