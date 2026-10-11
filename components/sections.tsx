@@ -1,4 +1,5 @@
 import { about, contact, faqs, gallery, navLinks, nextEvent, officers, programs, rounds, stats } from "@/lib/content";
+import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
@@ -65,12 +66,17 @@ export function Officers() {
     <section id="officers" className="py-20 md:py-28">
       <Container>
         <SectionHeader title="Driver lineup" sub="The JPCS-TSU officers for A.Y. 2026-2027. Tap a card to flip it." />
-        {/* Mobile: swipe carousel showing ~1.3 cards with position dots. Desktop: 4 x 2 grid. */}
+        {/* Mobile: swipe carousel showing ~1.3 cards with position dots. From md up: a pyramid with the
+            adviser on top, then the president and vice president, then everyone else in rows of 3 / 4. */}
         <OfficerCarousel count={officers.length}>
-          {officers.map((o) => (
-            <li key={o.number} className="w-[75%] shrink-0 snap-start md:w-auto">
-              <OfficerCard officer={o} />
-            </li>
+          {officers.map((o, i) => (
+            <Fragment key={o.number}>
+              <li className="w-[75%] shrink-0 snap-start md:mb-6 md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]">
+                <OfficerCard officer={o} />
+              </li>
+              {/* Row break after the adviser and after the VP */}
+              {(i === 0 || i === 2) && <li aria-hidden className="hidden basis-full md:block" />}
+            </Fragment>
           ))}
         </OfficerCarousel>
       </Container>

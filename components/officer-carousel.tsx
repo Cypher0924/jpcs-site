@@ -2,7 +2,7 @@
 
 import { useRef, useState, type ReactNode } from "react";
 
-/** Mobile swipe carousel with position dots; becomes a plain grid from md up. */
+/** Mobile swipe carousel with position dots; from md up the cards wrap in centred rows. */
 export function OfficerCarousel({ count, children }: { count: number; children: ReactNode }) {
   const ref = useRef<HTMLUListElement>(null);
   const [active, setActive] = useState(0);
@@ -21,7 +21,7 @@ export function OfficerCarousel({ count, children }: { count: number; children: 
         ref={ref}
         onScroll={onScroll}
         data-anim="launch-desktop"
-        className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:grid-cols-4"
+        className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 md:mx-0 md:flex-wrap md:justify-center md:gap-x-6 md:gap-y-0 md:overflow-visible md:px-0"
       >
         {children}
       </ul>
