@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { about, contact, events, faqs, gallery, navLinks, nextEvent, officers, programs, stats, type Event } from "@/lib/content";
+import { about, contact, events, faqs, gallery, navLinks, nextEvent, officerGroups, programs, stats, type Event } from "@/lib/content";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
@@ -66,20 +66,34 @@ export function Officers() {
   return (
     <section id="officers" className="py-20 md:py-28">
       <Container>
-        <SectionHeader title="Driver lineup" sub="The JPCS-TSU officers for A.Y. 2026-2027. Tap a card to flip it." />
-        {/* Mobile: swipe carousel showing ~1.3 cards with position dots. From md up: a pyramid with the
-            adviser on top, then the president and vice president, then everyone else in rows of 3 / 4. */}
-        <OfficerCarousel count={officers.length}>
-          {officers.map((o, i) => (
-            <Fragment key={o.number}>
-              <li className="w-[75%] shrink-0 snap-start md:mb-6 md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]">
-                <OfficerCard officer={o} />
-              </li>
-              {/* Row break after the adviser and after the VP */}
-              {(i === 0 || i === 2) && <li aria-hidden className="hidden basis-full md:block" />}
-            </Fragment>
+        <SectionHeader
+          title="Driver lineup"
+          sub="The JPCS-TSU officers and executive associates for A.Y. 2026-2027. Tap a card to flip it."
+        />
+        {/* One block per category: the adviser alone on top, then each group under its own heading.
+            Mobile: each group is a swipe carousel (~1.3 cards) with position dots. From md up: centred
+            rows of 3 / 4, so short rows sit in the middle like a pyramid. */}
+        <div className="flex flex-col gap-12 md:gap-14">
+          {officerGroups.map((g) => (
+            <div key={g.officers[0].slug}>
+              {g.title && (
+                <h3 className="type-heading mb-6 text-center">
+                  {g.title} <span className="type-data text-sm text-ink-muted">· {String(g.officers.length).padStart(2, "0")}</span>
+                </h3>
+              )}
+              <OfficerCarousel count={g.officers.length}>
+                {g.officers.map((o, i) => (
+                  <Fragment key={o.slug}>
+                    <li className="w-[75%] shrink-0 snap-start md:mb-6 md:w-[calc((100%-3rem)/3)] lg:w-[calc((100%-4.5rem)/4)]">
+                      <OfficerCard officer={o} />
+                    </li>
+                    {g.breaks?.includes(i) && <li aria-hidden className="hidden basis-full md:block" />}
+                  </Fragment>
+                ))}
+              </OfficerCarousel>
+            </div>
           ))}
-        </OfficerCarousel>
+        </div>
       </Container>
     </section>
   );

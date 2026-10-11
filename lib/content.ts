@@ -31,32 +31,81 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
   { value: null, label: "Partner orgs" },
 ];
 
-// From the "Newly elected officer 2026-2027" pubmats in the Officers folder; photos are cropped from them.
-// Codes are the first three letters of the surname. The adviser leads the lineup as team principal ("TP"),
-// and the officers are numbered 01-14 in rank order. TODO: add a short quote per officer (optional).
-const officerList: { name: string; role: string; slug: string; quote?: string }[] = [
-  { name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" },
-  { name: "Charles Guevarra", role: "President", slug: "charles-guevarra" },
-  { name: "Justin Tiamzon", role: "Vice President", slug: "justin-tiamzon" },
-  { name: "Nicole Bartolome", role: "Secretary", slug: "nicole-bartolome" },
-  { name: "Sabeena Estabillo", role: "Treasurer", slug: "sabeena-estabillo" },
-  { name: "Jaydeen Gerangaya", role: "Auditor", slug: "jaydeen-gerangaya" },
-  { name: "Fritz Noche", role: "Director on Records", slug: "fritz-noche" },
-  { name: "Roxanne Facun", role: "Director on Projects", slug: "roxanne-facun" },
-  { name: "Kaede Isip", role: "Director on Public Relations", slug: "kaede-isip" },
-  { name: "Cashlyn Florentino", role: "Multimedia Officer", slug: "cashlyn-florentino" },
-  { name: "Jhurena Bautista", role: "Associate Multimedia Officer", slug: "jhurena-bautista" },
-  { name: "Victor Bermudez", role: "First Year Representative", slug: "victor-bermudez" },
-  { name: "Aldrian Valdez", role: "Second Year Representative", slug: "aldrian-valdez" },
-  { name: "Shantrelle Reinoso", role: "Third Year Representative", slug: "shantrelle-reinoso" },
-  { name: "Allen Torres", role: "Fourth Year Representative", slug: "allen-torres" },
+// From the "Newly elected officer 2026-2027" pubmats in the Officers and "EA to Officers" folders; photos
+// are cropped from them. Grouped by category in rank order. The adviser leads as team principal ("TP"),
+// everyone else is numbered 01-24 across the groups. Codes are the first three letters of the surname.
+// `breaks` end a row early on desktop (after those indexes), so rows follow the hierarchy: P + VP together, the
+// three directors together, and each EA row matching the officers they assist.
+// TODO: add a short quote per officer (optional).
+type OfficerEntry = { name: string; role: string; slug: string; quote?: string };
+
+const officerGroupList: { title?: string; label: string; breaks?: number[]; officers: OfficerEntry[] }[] = [
+  {
+    label: "Chapter adviser",
+    officers: [{ name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" }],
+  },
+  {
+    title: "Executive board",
+    label: "Newly elected",
+    breaks: [1],
+    officers: [
+      { name: "Charles Guevarra", role: "President", slug: "charles-guevarra" },
+      { name: "Justin Tiamzon", role: "Vice President", slug: "justin-tiamzon" },
+      { name: "Nicole Bartolome", role: "Secretary", slug: "nicole-bartolome" },
+      { name: "Sabeena Estabillo", role: "Treasurer", slug: "sabeena-estabillo" },
+      { name: "Jaydeen Gerangaya", role: "Auditor", slug: "jaydeen-gerangaya" },
+    ],
+  },
+  {
+    title: "Directors and multimedia",
+    label: "Newly elected",
+    breaks: [2],
+    officers: [
+      { name: "Fritz Noche", role: "Director on Records", slug: "fritz-noche" },
+      { name: "Roxanne Facun", role: "Director on Projects", slug: "roxanne-facun" },
+      { name: "Kaede Isip", role: "Director on Public Relations", slug: "kaede-isip" },
+      { name: "Cashlyn Florentino", role: "Multimedia Officer", slug: "cashlyn-florentino" },
+      { name: "Jhurena Bautista", role: "Associate Multimedia Officer", slug: "jhurena-bautista" },
+    ],
+  },
+  {
+    title: "Year representatives",
+    label: "Newly elected",
+    officers: [
+      { name: "Victor Bermudez", role: "First Year Representative", slug: "victor-bermudez" },
+      { name: "Aldrian Valdez", role: "Second Year Representative", slug: "aldrian-valdez" },
+      { name: "Shantrelle Reinoso", role: "Third Year Representative", slug: "shantrelle-reinoso" },
+      { name: "Allen Torres", role: "Fourth Year Representative", slug: "allen-torres" },
+    ],
+  },
+  {
+    title: "Executive associates",
+    label: "Executive associate",
+    breaks: [3, 6],
+    officers: [
+      { name: "Kassandra Gonzales", role: "EA to the President", slug: "kassandra-gonzales" },
+      { name: "Nash Supan", role: "EA to the Vice President", slug: "nash-supan" },
+      { name: "Chenee Hita", role: "EA to the Secretary", slug: "chenee-hita" },
+      { name: "Althea Tan", role: "EA to the Auditor", slug: "althea-tan" },
+      { name: "Divina Marticio", role: "EA for Records", slug: "divina-marticio" },
+      { name: "Wesley Cunanan", role: "EA for Projects", slug: "wesley-cunanan" },
+      { name: "Miko Alcaraz", role: "EA for Public Relations", slug: "miko-alcaraz" },
+      { name: "Ezekiel Domalanta", role: "EA for Second Year Affairs", slug: "ezekiel-domalanta" },
+      { name: "Ivan Pineda", role: "EA for Third Year Affairs", slug: "ivan-pineda" },
+      { name: "Reena Golingan", role: "EA for Fourth Year Affairs", slug: "reena-golingan" },
+    ],
+  },
 ];
 
-export const officers = officerList.map((o, i) => ({
-  ...o,
-  number: o.role === "Adviser" ? "TP" : String(i).padStart(2, "0"),
-  code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
-  year: o.role === "Adviser" ? "Chapter adviser · 2026-2027" : "Newly elected · 2026-2027",
+let raceNumber = 0;
+export const officerGroups = officerGroupList.map(({ officers, label, ...group }) => ({
+  ...group,
+  officers: officers.map((o) => ({
+    ...o,
+    number: o.role === "Adviser" ? "TP" : String(++raceNumber).padStart(2, "0"),
+    code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
+    year: `${label} · 2026-2027`,
+  })),
 }));
 
 export const nextEvent = {
