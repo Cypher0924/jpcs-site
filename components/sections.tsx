@@ -15,7 +15,7 @@ export function About() {
   return (
     <section id="about" className="py-20 md:py-28">
       <Container>
-        <SectionHeader index="03" eyebrow="Team briefing" title="About JPCS-TSU" />
+        <SectionHeader title="Team briefing" sub="Who JPCS-TSU is, and the mission and vision the chapter works toward." />
         <div data-anim="rise" className="grid gap-8 lg:grid-cols-12 lg:gap-6">
           <PhotoSlot label="Photo: JPCS-TSU members, 4:3" className="aspect-[4/3] lg:col-span-6" />
           <div className="flex flex-col gap-6 lg:col-span-6">
@@ -58,7 +58,7 @@ export function Officers() {
   return (
     <section id="officers" className="py-20 md:py-28">
       <Container>
-        <SectionHeader index="05" eyebrow="Driver lineup" title="Officers" sub="Meet the team. Tap a card to flip it." />
+        <SectionHeader title="Driver lineup" sub="The JPCS-TSU officers for A.Y. 2026-2027. Tap a card to flip it." />
         {/* Mobile: swipe carousel showing ~1.3 cards with position dots. Desktop: 4 x 2 grid. */}
         <OfficerCarousel count={officers.length}>
           {officers.map((o) => (
@@ -76,16 +76,14 @@ export function Events() {
   return (
     <section id="events" className="bg-surface-2 py-20 md:py-28">
       <Container>
-        <SectionHeader index="06" eyebrow="Race calendar" title="Events" />
+        <SectionHeader title="Race calendar" sub="Every JPCS-TSU event this year, round by round." />
         <div className="grid gap-6 lg:grid-cols-12">
           <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
-            <div className="relative">
-              <PhotoSlot label="Event photo" className="aspect-[16/9]" />
-              <span className="slant type-label absolute top-4 left-4 bg-signal px-3 py-2 text-white">
+            <PhotoSlot label="Event photo" className="aspect-[16/9]" />
+            <div className="flex flex-1 flex-col gap-3 p-6">
+              <span className="slant type-label self-start bg-signal px-3 py-2 text-white">
                 <span className="unslant">Next round · {nextEvent.round}</span>
               </span>
-            </div>
-            <div className="flex flex-1 flex-col gap-3 p-6">
               <h3 className="type-heading">{nextEvent.title}</h3>
               <p className="type-data text-sm text-ink-muted">Date · {nextEvent.venue}</p>
               <p className="text-ink-muted">{nextEvent.blurb}</p>
@@ -147,7 +145,7 @@ export function Programs() {
   return (
     <section id="programs" className="py-20 md:py-28">
       <Container>
-        <SectionHeader index="07" eyebrow="Garage bays" title="Programs & committees" />
+        <SectionHeader title="Garage bays" sub="Programs and committees you can join, tagged by difficulty." />
         <ul data-anim="launch" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {programs.map((p, i) => (
             <li key={i} className="cut-corner flex gap-4 border border-line bg-surface p-5 sm:flex-col">
@@ -189,26 +187,29 @@ export function Gallery() {
       className="group bg-surface-2 py-20 md:py-28 lg:data-[strip=on]:overflow-hidden lg:data-[strip=on]:py-20"
     >
       <Container>
-        <SectionHeader index="08" eyebrow="Paddock" title="Gallery" />
+        <SectionHeader title="Paddock" sub="Photos from JPCS-TSU events, credited to the people who took them." />
         <div data-anim="gallery-viewport">
           <ul
             data-anim="gallery-track"
             className="grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4 lg:group-data-[strip=on]:flex lg:group-data-[strip=on]:w-max lg:group-data-[strip=on]:gap-6"
           >
             {gallery.map((g, i) => (
-              <li
-                key={i}
-                className={`relative lg:group-data-[strip=on]:h-[min(48vh,500px)] lg:group-data-[strip=on]:shrink-0 ${i === 0 ? "col-span-2 md:row-span-2 lg:group-data-[strip=on]:aspect-[4/3]" : "lg:group-data-[strip=on]:aspect-[3/4]"}`}
-              >
-                <PhotoSlot
-                  label={g.caption}
-                  tone="surface"
-                  className={`lg:group-data-[strip=on]:aspect-auto lg:group-data-[strip=on]:h-full ${i === 0 ? "aspect-[4/3] md:aspect-auto md:h-full" : "aspect-square"}`}
-                />
-                {/* Pit-board caption */}
-                <span className="type-data absolute bottom-2 left-2 bg-carbon-950 px-2 py-1 text-[11px] text-chevron">
-                  P{i + 1} · Photo: {g.credit}
-                </span>
+              <li key={i} className={`lg:group-data-[strip=on]:shrink-0 ${i === 0 ? "col-span-2 md:row-span-2" : ""}`}>
+                <figure className="flex h-full flex-col gap-2">
+                  <PhotoSlot
+                    label={g.caption}
+                    tone="surface"
+                    className={`lg:group-data-[strip=on]:h-[min(48vh,500px)] lg:group-data-[strip=on]:flex-none ${
+                      i === 0
+                        ? "aspect-[4/3] md:aspect-auto md:min-h-0 md:flex-1 lg:group-data-[strip=on]:aspect-[4/3]"
+                        : "aspect-square lg:group-data-[strip=on]:aspect-[3/4]"
+                    }`}
+                  />
+                  {/* Credit sits under the photo, never on it */}
+                  <figcaption className="type-data text-xs text-ink-muted">
+                    P{i + 1} · Photo: {g.credit}
+                  </figcaption>
+                </figure>
               </li>
             ))}
           </ul>
@@ -269,7 +270,7 @@ export function Faq() {
   return (
     <section id="faq" className="py-20 md:py-28">
       <Container className="max-w-3xl">
-        <SectionHeader index="10" eyebrow="Race control messages" title="FAQ" />
+        <SectionHeader title="Race control" sub="Answers to the questions we get most about joining and events." />
         <div data-anim="rise" className="flex flex-col gap-3">
           {faqs.map((f, i) => (
             <details key={f.q} open={i === 0} className="group border border-line bg-surface open:border-accent">

@@ -50,27 +50,22 @@ export function CheckeredStrip({ className = "", anim }: { className?: string; a
   return <div aria-hidden data-anim={anim} className={`checkered h-4 w-full opacity-90 ${className}`} />;
 }
 
+/**
+ * Section title in the race-broadcast voice ("Driver lineup", "Race calendar") with one plain-language
+ * line underneath, so the F1 name never hides what the section is. No eyebrow labels above titles.
+ */
 export function SectionHeader({
-  index,
-  eyebrow,
   title,
   sub,
   align = "center",
 }: {
-  index: string;
-  eyebrow: string;
   title: ReactNode;
-  sub?: string;
+  sub: string;
   align?: "center" | "left";
 }) {
   const centered = align === "center";
   return (
     <header className={`mb-12 md:mb-16 ${centered ? "text-center" : ""}`}>
-      <p className={`mb-4 flex items-center gap-3 text-accent-text ${centered ? "justify-center" : ""}`}>
-        <span className="type-data text-sm">{index}</span>
-        <SpeedSlashes />
-        <span className="type-label">{eyebrow}</span>
-      </p>
       {/* Broadcast wipe: an orange slanted bar sweeps across as the title reveals (components/motion.tsx) */}
       <div className="relative inline-block">
         <span
@@ -83,7 +78,7 @@ export function SectionHeader({
           {title}
         </h2>
       </div>
-      {sub && <p className="mt-3 text-ink-muted">{sub}</p>}
+      <p className={`mt-3 max-w-[65ch] text-ink-muted ${centered ? "mx-auto" : ""}`}>{sub}</p>
     </header>
   );
 }

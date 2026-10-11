@@ -66,13 +66,10 @@ export function Motion({ children }: { children: ReactNode }) {
 
           // Section titles: orange wipe sweeps across, letters land behind it
           for (const title of q<HTMLElement>("[data-anim=title]")) {
-            const header = title.closest("header");
-            const wipe = header?.querySelector("[data-anim=wipe]");
-            const slashes = header?.querySelectorAll("[data-anim=slashes] > span");
+            const wipe = title.parentElement?.querySelector("[data-anim=wipe]");
             const split = SplitText.create(title, { type: "words,chars" });
             gsap.set(split.chars, { autoAlpha: 0 });
             const tl = gsap.timeline({ scrollTrigger: { trigger: title, start: "top 85%", once: true } });
-            if (slashes?.length) tl.from(slashes, { x: -12, autoAlpha: 0, stagger: 0.06, duration: 0.3, ease: EASE }, 0);
             if (wipe) tl.fromTo(wipe, { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.32, ease: "power2.in" }, 0.05);
             tl.fromTo(
               split.chars,
