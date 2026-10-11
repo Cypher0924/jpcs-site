@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Subpage } from "@/components/subpage";
-import { PhotoSlot, SectionHeader } from "@/components/ui";
+import { PhotoGrid } from "@/components/photo-grid";
+import { SectionHeader } from "@/components/ui";
 import { contact, events } from "@/lib/content";
 
 export const metadata: Metadata = { title: "Paddock · JPCS-TSU" };
@@ -22,20 +23,13 @@ export default function GalleryPage() {
                 Event details →
               </Link>
             </div>
-            <ul className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-              {[e.cover, ...e.photos].map((src, n) => (
-                <li key={src}>
-                  <a href={src} target="_blank" rel="noopener" className="block">
-                    <PhotoSlot
-                      label={`${e.title}, photo ${n + 1}`}
-                      src={src}
-                      sizes="(min-width: 768px) 300px, 50vw"
-                      className="aspect-square transition-opacity hover:opacity-85"
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <PhotoGrid
+              photos={[e.cover, ...e.photos]}
+              label={e.title}
+              sizes="(min-width: 768px) 300px, 50vw"
+              className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"
+              tileClassName="aspect-square"
+            />
           </section>
         ))}
       </div>

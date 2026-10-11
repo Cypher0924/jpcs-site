@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Subpage } from "@/components/subpage";
+import { PhotoGrid } from "@/components/photo-grid";
 import { PhotoSlot } from "@/components/ui";
 import { events } from "@/lib/content";
 
@@ -60,24 +61,14 @@ async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["p
         className="mt-10 aspect-[16/9]"
       />
 
-      <ul className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-        {event.photos.map((src, n) => (
-          <li key={src}>
-            <figure className="flex flex-col gap-2">
-              {/* Opens the full-size photo */}
-              <a href={src} target="_blank" rel="noopener" className="block">
-                <PhotoSlot
-                  label={`${event.title}, photo ${n + 1}`}
-                  src={src}
-                  sizes="(min-width: 768px) 400px, 50vw"
-                  className="aspect-[16/9] transition-opacity hover:opacity-85"
-                />
-              </a>
-              <figcaption className="type-data text-xs text-ink-muted">P{n + 1} · Photo: JPCS-TSU</figcaption>
-            </figure>
-          </li>
-        ))}
-      </ul>
+      <PhotoGrid
+        photos={event.photos}
+        label={event.title}
+        sizes="(min-width: 768px) 400px, 50vw"
+        captions
+        className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4"
+        tileClassName="aspect-[16/9]"
+      />
 
       <nav aria-label="Other rounds" className="mt-12 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">
         {prev ? (
