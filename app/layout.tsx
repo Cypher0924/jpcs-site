@@ -25,7 +25,7 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JPCS-TSU · Orange CS Community",
+  title: "JPCS-TSU · CS Community",
   description:
     "Junior Philippine Computer Society, Tarlac State University chapter, College of Computer Studies.",
 };
