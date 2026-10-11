@@ -8,7 +8,7 @@ const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
 /** Five-column start-light gantry. Lights fill one by one, then go out. */
 function StartLights() {
   return (
-    <div className="flex justify-center gap-2 sm:gap-3" role="img" aria-label="Five start lights filling one by one, then going out">
+    <div data-anim="gantry" className="flex justify-center gap-2 sm:gap-3" role="img" aria-label="Five start lights filling one by one, then going out">
       {[0, 1, 2, 3, 4].map((i) => (
         <div key={i} className="flex flex-col gap-2 border border-line bg-surface p-2 sm:p-2.5">
           {[0, 1].map((row) => (
@@ -32,6 +32,7 @@ function HeroVisual() {
       {/* Season mark watermark, sits behind the gantry */}
       <span
         aria-hidden
+        data-anim="watermark"
         className="pointer-events-none absolute inset-x-0 top-[12%] -z-10 text-center font-display text-[clamp(9rem,6rem+12vw,18.75rem)] leading-none font-black text-ink opacity-[0.07] [font-stretch:62%]"
       >
         26/27
@@ -46,9 +47,9 @@ function HeroVisual() {
 
       {/* Speed stripe: three skewed bars in the official palette */}
       <div aria-hidden className="relative h-16">
-        <span className="slant absolute inset-x-[-10%] top-0 h-4 bg-jpcs-maroon" />
-        <span className="slant absolute inset-x-[-10%] top-6 h-4 bg-accent" />
-        <span className="slant absolute inset-x-[-10%] top-12 h-4 bg-gold" />
+        <span data-anim="stripe" className="slant absolute inset-x-[-10%] top-0 h-4 bg-jpcs-maroon" />
+        <span data-anim="stripe" className="slant absolute inset-x-[-10%] top-6 h-4 bg-accent" />
+        <span data-anim="stripe" className="slant absolute inset-x-[-10%] top-12 h-4 bg-gold" />
       </div>
 
       <div className="flex items-end justify-between">
@@ -63,7 +64,7 @@ export function Hero() {
   return (
     <section id="top" className="relative overflow-hidden" style={{ background: "var(--hero-wash)" }}>
       <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-12 lg:gap-6 lg:py-24">
-        <div className="lg:col-span-6 lg:pr-6">
+        <div data-anim="hero-copy" className="lg:col-span-6 lg:pr-6">
           <p className="mb-6 flex flex-wrap items-center gap-3 text-accent-text">
             <SpeedSlashes />
             <span className="type-label">JPCS-TSU · College of Computer Studies</span>

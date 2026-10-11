@@ -1,10 +1,11 @@
 import { Hero } from "@/components/hero";
+import { Motion } from "@/components/motion";
 import { Nav } from "@/components/nav";
 import { About, Events, Faq, Footer, Gallery, Join, Officers, Programs, Stats } from "@/components/sections";
 
 export default function Home() {
   return (
-    <>
+    <Motion>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60] focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink"
@@ -12,7 +13,7 @@ export default function Home() {
         Skip to content
       </a>
       <Nav />
-      <main id="main">
+      <main id="main" tabIndex={-1} className="overflow-x-clip outline-none">
         <Hero />
         <About />
         <Stats />
@@ -24,6 +25,6 @@ export default function Home() {
         <Faq />
       </main>
       <Footer />
-    </>
+    </Motion>
   );
 }

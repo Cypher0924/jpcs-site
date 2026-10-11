@@ -29,7 +29,7 @@ export function Button({
 /** "///" speed marks from the Midterms Pitstop pubmat. */
 export function SpeedSlashes({ className = "" }: { className?: string }) {
   return (
-    <span aria-hidden className={`inline-flex gap-1 ${className}`}>
+    <span aria-hidden data-anim="slashes" className={`inline-flex gap-1 ${className}`}>
       {[0, 1, 2].map((i) => (
         <span key={i} className="slant block h-3 w-1.5 bg-current" />
       ))}
@@ -46,8 +46,8 @@ export function Chevrons({ className = "" }: { className?: string }) {
   );
 }
 
-export function CheckeredStrip({ className = "" }: { className?: string }) {
-  return <div aria-hidden className={`checkered h-4 w-full opacity-90 ${className}`} />;
+export function CheckeredStrip({ className = "", anim }: { className?: string; anim?: string }) {
+  return <div aria-hidden data-anim={anim} className={`checkered h-4 w-full opacity-90 ${className}`} />;
 }
 
 export function SectionHeader({
@@ -71,7 +71,18 @@ export function SectionHeader({
         <SpeedSlashes />
         <span className="type-label">{eyebrow}</span>
       </p>
-      <h2 className="type-title text-ink">{title}</h2>
+      {/* Broadcast wipe: an orange slanted bar sweeps across as the title reveals (components/motion.tsx) */}
+      <div className="relative inline-block">
+        <span
+          aria-hidden
+          data-anim="wipe"
+          className="pointer-events-none absolute inset-y-[0.08em] -inset-x-3 origin-left bg-accent"
+          style={{ transform: "skewX(-12deg) scaleX(0)" }}
+        />
+        <h2 data-anim="title" className="type-title relative text-ink">
+          {title}
+        </h2>
+      </div>
       {sub && <p className="mt-3 text-ink-muted">{sub}</p>}
     </header>
   );

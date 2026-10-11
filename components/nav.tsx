@@ -31,6 +31,13 @@ export function Nav() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">
+      {/* Lap progress: fills with page scroll (components/motion.tsx) */}
+      <span
+        aria-hidden
+        data-anim="lap"
+        className="absolute inset-x-0 -bottom-px h-0.5 origin-left bg-accent"
+        style={{ transform: "scaleX(0)" }}
+      />
       <Container className="flex h-18 items-center justify-between gap-6">
         <a href="#top" className="flex items-center gap-3">
           <LogoMark />

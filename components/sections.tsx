@@ -16,7 +16,7 @@ export function About() {
     <section id="about" className="py-20 md:py-28">
       <Container>
         <SectionHeader index="03" eyebrow="Team briefing" title="About JPCS-TSU" />
-        <div className="grid gap-8 lg:grid-cols-12 lg:gap-6">
+        <div data-anim="rise" className="grid gap-8 lg:grid-cols-12 lg:gap-6">
           <PhotoSlot label="Photo: JPCS-TSU members, 4:3" className="aspect-[4/3] lg:col-span-6" />
           <div className="flex flex-col gap-6 lg:col-span-6">
             <div>
@@ -45,7 +45,7 @@ export function About() {
 export function Stats() {
   return (
     <section aria-label="JPCS-TSU in numbers" className="telemetry-grid border-y border-line bg-surface-2 py-14">
-      <Container className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-6">
+      <Container data-anim="rise" className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-6">
         {stats.map((s) => (
           <Stat key={s.label} {...s} />
         ))}
@@ -78,7 +78,7 @@ export function Events() {
       <Container>
         <SectionHeader index="06" eyebrow="Race calendar" title="Events" />
         <div className="grid gap-6 lg:grid-cols-12">
-          <article className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
+          <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
             <div className="relative">
               <PhotoSlot label="Event photo" className="aspect-[16/9]" />
               <span className="slant type-label absolute top-4 left-4 bg-signal px-3 py-2 text-white">
@@ -98,7 +98,7 @@ export function Events() {
             </div>
           </article>
 
-          <ol className="flex flex-col gap-3 lg:col-span-7">
+          <ol data-anim="launch" className="flex flex-col gap-3 lg:col-span-7">
             {rounds.map((r) => (
               <li key={r.round}>
                 <a
@@ -148,7 +148,7 @@ export function Programs() {
     <section id="programs" className="py-20 md:py-28">
       <Container>
         <SectionHeader index="07" eyebrow="Garage bays" title="Programs & committees" />
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+        <ul data-anim="launch" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {programs.map((p, i) => (
             <li key={i} className="cut-corner flex gap-4 border border-line bg-surface p-5 sm:flex-col">
               <span
@@ -182,24 +182,37 @@ export function Programs() {
 
 export function Gallery() {
   return (
-    <section id="gallery" className="bg-surface-2 py-20 md:py-28">
+    // data-strip="on" is set by components/motion.tsx on desktop (with motion allowed):
+    // the grid becomes a horizontal filmstrip that pans while the section is pinned.
+    <section
+      id="gallery"
+      className="group bg-surface-2 py-20 md:py-28 lg:data-[strip=on]:overflow-hidden lg:data-[strip=on]:py-20"
+    >
       <Container>
         <SectionHeader index="08" eyebrow="Paddock" title="Gallery" />
-        <ul className="grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4">
-          {gallery.map((g, i) => (
-            <li key={i} className={`relative ${i === 0 ? "col-span-2 md:row-span-2" : ""}`}>
-              <PhotoSlot
-                label={g.caption}
-                tone="surface"
-                className={i === 0 ? "aspect-[4/3] md:aspect-auto md:h-full" : "aspect-square"}
-              />
-              {/* Pit-board caption */}
-              <span className="type-data absolute bottom-2 left-2 bg-carbon-950 px-2 py-1 text-[11px] text-chevron">
-                P{i + 1} · Photo: {g.credit}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <div data-anim="gallery-viewport">
+          <ul
+            data-anim="gallery-track"
+            className="grid grid-cols-2 gap-3 md:grid-cols-4 md:grid-rows-2 md:gap-4 lg:group-data-[strip=on]:flex lg:group-data-[strip=on]:w-max lg:group-data-[strip=on]:gap-6"
+          >
+            {gallery.map((g, i) => (
+              <li
+                key={i}
+                className={`relative lg:group-data-[strip=on]:h-[min(48vh,500px)] lg:group-data-[strip=on]:shrink-0 ${i === 0 ? "col-span-2 md:row-span-2 lg:group-data-[strip=on]:aspect-[4/3]" : "lg:group-data-[strip=on]:aspect-[3/4]"}`}
+              >
+                <PhotoSlot
+                  label={g.caption}
+                  tone="surface"
+                  className={`lg:group-data-[strip=on]:aspect-auto lg:group-data-[strip=on]:h-full ${i === 0 ? "aspect-[4/3] md:aspect-auto md:h-full" : "aspect-square"}`}
+                />
+                {/* Pit-board caption */}
+                <span className="type-data absolute bottom-2 left-2 bg-carbon-950 px-2 py-1 text-[11px] text-chevron">
+                  P{i + 1} · Photo: {g.credit}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
         <p className="mt-6 text-right">
           <a href={contact.facebook} className="type-label text-accent-text hover:underline">
             View album →
@@ -213,10 +226,11 @@ export function Gallery() {
 export function Join() {
   return (
     <section id="join" className="grain overflow-hidden bg-accent text-accent-ink">
-      <CheckeredStrip className="[--ink:var(--color-carbon-950)]" />
+      <CheckeredStrip anim="strip-a" className="[--ink:var(--color-carbon-950)]" />
       <Container className="relative py-20 text-center md:py-24">
         <span
           aria-hidden
+          data-anim="boxbox"
           className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-display text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08] [font-stretch:62%]"
         >
           Box box
@@ -246,7 +260,7 @@ export function Join() {
           </a>
         </div>
       </Container>
-      <CheckeredStrip className="[--ink:var(--color-carbon-950)]" />
+      <CheckeredStrip anim="strip-b" className="[--ink:var(--color-carbon-950)]" />
     </section>
   );
 }
@@ -256,7 +270,7 @@ export function Faq() {
     <section id="faq" className="py-20 md:py-28">
       <Container className="max-w-3xl">
         <SectionHeader index="10" eyebrow="Race control messages" title="FAQ" />
-        <div className="flex flex-col gap-3">
+        <div data-anim="rise" className="flex flex-col gap-3">
           {faqs.map((f, i) => (
             <details key={f.q} open={i === 0} className="group border border-line bg-surface open:border-accent">
               <summary className="flex cursor-pointer list-none items-center gap-4 px-5 py-4 [&::-webkit-details-marker]:hidden">

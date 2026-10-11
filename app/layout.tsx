@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, JetBrains_Mono, Saira } from "next/font/google";
+import "lenis/dist/lenis.css";
 import "../styles/globals.css";
 
 // Display: condensed (wdth 62) for hero words, expanded italic (wdth 125) for titles

@@ -20,6 +20,7 @@ export function OfficerCarousel({ count, children }: { count: number; children: 
       <ul
         ref={ref}
         onScroll={onScroll}
+        data-anim="launch-desktop"
         className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 md:mx-0 md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:px-0 lg:grid-cols-4"
       >
         {children}

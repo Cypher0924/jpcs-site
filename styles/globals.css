@@ -146,6 +146,11 @@
     scroll-padding-top: 5rem;
   }
 
+  /* Lenis drives smooth scrolling when motion is allowed (components/motion.tsx) */
+  html.lenis {
+    scroll-behavior: auto;
+  }
+
   body {
     background: var(--canvas);
     color: var(--ink);
@@ -170,6 +175,7 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important; /* delayed reveals (hero headline) must not stay hidden */
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
