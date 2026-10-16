@@ -351,7 +351,7 @@ export function Footer({ base = "" }: { base?: string }) {
 
       <div className="border-t border-carbon-700">
         <Container className="flex flex-col items-start justify-between gap-4 py-6 text-sm text-paper-400 sm:flex-row sm:items-center">
-          <p>© 2026 JPCS-TSU · Website by (your name)</p>
+          <p>© 2026 JPCS-TSU</p>
           <a
             href="#top"
             className="slant type-label inline-flex items-center gap-2 border border-carbon-700 px-4 py-3 text-paper-100 hover:border-jpcs-orange hover:text-jpcs-orange"
