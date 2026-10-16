@@ -36,63 +36,151 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
 // `breaks` end a row early on desktop (after those indexes), so rows follow the hierarchy: P + VP together, the
 // three directors together, and each EA row matching the officers they assist.
 // TODO: add a short quote per officer (optional).
-type OfficerEntry = { name: string; role: string; slug: string; quote?: string };
+type OfficerEntry = {
+  name: string;
+  role: string;
+  slug: string;
+  quote?: string;
+};
 
-const officerGroupList: { title: string; label: string; breaks?: number[]; officers: OfficerEntry[] }[] = [
+const officerGroupList: {
+  title: string;
+  label: string;
+  breaks?: number[];
+  officers: OfficerEntry[];
+}[] = [
   {
-    title: "Chapter adviser",
-    label: "Chapter adviser",
-    officers: [{ name: "John Cedric Asprer", role: "Adviser", slug: "john-cedric-asprer" }],
+    title: "Chapter Adviser",
+    label: "Chapter Adviser",
+    officers: [
+      {
+        name: "John Cedric Asprer",
+        role: "Adviser",
+        slug: "john-cedric-asprer",
+      },
+    ],
   },
   {
-    title: "Executive board",
+    title: "Executive Board",
     label: "Newly elected",
     breaks: [1],
     officers: [
       { name: "Charles Guevarra", role: "President", slug: "charles-guevarra" },
-      { name: "Justin Tiamzon", role: "Vice President", slug: "justin-tiamzon" },
+      {
+        name: "Justin Tiamzon",
+        role: "Vice President",
+        slug: "justin-tiamzon",
+      },
       { name: "Nicole Bartolome", role: "Secretary", slug: "nicole-bartolome" },
-      { name: "Sabeena Estabillo", role: "Treasurer", slug: "sabeena-estabillo" },
+      {
+        name: "Sabeena Estabillo",
+        role: "Treasurer",
+        slug: "sabeena-estabillo",
+      },
       { name: "Jaydeen Gerangaya", role: "Auditor", slug: "jaydeen-gerangaya" },
     ],
   },
   {
-    title: "Directors and multimedia",
+    title: "Directors and Multimedia",
     label: "Newly elected",
     breaks: [2],
     officers: [
       { name: "Fritz Noche", role: "Director on Records", slug: "fritz-noche" },
-      { name: "Roxanne Facun", role: "Director on Projects", slug: "roxanne-facun" },
-      { name: "Kaede Isip", role: "Director on Public Relations", slug: "kaede-isip" },
-      { name: "Cashlyn Florentino", role: "Multimedia Officer", slug: "cashlyn-florentino" },
-      { name: "Jhurena Bautista", role: "Associate Multimedia Officer", slug: "jhurena-bautista" },
+      {
+        name: "Roxanne Facun",
+        role: "Director on Projects",
+        slug: "roxanne-facun",
+      },
+      {
+        name: "Kaede Isip",
+        role: "Director on Public Relations",
+        slug: "kaede-isip",
+      },
+      {
+        name: "Cashlyn Florentino",
+        role: "Multimedia Officer",
+        slug: "cashlyn-florentino",
+      },
+      {
+        name: "Jhurena Bautista",
+        role: "Associate Multimedia Officer",
+        slug: "jhurena-bautista",
+      },
     ],
   },
   {
-    title: "Year representatives",
+    title: "Year Representatives",
     label: "Newly elected",
     officers: [
-      { name: "Victor Bermudez", role: "First Year Representative", slug: "victor-bermudez" },
-      { name: "Aldrian Valdez", role: "Second Year Representative", slug: "aldrian-valdez" },
-      { name: "Shantrelle Reinoso", role: "Third Year Representative", slug: "shantrelle-reinoso" },
-      { name: "Allen Torres", role: "Fourth Year Representative", slug: "allen-torres" },
+      {
+        name: "Victor Bermudez",
+        role: "First Year Representative",
+        slug: "victor-bermudez",
+      },
+      {
+        name: "Aldrian Valdez",
+        role: "Second Year Representative",
+        slug: "aldrian-valdez",
+      },
+      {
+        name: "Shantrelle Reinoso",
+        role: "Third Year Representative",
+        slug: "shantrelle-reinoso",
+      },
+      {
+        name: "Allen Torres",
+        role: "Fourth Year Representative",
+        slug: "allen-torres",
+      },
     ],
   },
   {
-    title: "Executive associates",
-    label: "Executive associate",
+    title: "Executive Associates",
+    label: "Executive Associate",
     breaks: [3, 6],
     officers: [
-      { name: "Kassandra Gonzales", role: "EA to the President", slug: "kassandra-gonzales" },
-      { name: "Nash Supan", role: "EA to the Vice President", slug: "nash-supan" },
+      {
+        name: "Kassandra Gonzales",
+        role: "EA to the President",
+        slug: "kassandra-gonzales",
+      },
+      {
+        name: "Nash Supan",
+        role: "EA to the Vice President",
+        slug: "nash-supan",
+      },
       { name: "Chenee Hita", role: "EA to the Secretary", slug: "chenee-hita" },
       { name: "Althea Tan", role: "EA to the Auditor", slug: "althea-tan" },
-      { name: "Divina Marticio", role: "EA for Records", slug: "divina-marticio" },
-      { name: "Wesley Cunanan", role: "EA for Projects", slug: "wesley-cunanan" },
-      { name: "Miko Alcaraz", role: "EA for Public Relations", slug: "miko-alcaraz" },
-      { name: "Ezekiel Domalanta", role: "EA for Second Year Affairs", slug: "ezekiel-domalanta" },
-      { name: "Ivan Pineda", role: "EA for Third Year Affairs", slug: "ivan-pineda" },
-      { name: "Reena Golingan", role: "EA for Fourth Year Affairs", slug: "reena-golingan" },
+      {
+        name: "Divina Marticio",
+        role: "EA for Records",
+        slug: "divina-marticio",
+      },
+      {
+        name: "Wesley Cunanan",
+        role: "EA for Projects",
+        slug: "wesley-cunanan",
+      },
+      {
+        name: "Miko Alcaraz",
+        role: "EA for Public Relations",
+        slug: "miko-alcaraz",
+      },
+      {
+        name: "Ezekiel Domalanta",
+        role: "EA for Second Year Affairs",
+        slug: "ezekiel-domalanta",
+      },
+      {
+        name: "Ivan Pineda",
+        role: "EA for Third Year Affairs",
+        slug: "ivan-pineda",
+      },
+      {
+        name: "Reena Golingan",
+        role: "EA for Fourth Year Affairs",
+        slug: "reena-golingan",
+      },
     ],
   },
   {
@@ -100,26 +188,53 @@ const officerGroupList: { title: string; label: string; breaks?: number[]; offic
     label: "Apprentice",
     breaks: [3],
     officers: [
-      { name: "Jewel Pineda", role: "Apprentice to the President", slug: "jewel-pineda" },
-      { name: "Paul Almiron", role: "Apprentice to the Vice President", slug: "paul-almiron" },
-      { name: "Orlando Cunan", role: "Apprentice to the Treasurer", slug: "orlando-cunan" },
-      { name: "Mica Ramos", role: "Apprentice to the Auditor", slug: "mica-ramos" },
-      { name: "Nicole Feliciano", role: "Apprentice for Secretariat & Records", slug: "nicole-feliciano" },
-      { name: "Aira Celerio", role: "Apprentice for Projects & Documentation", slug: "aira-celerio" },
+      {
+        name: "Jewel Pineda",
+        role: "Apprentice to the President",
+        slug: "jewel-pineda",
+      },
+      {
+        name: "Paul Almiron",
+        role: "Apprentice to the Vice President",
+        slug: "paul-almiron",
+      },
+      {
+        name: "Orlando Cunan",
+        role: "Apprentice to the Treasurer",
+        slug: "orlando-cunan",
+      },
+      {
+        name: "Mica Ramos",
+        role: "Apprentice to the Auditor",
+        slug: "mica-ramos",
+      },
+      {
+        name: "Nicole Feliciano",
+        role: "Apprentice for Secretariat & Records",
+        slug: "nicole-feliciano",
+      },
+      {
+        name: "Aira Celerio",
+        role: "Apprentice for Projects & Documentation",
+        slug: "aira-celerio",
+      },
     ],
   },
 ];
 
 let raceNumber = 0;
-export const officerGroups = officerGroupList.map(({ officers, label, ...group }) => ({
-  ...group,
-  officers: officers.map((o) => ({
-    ...o,
-    number: o.role === "Adviser" ? "TP" : String(++raceNumber).padStart(2, "0"),
-    code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
-    year: `${label} · 2026-2027`,
-  })),
-}));
+export const officerGroups = officerGroupList.map(
+  ({ officers, label, ...group }) => ({
+    ...group,
+    officers: officers.map((o) => ({
+      ...o,
+      number:
+        o.role === "Adviser" ? "TP" : String(++raceNumber).padStart(2, "0"),
+      code: o.name.split(" ").at(-1)!.slice(0, 3).toUpperCase(),
+      year: `${label} · 2026-2027`,
+    })),
+  }),
+);
 
 export const nextEvent = {
   round: "R5",
@@ -148,7 +263,10 @@ export const events = [
     summary:
       "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
     cover: "/photos/general-assembly-group.webp",
-    photos: eventPhotos("general-assembly", [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16]),
+    photos: eventPhotos(
+      "general-assembly",
+      [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 16],
+    ),
   },
   {
     slug: "ready-set-join",
@@ -161,7 +279,10 @@ export const events = [
     summary:
       "Officers set up sign-up tables in classrooms and around campus so new BS Computer Science students could register as JPCS members, pick up freshman stickers and meet the chapter.",
     cover: "/photos/ready-set-join.webp",
-    photos: eventPhotos("ready-set-join", [1, 2, 3, 4, 6, 7, 10, 13, 14, 15, 16, 19]),
+    photos: eventPhotos(
+      "ready-set-join",
+      [1, 2, 3, 4, 6, 7, 10, 13, 14, 15, 16, 19],
+    ),
   },
   {
     slug: "meet-and-greet-booth",
@@ -169,12 +290,15 @@ export const events = [
     month: "JUL",
     day: "28", // July 28, 2026
     title: "Meet & Greet Booth",
-    venue: "The CS Booth, games and performances",
+    venue: "The JPCS Booth, games and performances",
     done: true,
     summary:
       "The jungle-themed CS Booth at the campus fair: balloon giveaways, games on the plaza and performances, with the CS Community out in full orange.",
     cover: "/photos/meet-and-greet-group.webp",
-    photos: eventPhotos("meet-and-greet-booth", [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66]),
+    photos: eventPhotos(
+      "meet-and-greet-booth",
+      [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66],
+    ),
   },
   {
     slug: "ccs-cares",
@@ -187,7 +311,10 @@ export const events = [
     summary:
       "Members and officers swept, wiped and bagged their way through classrooms, hallways, restrooms and the AVR to leave the College of Computer Studies building clean.",
     cover: "/photos/ccs-cares.webp",
-    photos: eventPhotos("ccs-cares", [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45]),
+    photos: eventPhotos(
+      "ccs-cares",
+      [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45],
+    ),
   },
 ];
 
@@ -195,17 +322,45 @@ export type Event = (typeof events)[number];
 
 // TODO: credit the actual photographers. "JPCS-TSU" is used because the photos carry the chapter's frame.
 export const gallery = [
-  { src: "/photos/meet-and-greet-group.webp", caption: "Meet & Greet Booth", credit: "JPCS-TSU" },
-  { src: "/photos/ready-set-join.webp", caption: "Ready, Set, Join", credit: "JPCS-TSU" },
-  { src: "/photos/ccs-cares.webp", caption: "Project CCS C.A.R.E.S", credit: "JPCS-TSU" },
-  { src: "/photos/meet-and-greet-booth.webp", caption: "The CS Booth", credit: "JPCS-TSU" },
-  { src: "/photos/general-assembly-members.webp", caption: "General Assembly", credit: "JPCS-TSU" },
+  {
+    src: "/photos/meet-and-greet-group.webp",
+    caption: "Meet & Greet Booth",
+    credit: "JPCS-TSU",
+  },
+  {
+    src: "/photos/ready-set-join.webp",
+    caption: "Ready, Set, Join",
+    credit: "JPCS-TSU",
+  },
+  {
+    src: "/photos/ccs-cares.webp",
+    caption: "Project CCS C.A.R.E.S",
+    credit: "JPCS-TSU",
+  },
+  {
+    src: "/photos/meet-and-greet-booth.webp",
+    caption: "The JPCS Booth",
+    credit: "JPCS-TSU",
+  },
+  {
+    src: "/photos/general-assembly-members.webp",
+    caption: "General Assembly",
+    credit: "JPCS-TSU",
+  },
 ];
 
 export const faqs = [
   { time: "14:02", q: "Who can join?", a: "Answer placeholder." },
-  { time: "14:05", q: "How much is the membership fee?", a: "Answer placeholder." },
-  { time: "14:09", q: "When do events usually happen?", a: "Answer placeholder." },
+  {
+    time: "14:05",
+    q: "How much is the membership fee?",
+    a: "Answer placeholder.",
+  },
+  {
+    time: "14:09",
+    q: "When do events usually happen?",
+    a: "Answer placeholder.",
+  },
   { time: "14:12", q: "How do I get my JPCS merch?", a: "Answer placeholder." },
 ];
 
