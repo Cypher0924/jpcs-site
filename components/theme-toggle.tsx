@@ -18,10 +18,15 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
 
   function toggle() {
     const next: Theme = theme === "light" ? "dark" : "light";
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("theme", next);
-    } catch {}
+    const apply = () => {
+      document.documentElement.setAttribute("data-theme", next);
+      try {
+        localStorage.setItem("theme", next);
+      } catch {}
+    };
+    // Slanted wipe like the splash (theme-wipe-* in globals.css). Instant switch without support or under reduced motion.
+    if (!("startViewTransition" in document) || matchMedia("(prefers-reduced-motion: reduce)").matches) apply();
+    else document.startViewTransition(apply);
   }
 
   return (

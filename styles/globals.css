@@ -368,3 +368,62 @@
     visibility: hidden;
   }
 }
+
+/* Theme switch (components/theme-toggle.tsx): the new theme sweeps in behind a slanted orange band, the same
+   edge as the splash wipe. The old snapshot sits on top and is clipped away right of the edge; the new one
+   follows a band-width behind, and the orange background shows in the gap. Animates clip-path, the one
+   exception to the transform/opacity rule, because a view-transition snapshot can't be moved without
+   moving the page with it. */
+::view-transition {
+  --wipe-band: clamp(2.5rem, 6vw, 5rem);
+  --wipe-slant: 21.3vh; /* tan(12deg) x viewport height: matches skewX(-12deg) */
+}
+
+::view-transition-image-pair(root) {
+  background: var(--accent);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  animation-duration: 600ms;
+  animation-timing-function: var(--ease-launch);
+  animation-fill-mode: both;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+  animation-name: theme-wipe-old;
+}
+
+::view-transition-new(root) {
+  animation-name: theme-wipe-new;
+}
+
+@keyframes theme-wipe-old {
+  from {
+    clip-path: polygon(0 0, 200% 0, 200% 100%, calc(0px - var(--wipe-slant)) 100%);
+  }
+  to {
+    clip-path: polygon(
+      calc(100% + var(--wipe-slant) + var(--wipe-band)) 0,
+      200% 0,
+      200% 100%,
+      calc(100% + var(--wipe-band)) 100%
+    );
+  }
+}
+
+@keyframes theme-wipe-new {
+  from {
+    clip-path: polygon(
+      0 0,
+      calc(0px - var(--wipe-band)) 0,
+      calc(0px - var(--wipe-band) - var(--wipe-slant)) 100%,
+      0 100%
+    );
+  }
+  to {
+    clip-path: polygon(0 0, calc(100% + var(--wipe-slant)) 0, 100% 100%, 0 100%);
+  }
+}
