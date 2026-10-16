@@ -239,7 +239,7 @@ export const officerGroups = officerGroupList.map(
 export const nextEvent = {
   round: "R5",
   title: "Event title",
-  date: "2026-11-14T09:00:00+08:00", // TODO
+  date: "2026-01-01T00:00:00+08:00", // TODO: R5 date unknown. A past date keeps the countdown at 00.
   venue: "Venue",
   blurb: "One or two lines about the event and who it is for.",
 };

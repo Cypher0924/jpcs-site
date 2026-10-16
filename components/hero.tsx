@@ -53,7 +53,7 @@ function HeroVisual() {
       </div>
 
       <div className="flex items-end justify-between">
-        <span className="type-label text-accent-text">Your own illustration or photo here</span>
+        <span className="type-label text-accent-text">Grid forming</span>
         <Chevrons className="size-8 text-accent" />
       </div>
     </div>
