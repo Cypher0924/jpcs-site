@@ -2,8 +2,8 @@ import { nextEvent } from "@/lib/content";
 import { Countdown } from "./countdown";
 import { Button, Chevrons, Container, SpeedSlashes } from "./ui";
 
-const LIGHT_STEP = 0.55; // seconds between each start light
-const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
+export const LIGHT_STEP = 0.55; // seconds between each start light
+export const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
 
 /** Five-column start-light gantry. Lights fill one by one, then go out. */
 function StartLights() {

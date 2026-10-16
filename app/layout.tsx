@@ -30,8 +30,9 @@ export const metadata: Metadata = {
     "Junior Philippine Computer Society, Tarlac State University chapter, College of Computer Studies.",
 };
 
-// Runs before first paint: saved choice wins, otherwise follow the OS setting.
-const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`;
+// Runs before first paint: saved choice wins, otherwise follow the OS setting. Also marks whether the splash
+// plays: skipped on repeat visits in this tab and under reduced motion (components/splash.tsx).
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}try{document.documentElement.setAttribute("data-splash",sessionStorage.getItem("splash")||matchMedia("(prefers-reduced-motion: reduce)").matches?"skip":"play")}catch(e){}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

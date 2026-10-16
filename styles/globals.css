@@ -328,3 +328,43 @@
     transform: none;
   }
 }
+
+/* Splash (components/splash.tsx). The head script in app/layout.tsx sets data-splash before first paint, so
+   the scroll lock holds from the first frame and lifts when the splash leaves the DOM. The reserved gutter
+   keeps the page from shifting when the scrollbar comes back, and is painted carbon to match the splash. */
+[data-splash="skip"] .splash {
+  display: none;
+}
+
+[data-splash="play"]:has(.splash) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+  background-color: var(--color-carbon-950);
+}
+
+@keyframes splash-wipe {
+  from {
+    transform: skewX(-12deg);
+  }
+  to {
+    transform: translateX(calc(100% + 6rem)) skewX(-12deg);
+  }
+}
+
+@keyframes splash-fade {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes splash-progress {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes splash-done {
+  to {
+    visibility: hidden;
+  }
+}

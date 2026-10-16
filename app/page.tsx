@@ -2,6 +2,7 @@ import { Hero } from "@/components/hero";
 import { Motion } from "@/components/motion";
 import { Nav } from "@/components/nav";
 import { About, Events, Faq, Footer, Gallery, Join, Officers, Stats } from "@/components/sections";
+import { Splash } from "@/components/splash";
 
 export default function Home() {
   return (
@@ -12,13 +13,14 @@ export default function Home() {
       >
         Skip to content
       </a>
+      <Splash />
       <Nav />
       <main id="main" tabIndex={-1} className="overflow-x-clip outline-none">
         <Hero />
         <About />
         <Stats />
         <Officers />
-        <Events />
+        <Events />
         <Gallery />
         <Join />
         <Faq />
