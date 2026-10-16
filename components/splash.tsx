@@ -8,7 +8,7 @@ import { LogoMark } from "./ui";
 const skip = () => document.getAnimations().forEach((a) => a.finish());
 
 /**
- * First-visit start sequence. Plays the five start lights on the hero's clock, then a slanted carbon panel
+ * First-visit start sequence, in the visitor's theme. Plays the five start lights on the hero's clock, then a slanted panel
  * with an orange trailing edge wipes off to reveal the hero as its headline drops in. Any key, click or tap
  * skips it. Once per tab session: the head script in app/layout.tsx sets data-splash="skip" before first
  * paint on repeat visits and under reduced motion, and CSS hides it. Without JS it still wipes away by CSS.
@@ -28,7 +28,6 @@ export function Splash() {
 
   return (
     <div
-      data-theme="dark"
       data-lenis-prevent
       className="splash fixed inset-0 z-[70] overflow-hidden"
       style={{ animation: `splash-done 0s ${LIGHTS_OUT + 0.5}s forwards` }}
