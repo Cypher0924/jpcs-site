@@ -283,7 +283,7 @@ const eventList = [
     cover: "/photos/ccs-cares.webp",
     photos: eventPhotos(
       "ccs-cares",
-      [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45],
+      [3, 4, 5, 7, 14, 15, 23, 25, 26, 28, 32, 45],
     ),
   },
   {
