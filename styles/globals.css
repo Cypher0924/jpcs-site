@@ -35,9 +35,9 @@
   --color-paper-400: #b9ad9c;
 
   /* Type scale (fluid between 390px and 1440px) */
-  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 7rem);
+  --text-display: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
   --text-display--line-height: 0.88;
-  --text-title: clamp(2rem, 1.45rem + 2.4vw, 3.5rem);
+  --text-title: clamp(1.5rem, 1rem + 2.2vw, 3rem);
   --text-title--line-height: 1;
   --text-heading: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
   --text-heading--line-height: 1.2;
@@ -130,9 +130,10 @@
   --color-highlight: var(--highlight);
   --color-gold: var(--gold);
 
-  --font-display: var(--font-saira), "Arial Narrow", sans-serif;
+  --font-display: var(--font-f1), "Arial Black", sans-serif;
+  --font-wide: var(--font-f1-wide), "Arial Black", sans-serif;
+  --font-condensed: var(--font-saira), "Arial Narrow", sans-serif;
   --font-sans: var(--font-archivo), system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 }
 
 @layer base {
@@ -198,24 +199,20 @@
 
 /* ---------- Type roles ---------- */
 @utility type-display {
-  /* Pubmat "FULL THROTTLE FRONTEND": tall, ultra-condensed caps */
+  /* Formula1 Display Black caps */
   font-family: var(--font-display);
   font-size: var(--text-display);
   line-height: var(--text-display--line-height);
   font-weight: 900;
-  font-stretch: 62%;
   text-transform: uppercase;
   letter-spacing: -0.01em;
 }
 
 @utility type-title {
-  /* Pubmat "TRACKSIDE" / "MIDTERMS PITSTOP": wide, italic, fast */
-  font-family: var(--font-display);
+  /* Formula1 Display Wide, upright like F1's own graphics (the font has no wide italic) */
+  font-family: var(--font-wide);
   font-size: var(--text-title);
   line-height: var(--text-title--line-height);
-  font-weight: 800;
-  font-stretch: 125%;
-  font-style: italic;
   text-transform: uppercase;
   letter-spacing: -0.01em;
 }
@@ -228,21 +225,20 @@
 }
 
 @utility type-label {
-  /* Pubmat "INTERFACE DESIGN CHALLENGE": heavy, extended caps */
-  font-family: var(--font-sans);
+  /* Formula1 Display Bold caps */
+  font-family: var(--font-display);
   font-size: 0.75rem;
   line-height: 1;
-  font-weight: 800;
-  font-stretch: 125%;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: var(--tracking-label);
 }
 
 @utility type-data {
-  /* Timing tower / telemetry numbers */
-  font-family: var(--font-mono);
+  /* Timing tower / telemetry numbers: Formula1 Display Regular with tabular figures */
+  font-family: var(--font-display);
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 /* ---------- Motifs ---------- */

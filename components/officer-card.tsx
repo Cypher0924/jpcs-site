@@ -30,7 +30,7 @@ export function OfficerCard({ officer }: { officer: Officer }) {
             />
             {/* Darkens the pubmat's busy top-left corner so the race number stays readable */}
             <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,rgb(0_0_0/0.75),transparent_45%)]" />
-            <span className="absolute top-2 left-3 font-display text-[3.5rem] leading-none font-black text-accent [font-stretch:62%]">{officer.number}</span>
+            <span className="absolute top-2 left-3 font-display text-[3.5rem] leading-none font-black text-accent">{officer.number}</span>
           </span>
           <span className="flex flex-1 items-start justify-between gap-2 p-4">
             <span>

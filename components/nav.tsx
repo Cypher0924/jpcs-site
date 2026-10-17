@@ -42,7 +42,7 @@ export function Nav({ base = "" }: { base?: string }) {
         <a href={`${base}#top`} className="flex items-center gap-3">
           <LogoMark />
           <span className="leading-tight whitespace-nowrap">
-            <span className="block font-display text-lg font-extrabold italic [font-stretch:125%]">JPCS-TSU</span>
+            <span className="block font-wide text-base">JPCS-TSU</span>
             <span className="hidden text-xs text-ink-muted sm:block">College of Computer Studies</span>
           </span>
         </a>
@@ -104,7 +104,7 @@ export function Nav({ base = "" }: { base?: string }) {
                 <li key={id} className="animate-[slide-in_400ms_var(--ease-launch)_both]" style={{ animationDelay: `${i * 40}ms` }}>
                   <a href={`${base}#${id}`} onClick={() => setOpen(false)} className="flex items-center gap-4 py-4">
                     <span className="type-data w-8 text-sm text-accent-text">P{i + 1}</span>
-                    <span className="font-display text-[1.75rem] font-extrabold uppercase italic [font-stretch:125%]">{label}</span>
+                    <span className="font-wide text-2xl uppercase">{label}</span>
                   </a>
                 </li>
               ))}

@@ -330,14 +330,14 @@ export function Join() {
         <span
           aria-hidden
           data-anim="boxbox"
-          className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-display text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08] [font-stretch:62%]"
+          className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-condensed text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08] [font-stretch:62%]"
         >
           Box box
         </span>
         <p className="type-label flex items-center justify-center gap-3">
           <SpeedSlashes /> Get your superlicence <SpeedSlashes />
         </p>
-        <h2 className="mt-4 font-display text-[clamp(2.5rem,1.6rem+4vw,5rem)] leading-none font-black uppercase italic [font-stretch:125%]">
+        <h2 className="mt-4 font-wide text-[clamp(1.75rem,1rem+3vw,4.5rem)] leading-none uppercase">
           Join JPCS-TSU
         </h2>
         <p className="mx-auto mt-4 max-w-xl">
@@ -397,7 +397,7 @@ export function Footer({ base = "" }: { base?: string }) {
           <div className="flex items-center gap-3">
             <LogoMark size={48} />
             <span className="leading-tight">
-              <span className="block font-display text-lg font-extrabold italic [font-stretch:125%]">JPCS-TSU</span>
+              <span className="block font-wide text-base">JPCS-TSU</span>
               <span className="block text-xs text-paper-400">College of Computer Studies</span>
             </span>
           </div>
