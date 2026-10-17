@@ -1,9 +1,23 @@
 import Link from "next/link";
-import { about, contact, events, faqs, gallery, navLinks, nextEvent, officerGroups, stats, type Event } from "@/lib/content";
+import {
+  about,
+  contact,
+  events,
+  faqs,
+  gallery,
+  merch,
+  navLinks,
+  nextEvent,
+  officerGroups,
+  peso,
+  stats,
+  type Event,
+} from "@/lib/content";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
+import { PhotoGrid } from "./photo-grid";
 import { Stat } from "./stat";
 import { Button, CheckeredStrip, Chevrons, Container, InProgress, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
 
@@ -212,6 +226,97 @@ export function Gallery() {
             Full gallery →
           </Link>
         </p>
+      </Container>
+    </section>
+  );
+}
+
+type MerchGroup = (typeof merch.groups)[number];
+type MerchItem = MerchGroup["items"][number];
+
+/** Lowest price in a group, marked "from" when items differ or a price is only a starting price. */
+function groupPrice(g: MerchGroup) {
+  const prices = g.items.map((i) => i.price);
+  const from = g.items.some((i) => "from" in i && i.from) || new Set(prices).size > 1;
+  return `${from ? "From " : ""}${peso(Math.min(...prices))}`;
+}
+
+/** Pre-order button while the form is open, otherwise the checkered "finished" mark from the race calendar. */
+export function MerchStatus() {
+  return merch.open ? (
+    <Button href={merch.form}>Pre-order now</Button>
+  ) : (
+    <p className="flex items-center gap-3">
+      <span aria-hidden className="checkered block size-6 shrink-0 border border-line [background-size:8px_8px]" />
+      <span>
+        <span className="font-semibold">Pre-orders closed.</span>{" "}
+        <span className="text-ink-muted">The 2026-2027 run was open {merch.window}.</span>
+      </span>
+    </p>
+  );
+}
+
+/** Name and price, then what it is and who made it. Sits under each merch photo. */
+export function MerchCaption({ item, creditLabel = "Design by" }: { item: MerchItem; creditLabel?: string }) {
+  return (
+    <span className="flex flex-col gap-1">
+      <span className="flex items-baseline justify-between gap-3">
+        <span className="font-semibold">{item.name}</span>
+        <span className="type-data shrink-0 text-sm text-accent-text">
+          {"from" in item && item.from ? "From " : ""}
+          {peso(item.price)}
+        </span>
+      </span>
+      {item.details && <span className="text-sm text-ink-muted">{item.details}</span>}
+      {"credit" in item && item.credit && (
+        <span className="type-data text-xs text-ink-muted">
+          {creditLabel} {item.credit}
+        </span>
+      )}
+    </span>
+  );
+}
+
+export function Merch() {
+  const shirts = merch.groups[0].items;
+  return (
+    <section id="merch" className="bg-surface-2 py-20 md:py-28">
+      <Container>
+        <SectionHeader title="Team kit" sub="The official JPCS 26/27 merch, designed by our own officers and members." />
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-6">
+          <div data-anim="rise" className="lg:col-span-7">
+            <PhotoGrid
+              photos={shirts.map((s) => s.image)}
+              label="JPCS 26/27 shirts"
+              sizes="(min-width: 1024px) 340px, 50vw"
+              captions={shirts.map((s) => (
+                <MerchCaption key={s.name} item={s} />
+              ))}
+              className="grid grid-cols-2 gap-3 md:gap-4"
+              tileClassName="aspect-square"
+            />
+          </div>
+
+          <div data-anim="rise" className="flex flex-col gap-6 lg:col-span-5">
+            <MerchStatus />
+            <ul className="border-t border-line">
+              {merch.groups.map((g) => (
+                <li key={g.id}>
+                  <Link
+                    href={`/merch#${g.id}`}
+                    className="group flex items-baseline justify-between gap-4 border-b border-line py-4 hover:text-accent-text"
+                  >
+                    <span className="type-heading text-lg">{g.title}</span>
+                    <span className="type-data text-sm text-ink-muted group-hover:text-accent-text">{groupPrice(g)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Button href="/merch" variant="outline" className="self-start">
+              See the full kit
+            </Button>
+          </div>
+        </div>
       </Container>
     </section>
   );

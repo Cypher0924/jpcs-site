@@ -6,6 +6,7 @@ export const navLinks = [
   { id: "officers", label: "Officers" },
   { id: "events", label: "Events" },
   { id: "gallery", label: "Gallery" },
+  { id: "merch", label: "Merch" },
   { id: "faq", label: "FAQ" },
 ] as const;
 
@@ -242,10 +243,9 @@ export const officerGroups = officerGroupList.map(
 const eventPhotos = (slug: string, nums: number[]) =>
   nums.map((n) => `/events/${slug}/${String(n).padStart(2, "0")}.webp`);
 
-export const events = [
+const eventList = [
   {
     slug: "general-assembly",
-    round: "R1",
     month: "JUL",
     day: "03", // July 3, 2026
     title: "JPCS-TSU General Assembly",
@@ -261,8 +261,20 @@ export const events = [
     ),
   },
   {
+    slug: "officers-clean-up",
+    month: "JUL",
+    day: "07", // July 7, 2026
+    title: "Officers' Clean-up Drive",
+    venue: "Sorting supplies and clearing the room",
+    done: true,
+    summary:
+      "The newly elected officers' first job together: they sorted the org's supplies, cleared out old posters and equipment, swept up and bagged the trash.",
+    credit: "JPCS-TSU",
+    cover: "/photos/officers-clean-up.webp",
+    photos: eventPhotos("officers-clean-up", [1, 2, 3, 4, 5, 6, 8, 9, 10]),
+  },
+  {
     slug: "ccs-cares",
-    round: "R2",
     month: "JUL",
     day: "15", // July 15, 2026, 8:00 AM (per The Browser). JPCS posted the photos Jul 29.
     title: "Project CCS C.A.R.E.S",
@@ -279,7 +291,6 @@ export const events = [
   },
   {
     slug: "ready-set-join",
-    round: "R3",
     month: "JUL",
     day: "27", // July 27, 2026
     title: "Ready, Set, Join: Become a JPCS Member",
@@ -296,7 +307,6 @@ export const events = [
   },
   {
     slug: "meet-and-greet-booth",
-    round: "R4",
     month: "JUL",
     day: "28", // July 28, 2026
     title: "Meet & Greet Booth",
@@ -311,7 +321,29 @@ export const events = [
       [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66],
     ),
   },
+  {
+    slug: "jpcs-merch",
+    month: "SEP",
+    day: "08", // Pre-orders ran Sept 8 to 25, 2026
+    title: "JPCS Official Merch",
+    venue: "Pre-orders, Sept 8 to 25",
+    done: true,
+    summary:
+      "The 2026-2027 collection launched with shirts, lanyards, keychains and button pins, all designed by JPCS-TSU officers and members, on pre-order through a Google Form until the last lap on September 25.",
+    credit: "JPCS-TSU",
+    cover: "/merch/bundle-a.webp",
+    photos: [
+      "shirt-red", "shirt-orange", "lanyard-half-inch", "lanyard-reversible", "keychain-f1", "keychain-jujutsu-kaisen",
+      "keychain-haikyuu", "keychain-demon-slayer", "keychain-exclusive", "pins", "bundle-e", "size-chart",
+    ].map((n) => `/merch/${n}.webp`),
+    // Pubmats are square, so they aren't cropped to the usual 16:9 tiles
+    square: true,
+    link: { href: "/merch", label: "See the full kit" },
+  },
 ];
+
+// Rounds follow the calendar order above.
+export const events = eventList.map((e, i) => ({ ...e, round: `R${i + 1}` }));
 
 export type Event = (typeof events)[number];
 
@@ -352,6 +384,170 @@ export const gallery = [
   },
 ];
 
+// The 2026-2027 collection, from the Sept 8, 2026 "JPCS Official Merch" launch pubmats (public/merch/).
+// Pre-order only, through a Google Form that closed Sept 25, so there is no buy button while `open` is false.
+// Shirt prices "start at" PHP 249; no price per size was posted, so none is shown.
+type MerchItem = { name: string; price: number; from?: boolean; image: string; details?: string; credit?: string };
+
+export const merch = {
+  open: false,
+  form: "https://forms.gle/XNS4qgSrKSUExjL37",
+  window: "Sept 8 to 25, 2026",
+  groups: [
+    {
+      id: "shirts",
+      title: "Shirts",
+      note: "Sizes XS to 3XL. Larger sizes may cost more.",
+      items: [
+        {
+          name: "Red ComSci shirt",
+          price: 249,
+          from: true,
+          image: "/merch/shirt-red.webp",
+          details: "Small logo on the front, the Computer Science graphic with MMXXVI on the back.",
+          credit: "Cashlyn Florentino",
+        },
+        {
+          name: "Orange ComSci shirt",
+          price: 249,
+          from: true,
+          image: "/merch/shirt-orange.webp",
+          details: "Same design as the red shirt, in the CS Community's orange.",
+          credit: "Cashlyn Florentino",
+        },
+      ],
+    },
+    {
+      id: "lanyards",
+      title: "Lanyards",
+      items: [
+        {
+          name: "Half-inch lanyard",
+          price: 79,
+          image: "/merch/lanyard-half-inch.webp",
+          details: "Black.",
+          credit: "Charles Guevarra",
+        },
+        {
+          name: "Reversible lanyard",
+          price: 149,
+          image: "/merch/lanyard-reversible.webp",
+          details: "Black and red on the front, white and blue Computer Science on the back.",
+          credit: "Charles Guevarra, Justin Tiamzon",
+        },
+      ],
+    },
+    {
+      id: "keychains",
+      title: "Keychains",
+      creditLabel: "Art by",
+      note: "Chibi characters riding tires. Sold per piece.",
+      items: [
+        {
+          name: "F1 set",
+          price: 45,
+          image: "/merch/keychain-f1.webp",
+          details: "Lewis Hamilton, Max Verstappen, Charles Leclerc, Kimi Antonelli",
+          credit: "Kassandra Gonzales, Nash Joshua Supan",
+        },
+        {
+          name: "Jujutsu Kaisen set",
+          price: 45,
+          image: "/merch/keychain-jujutsu-kaisen.webp",
+          details: "Satoru Gojo, Ryomen Sukuna, Yuji Itadori, Suguru Geto",
+          credit: "Jaydeen Gerangaya",
+        },
+        {
+          name: "Haikyuu!! set",
+          price: 45,
+          image: "/merch/keychain-haikyuu.webp",
+          details: "Tobio Kageyama, Shoyo Hinata, Kei Tsukishima",
+          credit: "Jaydeen Gerangaya, Nash Joshua Supan",
+        },
+        {
+          name: "Demon Slayer set",
+          price: 45,
+          image: "/merch/keychain-demon-slayer.webp",
+          details: "Zenitsu Agatsuma, Obanai Iguro, Nezuko Kamado, Mitsuri Kanroji",
+          credit: "Kassandra Gonzales",
+        },
+        {
+          name: "Exclusive set",
+          price: 45,
+          image: "/merch/keychain-exclusive.webp",
+          details: "The JPCS mascot, Spider-Man",
+          credit: "John Paul Almiron, Nash Joshua Supan",
+        },
+      ],
+    },
+    {
+      id: "pins",
+      title: "Button pins",
+      items: [
+        {
+          name: "Button pins",
+          price: 25,
+          image: "/merch/pins.webp",
+          details:
+            "Girls in Tech, Hello World!, ComSci, Bugs Love My Code, Geto, Gojo, Certified Komsay Boy, Certified Komsay Girl, Komsay Spidey, AI Can't Replace Boy, AI Can't Replace Girl",
+          credit: "Charles Guevarra, Justin Tiamzon, Cashlyn Florentino, Aira Celerio, Miko Alcaraz",
+        },
+        {
+          name: "Pin bundle A",
+          price: 40,
+          image: "/merch/pins-bundle-a.webp",
+          details: "Certified Komsay Boy and Girl",
+        },
+        {
+          name: "Pin bundle B",
+          price: 40,
+          image: "/merch/pins-bundle-b.webp",
+          details: "Gojo and Geto",
+        },
+        {
+          name: "Pin bundle C",
+          price: 40,
+          image: "/merch/pins-bundle-c.webp",
+          details: "AI Can't Replace Boy and Girl",
+        },
+      ],
+    },
+    {
+      id: "bundles",
+      title: "Bundles",
+      items: [
+        { name: "Bundle A", price: 479, image: "/merch/bundle-a.webp", details: "Red shirt and orange shirt" },
+        {
+          name: "Bundle B",
+          price: 209,
+          image: "/merch/bundle-b.webp",
+          details: "Half-inch lanyard and reversible lanyard",
+        },
+        { name: "Bundle C", price: 309, image: "/merch/bundle-c.webp", details: "1 shirt and half-inch lanyard" },
+        { name: "Bundle D", price: 379, image: "/merch/bundle-d.webp", details: "1 shirt and reversible lanyard" },
+        {
+          name: "Bundle E",
+          price: 459,
+          image: "/merch/bundle-e.webp",
+          details: "1 shirt, half-inch lanyard and reversible lanyard",
+        },
+      ],
+    },
+  ] satisfies { id: string; title: string; note?: string; creditLabel?: string; items: MerchItem[] }[],
+  // Shirt size chart from the pubmat. No unit was printed; most likely inches.
+  sizes: [
+    ["XS", 18.5, 24],
+    ["S", 19.5, 25],
+    ["M", 20.5, 26],
+    ["L", 21.5, 27],
+    ["XL", 22.5, 28],
+    ["2XL", 23.5, 29],
+    ["3XL", 24.5, 30],
+  ] as const,
+};
+
+export const peso = (n: number) => `PHP ${n}`;
+
 export const faqs = [
   {
     time: "14:02",
@@ -371,7 +567,7 @@ export const faqs = [
   {
     time: "14:12",
     q: "How do I get my JPCS merch?",
-    a: "Through the pre-order form we post on Facebook. The 2026 run was open from September 8 to 25.",
+    a: "Through the pre-order form we post on Facebook. The 2026-2027 collection was open from September 8 to 25, and the Merch section shows what was on sale.",
   },
 ];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { PhotoSlot } from "./ui";
 
 /**
@@ -15,7 +15,7 @@ export function PhotoGrid({
   sizes,
   className = "",
   tileClassName = "",
-  captions = false,
+  captions,
 }: {
   photos: string[];
   /** Used for alt text: "<label>, photo 3". */
@@ -23,8 +23,8 @@ export function PhotoGrid({
   sizes: string;
   className?: string;
   tileClassName?: string;
-  /** Show "P1 · Photo: JPCS-TSU" under each tile. */
-  captions?: boolean;
+  /** One caption per photo, shown under its tile. */
+  captions?: ReactNode[];
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState<number | null>(null);
@@ -63,7 +63,7 @@ export function PhotoGrid({
               <button type="button" onClick={() => show(i)} className="block w-full cursor-zoom-in" aria-label={`View ${alt(i)}`}>
                 <PhotoSlot label={alt(i)} src={src} sizes={sizes} className={`transition-opacity hover:opacity-85 ${tileClassName}`} />
               </button>
-              {captions && <figcaption className="type-data text-xs text-ink-muted">P{i + 1} · Photo: JPCS-TSU</figcaption>}
+              {captions && <figcaption>{captions[i]}</figcaption>}
             </figure>
           </li>
         ))}

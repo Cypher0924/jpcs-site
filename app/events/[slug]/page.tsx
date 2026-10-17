@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { Subpage } from "@/components/subpage";
 import { PhotoGrid } from "@/components/photo-grid";
-import { PhotoSlot } from "@/components/ui";
+import { Button, PhotoSlot } from "@/components/ui";
 import { events } from "@/lib/content";
 
 export function generateStaticParams() {
@@ -54,23 +54,34 @@ async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["p
         <div className="lg:col-span-5">
           <p className="text-ink-muted">{event.summary}</p>
           <p className="type-data mt-3 text-xs text-ink-muted">Photos: {event.credit}</p>
+          {event.link && (
+            <Button href={event.link.href} variant="outline" className="mt-6">
+              {event.link.label}
+            </Button>
+          )}
         </div>
       </header>
 
-      <PhotoSlot
-        label={event.title}
-        src={event.cover}
-        sizes="(min-width: 1280px) 1200px, 100vw"
-        className="mt-10 aspect-[16/9]"
-      />
+      {!event.square && (
+        <PhotoSlot
+          label={event.title}
+          src={event.cover}
+          sizes="(min-width: 1280px) 1200px, 100vw"
+          className="mt-10 aspect-[16/9]"
+        />
+      )}
 
       <PhotoGrid
         photos={event.photos}
         label={event.title}
         sizes="(min-width: 768px) 400px, 50vw"
-        captions
-        className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4"
-        tileClassName="aspect-[16/9]"
+        captions={event.photos.map((_, i) => (
+          <span key={i} className="type-data text-xs text-ink-muted">
+            P{i + 1} · Photo: {event.credit}
+          </span>
+        ))}
+        className={`grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 ${event.square ? "mt-10" : "mt-4"}`}
+        tileClassName={event.square ? "aspect-square" : "aspect-[16/9]"}
       />
 
       <nav aria-label="Other rounds" className="mt-12 grid gap-3 border-t border-line pt-8 sm:grid-cols-2">

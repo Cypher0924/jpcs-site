@@ -1,7 +1,7 @@
 import { Hero } from "@/components/hero";
 import { Motion } from "@/components/motion";
 import { Nav } from "@/components/nav";
-import { About, Events, Faq, Footer, Gallery, Join, Officers, Stats } from "@/components/sections";
+import { About, Events, Faq, Footer, Gallery, Join, Merch, Officers, Stats } from "@/components/sections";
 import { Splash } from "@/components/splash";
 
 export default function Home() {
@@ -22,6 +22,7 @@ export default function Home() {
         <Officers />
         <Events />
         <Gallery />
+        <Merch />
         <Join />
         <Faq />
       </main>
