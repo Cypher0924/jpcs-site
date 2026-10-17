@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Archivo, Saira } from "next/font/google";
+import { Barlow, Big_Shoulders } from "next/font/google";
 import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "../styles/globals.css";
 
-// Official Formula1 Display, supplied by the organizers: hero words, labels, timing numbers
+// Official Formula1 Display, supplied by the organizers: race numbers, labels, timing numbers
 const f1 = localFont({
   variable: "--font-f1",
   src: [
@@ -17,18 +17,19 @@ const f1 = localFont({
 // Formula1 Display Wide: section titles and the wordmark
 const f1Wide = localFont({ variable: "--font-f1-wide", src: "./fonts/f1-wide.woff2" });
 
-// Condensed (wdth 62) for the 26/27 and BOX BOX watermarks, which F1 has no narrow cut for
-const saira = Saira({
-  variable: "--font-saira",
+// Tall condensed poster type for the hero headline and the 26/27 and BOX BOX watermarks (F1 has no narrow cut).
+// The opsz axis picks its display cut automatically at large sizes.
+const bigShoulders = Big_Shoulders({
+  variable: "--font-big-shoulders",
   subsets: ["latin"],
-  axes: ["wdth"],
+  axes: ["opsz"],
 });
 
-// Body text and headings
-const archivo = Archivo({
-  variable: "--font-archivo",
+// Body text and headings: DIN-like, so it sits with F1's geometry
+const barlow = Barlow({
+  variable: "--font-barlow",
   subsets: ["latin"],
-  axes: ["wdth"],
+  weight: ["400", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-theme="dark"
       suppressHydrationWarning
-      className={`${f1.variable} ${f1Wide.variable} ${saira.variable} ${archivo.variable} antialiased`}
+      className={`${f1.variable} ${f1Wide.variable} ${bigShoulders.variable} ${barlow.variable} antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

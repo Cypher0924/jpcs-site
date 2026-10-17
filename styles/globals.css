@@ -35,7 +35,7 @@
   --color-paper-400: #b9ad9c;
 
   /* Type scale (fluid between 390px and 1440px) */
-  --text-display: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+  --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 7rem);
   --text-display--line-height: 0.88;
   --text-title: clamp(1.5rem, 1rem + 2.2vw, 3rem);
   --text-title--line-height: 1;
@@ -132,8 +132,8 @@
 
   --font-display: var(--font-f1), "Arial Black", sans-serif;
   --font-wide: var(--font-f1-wide), "Arial Black", sans-serif;
-  --font-condensed: var(--font-saira), "Arial Narrow", sans-serif;
-  --font-sans: var(--font-archivo), system-ui, sans-serif;
+  --font-condensed: var(--font-big-shoulders), "Arial Narrow", sans-serif;
+  --font-sans: var(--font-barlow), system-ui, sans-serif;
 }
 
 @layer base {
@@ -199,8 +199,8 @@
 
 /* ---------- Type roles ---------- */
 @utility type-display {
-  /* Formula1 Display Black caps */
-  font-family: var(--font-display);
+  /* Big Shoulders Black: tall condensed poster caps, like the pubmat "FULL THROTTLE FRONTEND" */
+  font-family: var(--font-condensed);
   font-size: var(--text-display);
   line-height: var(--text-display--line-height);
   font-weight: 900;

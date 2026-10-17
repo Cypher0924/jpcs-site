@@ -33,7 +33,7 @@ function HeroVisual() {
       <span
         aria-hidden
         data-anim="watermark"
-        className="pointer-events-none absolute inset-x-0 top-[12%] -z-10 text-center font-condensed text-[clamp(9rem,6rem+12vw,18.75rem)] leading-none font-black text-ink opacity-[0.07] [font-stretch:62%]"
+        className="pointer-events-none absolute inset-x-0 top-[12%] -z-10 text-center font-condensed text-[clamp(9rem,6rem+12vw,18.75rem)] leading-none font-black text-ink opacity-[0.07]"
       >
         26/27
       </span>

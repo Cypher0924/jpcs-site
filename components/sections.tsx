@@ -330,7 +330,7 @@ export function Join() {
         <span
           aria-hidden
           data-anim="boxbox"
-          className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-condensed text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08] [font-stretch:62%]"
+          className="pointer-events-none absolute inset-0 -z-10 grid place-items-center font-condensed text-[clamp(8rem,4rem+18vw,21rem)] leading-none font-black whitespace-nowrap uppercase opacity-[0.08]"
         >
           Box box
         </span>
