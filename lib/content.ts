@@ -238,10 +238,10 @@ export const officerGroups = officerGroupList.map(
 
 export const nextEvent = {
   round: "R5",
-  title: "Event title",
+  title: "TBA",
   date: "2026-01-01T00:00:00+08:00", // TODO: R5 date unknown. A past date keeps the countdown at 00.
-  venue: "Venue",
-  blurb: "One or two lines about the event and who it is for.",
+  venue: "Venue TBA",
+  blurb: "Details to be announced.",
 };
 
 // Past activities from the competition materials. Each one gets a page at /events/[slug].
@@ -350,18 +350,18 @@ export const gallery = [
 ];
 
 export const faqs = [
-  { time: "14:02", q: "Who can join?", a: "Answer placeholder." },
+  { time: "14:02", q: "Who can join?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
   {
     time: "14:05",
     q: "How much is the membership fee?",
-    a: "Answer placeholder.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   {
     time: "14:09",
     q: "When do events usually happen?",
-    a: "Answer placeholder.",
+    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
-  { time: "14:12", q: "How do I get my JPCS merch?", a: "Answer placeholder." },
+  { time: "14:12", q: "How do I get my JPCS merch?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
 ];
 
 export const contact = {

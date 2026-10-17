@@ -107,7 +107,7 @@ export function Events() {
                 <span className="unslant">Next round · {nextEvent.round}</span>
               </span>
               <h3 className="type-heading">{nextEvent.title}</h3>
-              <p className="type-data text-sm text-ink-muted">Date · {nextEvent.venue}</p>
+              <p className="type-data text-sm text-ink-muted">Date TBA · {nextEvent.venue}</p>
               <p className="text-ink-muted">{nextEvent.blurb}</p>
               <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-4">
                 <Countdown to={nextEvent.date} />
