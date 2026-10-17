@@ -19,7 +19,20 @@ import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
 import { PhotoGrid } from "./photo-grid";
 import { Stat } from "./stat";
-import { Button, CheckeredStrip, Chevrons, Container, InProgress, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
+import {
+  Button,
+  CheckeredStrip,
+  Chevrons,
+  Container,
+  FacebookIcon,
+  InProgress,
+  LogoMark,
+  MailIcon,
+  MessengerIcon,
+  PhotoSlot,
+  SectionHeader,
+  SpeedSlashes,
+} from "./ui";
 
 export function About() {
   return (
@@ -423,22 +436,23 @@ export function Footer({ base = "" }: { base?: string }) {
 
         <div className="md:col-span-3">
           <p className="type-label text-jpcs-orange">Contact</p>
-          <ul className="mt-4 space-y-2 text-sm text-paper-400">
-            <li>
-              <a href={`mailto:${contact.email}`} className="hover:text-white">
-                {contact.email}
-              </a>
-            </li>
-            <li>
-              <a href={contact.facebook} className="hover:text-white">
-                fb.com{contact.handle}
-              </a>
-            </li>
-            <li>
-              <a href={contact.messenger} className="hover:text-white">
-                Messenger
-              </a>
-            </li>
+          <ul className="mt-4 flex gap-3">
+            {[
+              { href: `mailto:${contact.email}`, label: `Email ${contact.email}`, icon: <MailIcon /> },
+              { href: contact.facebook, label: `Facebook, fb.com${contact.handle}`, icon: <FacebookIcon /> },
+              { href: contact.messenger, label: "Message us on Messenger", icon: <MessengerIcon /> },
+            ].map(({ href, label, icon }) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  aria-label={label}
+                  title={label}
+                  className="grid size-12 place-items-center border border-carbon-700 text-paper-100 transition-colors hover:border-jpcs-orange hover:text-jpcs-orange"
+                >
+                  {icon}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
