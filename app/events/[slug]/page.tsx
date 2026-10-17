@@ -17,8 +17,8 @@ export async function generateMetadata({ params }: PageProps<"/events/[slug]">):
   return { title: event ? `${event.title} · JPCS-TSU` : "Event not found · JPCS-TSU" };
 }
 
-// The nav, back link and footer form an instant shell; the event itself reads URL params, so it sits
-// behind Suspense (Partial Prefetching). All four slugs are prerendered, so the fallback rarely shows.
+// nav, back link and footer are an instant shell. the event reads params so it sits behind Suspense (Partial Prefetching).
+// all slugs are prerendered so the fallback rarely shows
 export default function EventPage({ params }: PageProps<"/events/[slug]">) {
   return (
     <Subpage back={{ href: "/events", label: "Race calendar" }}>

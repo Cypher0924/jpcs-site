@@ -1,29 +1,23 @@
 @import "tailwindcss";
 
-/*
- * JPCS-TSU · "CS Community" design system
- *
- * Layer 1  brand palette   fixed hex values (@theme)
- * Layer 2  semantic roles  switch per theme ([data-theme])
- * Layer 3  utilities       Tailwind maps roles to classes (@theme inline)
- */
+/* tokens: brand palette (fixed), theme roles (per data-theme), utilities */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ---------- Layer 1 · brand palette ---------- */
+/* brand palette */
 @theme {
-  /* Official chapter logo */
+  /* chapter logo */
   --color-jpcs-orange: #e77d27;
   --color-jpcs-maroon: #a0372a;
   --color-pcs-gold: #f5c542;
 
-  /* 26/27 season pubmats */
+  /* season pubmats */
   --color-race-red: #e10600;
   --color-magenta: #e6176b;
   --color-chevron: #ffb800;
   --color-burnt: #c04000;
 
-  /* Neutrals: carbon (night) and paper (day) */
+  /* carbon (night), paper (day) */
   --color-carbon-950: #0b0b0d;
   --color-carbon-900: #131316;
   --color-carbon-800: #1c1c21;
@@ -34,7 +28,7 @@
   --color-paper-200: #e6ddcf;
   --color-paper-400: #b9ad9c;
 
-  /* Type scale (fluid between 390px and 1440px) */
+  /* fluid type, 390px to 1440px */
   --text-display: clamp(2.75rem, 1.6rem + 5.2vw, 5rem);
   --text-display--line-height: 0.88;
   --text-title: clamp(1.5rem, 1rem + 2.2vw, 3rem);
@@ -44,27 +38,25 @@
   --text-stat: clamp(3rem, 2.3rem + 3vw, 5rem);
   --text-stat--line-height: 1;
 
-  /* Tracking */
   --tracking-label: 0.14em;
 
-  /* Shape: sharp by default; cuts and slants instead of rounding */
+  /* no rounding, use cuts and slants */
   --radius-xs: 2px;
   --radius-sm: 4px;
 
-  /* Motion */
   --ease-launch: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-brake: cubic-bezier(0.7, 0, 0.84, 0);
 
-  /* Layout: 12 x 78px columns, 24px gutters = 1200px content at 1440 */
+  /* 12 cols x 78px, 24px gutters, 1200px content at 1440 */
   --container-site: 75rem;
   --spacing-gutter: 1.5rem;
 }
 
-/* ---------- Layer 2 · semantic roles ---------- */
+/* theme roles */
 :root,
 [data-theme="light"] {
   color-scheme: light;
-  /* "Paddock day": warm paper, official orange + maroon */
+  /* light theme */
   --canvas: var(--color-paper-50);
   --surface: #ffffff;
   --surface-2: var(--color-paper-100);
@@ -75,7 +67,7 @@
 
   --accent: var(--color-jpcs-orange);
   --accent-ink: #16151a; /* text on orange fills (7.2:1) */
-  --accent-text: #b4471a; /* orange as text on paper (5.3:1) */
+  --accent-text: #b4471a; /* orange text on paper (5.3:1) */
   --secondary: var(--color-jpcs-maroon);
   --secondary-ink: #ffffff;
   --signal: var(--color-race-red);
@@ -89,7 +81,7 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  /* "Night race": carbon, orange glow, red start lights */
+  /* dark theme */
   --canvas: var(--color-carbon-950);
   --surface: var(--color-carbon-900);
   --surface-2: var(--color-carbon-800);
@@ -112,7 +104,7 @@
   --hero-wash: radial-gradient(120% 80% at 80% 0%, #3a1608 0%, var(--color-carbon-950) 60%);
 }
 
-/* ---------- Layer 3 · utilities ---------- */
+/* utilities */
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
@@ -142,7 +134,7 @@
     scroll-padding-top: 5rem;
   }
 
-  /* Lenis drives smooth scrolling when motion is allowed (components/motion.tsx) */
+  /* Lenis smooth scroll, see motion.tsx */
   html.lenis {
     scroll-behavior: auto;
   }
@@ -163,8 +155,7 @@
     outline-offset: 3px;
   }
 
-  /* FAQ dropdowns: native <details> slide open/closed. Browsers without ::details-content
-     (older Firefox/Safari) just open instantly. */
+  /* FAQ <details> slide open. older Firefox/Safari without ::details-content just snap open */
   :root {
     interpolate-size: allow-keywords;
   }
@@ -190,16 +181,16 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
-      animation-delay: 0s !important; /* delayed reveals (hero headline) must not stay hidden */
+      animation-delay: 0s !important; /* delayed reveals (hero headline) would stay hidden otherwise */
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
   }
 }
 
-/* ---------- Type roles ---------- */
+/* type */
 @utility type-display {
-  /* Big Shoulders Black: tall condensed poster caps, like the pubmat "FULL THROTTLE FRONTEND" */
+  /* Big Shoulders Black, tall poster caps like the pubmat */
   font-family: var(--font-condensed);
   font-size: var(--text-display);
   line-height: var(--text-display--line-height);
@@ -209,7 +200,7 @@
 }
 
 @utility type-title {
-  /* Formula1 Display Wide, upright like F1's own graphics (the font has no wide italic) */
+  /* F1 Wide, upright (the font has no wide italic) */
   font-family: var(--font-wide);
   font-size: var(--text-title);
   line-height: var(--text-title--line-height);
@@ -225,7 +216,7 @@
 }
 
 @utility type-label {
-  /* Formula1 Display Bold caps */
+  /* F1 Bold caps */
   font-family: var(--font-display);
   font-size: 0.75rem;
   line-height: 1;
@@ -235,15 +226,15 @@
 }
 
 @utility type-data {
-  /* Timing tower / telemetry numbers: Formula1 Display Regular with tabular figures */
+  /* timing tower numbers, tabular figures */
   font-family: var(--font-display);
   font-variant-numeric: tabular-nums;
   font-weight: 400;
 }
 
-/* ---------- Motifs ---------- */
+/* motifs */
 @utility slant {
-  /* Skewed label box from the pubmats; wrap content in .unslant */
+  /* skewed label box from the pubmats, wrap content in .unslant */
   transform: skewX(-12deg);
 }
 
@@ -253,7 +244,7 @@
 }
 
 @utility cut-corner {
-  /* Chamfered top-right corner, like a front-wing endplate */
+  /* chamfered top-right corner */
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
 }
 
@@ -263,7 +254,7 @@
 }
 
 @utility telemetry-grid {
-  /* Thin grid overlay from the "Full Throttle Frontend" pubmat */
+  /* grid overlay from the pubmat */
   background-image:
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
@@ -284,7 +275,7 @@
   }
 }
 
-/* ---------- Animations ---------- */
+/* animations */
 @keyframes light-on {
   from {
     background-color: var(--surface-2);
@@ -325,9 +316,8 @@
   }
 }
 
-/* Splash (components/splash.tsx). The head script in app/layout.tsx sets data-splash before first paint, so
-   the scroll lock holds from the first frame and lifts when the splash leaves the DOM. The reserved gutter
-   keeps the page from shifting when the scrollbar comes back, and is painted to match the splash. */
+/* splash: head script in layout.tsx sets data-splash before first paint so the scroll lock holds from frame 1.
+   gutter is reserved so the page doesn't shift when the scrollbar comes back, painted to match the splash */
 [data-splash="skip"] .splash {
   display: none;
 }
@@ -365,14 +355,11 @@
   }
 }
 
-/* Theme switch (components/theme-toggle.tsx): the new theme sweeps in behind a slanted orange band, the same
-   edge as the splash wipe. The old snapshot sits on top and is clipped away right of the edge; the new one
-   follows a band-width behind, and the orange background shows in the gap. Animates clip-path, the one
-   exception to the transform/opacity rule, because a view-transition snapshot can't be moved without
-   moving the page with it. */
+/* theme switch: new theme wipes in behind a slanted orange band (same edge as the splash). Animates clip-path,
+   which breaks the transform/opacity rule, but a view-transition snapshot can't move without moving the page */
 ::view-transition {
   --wipe-band: clamp(2.5rem, 6vw, 5rem);
-  --wipe-slant: 21.3vh; /* tan(12deg) x viewport height: matches skewX(-12deg) */
+  --wipe-slant: 21.3vh; /* tan(12deg) x viewport height, matches skewX(-12deg) */
 }
 
 ::view-transition-image-pair(root) {

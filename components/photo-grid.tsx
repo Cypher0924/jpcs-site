@@ -4,11 +4,7 @@ import Image from "next/image";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { PhotoSlot } from "./ui";
 
-/**
- * Photo grid whose tiles open an in-page viewer (native <dialog>) instead of the raw image file, so the
- * URL never changes. Close with ✕, Esc, a click outside the photo, or the browser/phone Back button;
- * step through with the arrows or ← →.
- */
+/** Photo tiles that open an in-page <dialog> viewer. URL never changes, Back button closes it. */
 export function PhotoGrid({
   photos,
   label,
@@ -18,12 +14,12 @@ export function PhotoGrid({
   captions,
 }: {
   photos: string[];
-  /** Used for alt text: "<label>, photo 3". */
+  /** alt text is "<label>, photo 3" */
   label: string;
   sizes: string;
   className?: string;
   tileClassName?: string;
-  /** One caption per photo, shown under its tile. */
+  /** one caption per photo */
   captions?: ReactNode[];
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -34,11 +30,11 @@ export function PhotoGrid({
   function show(i: number) {
     setOpen(i);
     dialog.current?.showModal();
-    // Lets the phone/browser Back button close the viewer instead of leaving the page
+    // so Back closes the viewer instead of leaving the page
     history.pushState({ photoViewer: true }, "");
   }
 
-  // Closing by any route (✕, Esc, backdrop) goes through the dialog's close event; undo our history entry.
+  // any close route (✕, Esc, backdrop) fires close, so undo our history entry
   function onClose() {
     setOpen(null);
     if (history.state?.photoViewer) history.back();

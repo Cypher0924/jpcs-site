@@ -13,7 +13,7 @@ function subscribe(onChange: () => void) {
 const getTheme = () => (document.documentElement.getAttribute("data-theme") as Theme) ?? "dark";
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  // Server renders null; the inline script in layout.tsx has already set the real value.
+  // server renders null, inline script in layout.tsx already set the real value
   const theme = useSyncExternalStore<Theme | null>(subscribe, getTheme, () => null);
 
   function toggle() {
@@ -24,7 +24,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
         localStorage.setItem("theme", next);
       } catch {}
     };
-    // Slanted wipe like the splash (theme-wipe-* in globals.css). Instant switch without support or under reduced motion.
+    // slanted wipe like the splash. instant switch without support or under reduced motion
     if (!("startViewTransition" in document) || matchMedia("(prefers-reduced-motion: reduce)").matches) apply();
     else document.startViewTransition(apply);
   }
@@ -36,7 +36,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={theme === "light" ? "Switch to night race (dark)" : "Switch to paddock day (light)"}
       className={`grid size-10 place-items-center border border-line text-ink transition-colors hover:border-accent hover:text-accent-text ${className}`}
     >
-      {/* sun for dark mode, moon for light mode */}
+      {/* sun in dark mode, moon in light */}
       <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
         {theme === "light" ? (
           <path d="M20 14.5A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.5Z" />

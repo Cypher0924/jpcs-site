@@ -4,10 +4,7 @@ import { Nav } from "./nav";
 import { Footer } from "./sections";
 import { Container } from "./ui";
 
-/**
- * Chrome for pages outside the homepage (/events, /gallery). Nav and footer links point back to the
- * homepage sections. No <Motion>, so no smooth scroll or scroll effects here.
- */
+/** Nav and footer for pages outside the homepage. No <Motion>, so no smooth scroll. */
 export function Subpage({ back, children }: { back?: { href: string; label: string }; children: ReactNode }) {
   return (
     <>

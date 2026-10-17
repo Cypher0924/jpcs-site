@@ -5,7 +5,6 @@ import { PhotoSlot } from "./ui";
 
 type Officer = { number: string; code: string; name: string; role: string; slug: string; year: string; quote?: string };
 
-/** Driver card: race number + three-letter code. Hover or tap flips to role, year and quote. */
 export function OfficerCard({ officer }: { officer: Officer }) {
   const [flipped, setFlipped] = useState(false);
 
@@ -19,7 +18,6 @@ export function OfficerCard({ officer }: { officer: Officer }) {
       <span
         className={`relative grid transition-transform duration-500 ease-[var(--ease-launch)] [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] ${flipped ? "[transform:rotateY(180deg)]" : ""}`}
       >
-        {/* front */}
         <span className="cut-corner col-start-1 row-start-1 flex flex-col border border-line bg-surface [backface-visibility:hidden]">
           <span className="relative">
             <PhotoSlot
@@ -28,7 +26,7 @@ export function OfficerCard({ officer }: { officer: Officer }) {
               sizes="(min-width: 1024px) 280px, (min-width: 768px) 33vw, 75vw"
               className="aspect-square"
             />
-            {/* Darkens the pubmat's busy top-left corner so the race number stays readable */}
+            {/* darken the busy top-left corner so the race number is readable */}
             <span aria-hidden className="absolute inset-0 bg-[radial-gradient(circle_at_0_0,rgb(0_0_0/0.75),transparent_45%)]" />
             <span className="absolute top-2 left-3 font-display text-[3.5rem] leading-none font-black text-accent">{officer.number}</span>
           </span>
@@ -41,7 +39,6 @@ export function OfficerCard({ officer }: { officer: Officer }) {
           </span>
         </span>
 
-        {/* back */}
         <span className="cut-corner col-start-1 row-start-1 flex flex-col justify-between border border-accent bg-secondary p-5 text-secondary-ink [backface-visibility:hidden] [transform:rotateY(180deg)]">
           <span className="type-data text-sm opacity-80">
             #{officer.number} · {officer.code}

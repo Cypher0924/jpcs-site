@@ -4,20 +4,17 @@ import { useEffect, useState } from "react";
 import { LIGHT_STEP, LIGHTS_OUT } from "./hero";
 import { LogoMark } from "./ui";
 
-// Jumps every CSS animation to its end: the splash runs its normal cleanup and the hero headline lands at once.
+// finishes every CSS animation so cleanup runs and the headline lands at once
 const skip = () => document.getAnimations().forEach((a) => a.finish());
 
 /**
- * First-visit start sequence, in the visitor's theme. Plays the five start lights on the hero's clock, then a slanted panel
- * with an orange trailing edge wipes off to reveal the hero as its headline drops in. Any key, click or tap
- * skips it. Once per tab session: the head script in app/layout.tsx sets data-splash="skip" before first
- * paint on repeat visits and under reduced motion, and CSS hides it. Without JS it still wipes away by CSS.
+ * First-visit start lights, then a slanted wipe. Any key/click/tap skips it. Once per tab: head script in
+ * layout.tsx sets data-splash="skip" on repeat visits and reduced motion. Without JS it still wipes away by CSS.
  */
 export function Splash() {
   const [done, setDone] = useState(false);
 
-  // Page scroll is locked in CSS while this is mounted ([data-splash="play"]:has(.splash) in globals.css),
-  // and data-lenis-prevent keeps Lenis off it
+  // scroll is locked in CSS while mounted (globals.css), data-lenis-prevent keeps Lenis off it
   useEffect(() => {
     if (done || document.documentElement.dataset.splash === "skip") return;
     window.addEventListener("keydown", skip);
@@ -40,7 +37,7 @@ export function Splash() {
         setDone(true);
       }}
     >
-      {/* Wider than the viewport so the skewed corners stay covered; the orange band trails it off-screen */}
+      {/* wider than the viewport so the skewed corners stay covered, orange band trails it off-screen */}
       <div
         aria-hidden
         className="absolute inset-y-0 -right-[15vh] -left-[15vh] bg-canvas"
@@ -77,7 +74,7 @@ export function Splash() {
           Skip intro
         </button>
 
-        {/* Loading bar: fills in step with the lights */}
+        {/* loading bar, fills with the lights */}
         <span
           aria-hidden
           className="block h-0.5 origin-left bg-accent"

@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-/** Telemetry readout: counts up once when scrolled into view. */
 export function Stat({ value, unit, label }: { value: number | null; unit?: string; label: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(0);

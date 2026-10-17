@@ -1,5 +1,5 @@
-// Site content. About, events and gallery come from the "JPCS Competition Materials" folder; everything
-// else is still placeholder. Replace every value marked TODO before submitting (wireframe notes 03, 04).
+// Site content. About, events and gallery are real (Competition Materials folder), the rest is placeholder.
+// TODO: replace every TODO value before submitting (wireframe notes 03, 04)
 
 export const navLinks = [
   { id: "about", label: "About" },
@@ -10,7 +10,7 @@ export const navLinks = [
   { id: "faq", label: "FAQ" },
 ] as const;
 
-// From "JPCS Description_Mission_Vision.docx", word for word.
+// word for word from "JPCS Description_Mission_Vision.docx"
 export const about = {
   who: "The Junior Philippine Computer Society (JPCS) is an organization of students in the field of Information and Communications Technology. JPCS aims to provide its members with experiences that complement the knowledge they acquire in their respective schools, thus better preparing them for their future roles as world-class ICT professionals.",
   whoMore:
@@ -31,12 +31,10 @@ export const stats: { value: number | null; unit?: string; label: string }[] = [
   { value: null, label: "Partner orgs" },
 ];
 
-// From the "Newly elected officer 2026-2027" pubmats in the Officers, "EA to Officers" and Apprentice folders; photos
-// are cropped from them. Grouped by category in rank order. The adviser leads as team principal ("TP"),
-// everyone else is numbered 01-30 across the groups. Codes are the first three letters of the surname.
-// `breaks` end a row early on desktop (after those indexes), so rows follow the hierarchy: P + VP together, the
-// three directors together, and each EA row matching the officers they assist.
-// TODO: add a short quote per officer (optional).
+// From the "Newly elected officer 2026-2027" pubmats (Officers, EA to Officers, Apprentice folders), photos cropped from them.
+// Grouped by rank. Adviser is team principal "TP", everyone else numbered 01-30. Codes are the first 3 letters of the surname.
+// `breaks` end a row early on desktop (after those indexes): P + VP together, three directors together, each EA row matching the officers they assist.
+// TODO: short quote per officer (optional)
 type OfficerEntry = {
   name: string;
   role: string;
@@ -237,9 +235,8 @@ export const officerGroups = officerGroupList.map(
   }),
 );
 
-// Past activities from the competition materials and the TSUJPCS Facebook page. Each one gets a page at
-// /events/[slug]. Ordered by date, so rounds follow the calendar. Photos are the curated picks in
-// public/events/<slug>/, named by their number in the original folder.
+// Past activities from the competition materials and the TSUJPCS Facebook page. Each gets /events/[slug].
+// Ordered by date. Photos are curated picks in public/events/<slug>/, named by number in the original folder.
 const eventPhotos = (slug: string, nums: number[]) =>
   nums.map((n) => `/events/${slug}/${String(n).padStart(2, "0")}.webp`);
 
@@ -276,7 +273,7 @@ const eventList = [
   {
     slug: "ccs-cares",
     month: "JUL",
-    day: "15", // July 15, 2026, 8:00 AM (per The Browser). JPCS posted the photos Jul 29.
+    day: "15", // July 15, 2026, 8:00 AM (per The Browser). photos posted Jul 29.
     title: "Project CCS C.A.R.E.S",
     venue: "CCS Grounds, TSU San Isidro Campus",
     done: true,
@@ -336,26 +333,35 @@ const eventList = [
       "shirt-red", "shirt-orange", "lanyard-half-inch", "lanyard-reversible", "keychain-f1", "keychain-jujutsu-kaisen",
       "keychain-haikyuu", "keychain-demon-slayer", "keychain-exclusive", "pins", "bundle-e", "size-chart",
     ].map((n) => `/merch/${n}.webp`),
-    // Pubmats are square, so they aren't cropped to the usual 16:9 tiles
+    // pubmats are square, so no 16:9 crop
     square: true,
     link: { href: "/merch", label: "See the full kit" },
   },
 ];
 
-// Rounds follow the calendar order above.
 export const events = eventList.map((e, i) => ({ ...e, round: `R${i + 1}` }));
 
 export type Event = (typeof events)[number];
 
-// Happening now, so it shows "In progress" instead of a countdown. Set `date` only once a real start time exists.
-export const nextEvent: { round: string; title: string; date?: string; venue: string; blurb: string } = {
+// happening now, so it shows "In progress" instead of a countdown. only set `date` once a real start time exists
+export const nextEvent: {
+  round: string;
+  title: string;
+  date?: string;
+  venue: string;
+  blurb: string;
+  photo: string;
+  photoCaption: string;
+} = {
   round: `R${events.length + 1}`,
   title: "Full Throttle Frontend: Interface Design Challenge",
   venue: "Open to all CCS students",
   blurb: "An interface design challenge for CCS students. Top three win PHP 500, 300 and 200, plus certificates.",
+  photo: "/photos/full-throttle-frontend.webp",
+  photoCaption: "Official pubmat · JPCS-TSU",
 };
 
-// Photographers as credited on the TSUJPCS Facebook posts. "JPCS-TSU" where no one was credited.
+// photographers as credited on the TSUJPCS Facebook posts, "JPCS-TSU" where nobody was credited
 export const gallery = [
   {
     src: "/photos/meet-and-greet-group.webp",
@@ -384,9 +390,9 @@ export const gallery = [
   },
 ];
 
-// The 2026-2027 collection, from the Sept 8, 2026 "JPCS Official Merch" launch pubmats (public/merch/).
-// Pre-order only, through a Google Form that closed Sept 25, so there is no buy button while `open` is false.
-// Shirt prices "start at" PHP 249; no price per size was posted, so none is shown.
+// 2026-2027 collection, from the Sept 8, 2026 "JPCS Official Merch" pubmats (public/merch/).
+// Pre-order only through a Google Form that closed Sept 25, so no buy button while `open` is false.
+// Shirts "start at" PHP 249. no price per size was posted, so none is shown.
 type MerchItem = { name: string; price: number; from?: boolean; image: string; details?: string; credit?: string };
 
 export const merch = {
@@ -534,7 +540,7 @@ export const merch = {
       ],
     },
   ] satisfies { id: string; title: string; note?: string; creditLabel?: string; items: MerchItem[] }[],
-  // Shirt size chart from the pubmat. No unit was printed; most likely inches.
+  // shirt size chart from the pubmat. no unit printed, probably inches
   sizes: [
     ["XS", 18.5, 24],
     ["S", 19.5, 25],

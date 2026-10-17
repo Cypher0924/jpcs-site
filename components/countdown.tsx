@@ -14,7 +14,7 @@ function parts(ms: number) {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** Race-start countdown. Renders dashes on the server, ticks once mounted. */
+/** dashes on the server, ticks after mount */
 export function Countdown({ to, className = "" }: { to: string; className?: string }) {
   const [left, setLeft] = useState<ReturnType<typeof parts> | null>(null);
 

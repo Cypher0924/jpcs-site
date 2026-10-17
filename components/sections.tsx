@@ -91,9 +91,8 @@ export function Officers() {
           title="Driver lineup"
           sub="The JPCS-TSU officers, executive associates and apprentices for A.Y. 2026-2027. Tap a card to flip it."
         />
-        {/* One block per category, each under its own heading, starting with the adviser alone on top.
-            Mobile: each group is a swipe carousel (~1.3 cards) with position dots. From md up: centred
-            rows of 3 / 4, so short rows sit in the middle like a pyramid. */}
+        {/* one block per category, adviser alone on top. mobile: swipe carousel per group (~1.3 cards) with dots.
+            md+: centred rows of 3/4 so short rows sit in the middle like a pyramid */}
         <div className="flex flex-col gap-12 md:gap-14">
           {officerGroups.map((g) => (
             <div key={g.officers[0].slug}>
@@ -128,7 +127,16 @@ export function Events() {
         <SectionHeader title="Race calendar" sub="Every JPCS-TSU event this year, round by round." />
         <div className="grid gap-6 lg:grid-cols-12">
           <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
-            <PhotoSlot label="Event photo" className="aspect-[16/9]" />
+            <figure>
+              <PhotoSlot
+                label={`${nextEvent.title} pubmat`}
+                src={nextEvent.photo}
+                contain
+                sizes="(min-width: 1024px) 480px, 100vw"
+                className="aspect-[16/9]"
+              />
+              <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">{nextEvent.photoCaption}</figcaption>
+            </figure>
             <div className="flex flex-1 flex-col gap-3 p-6">
               <span className="slant type-label self-start bg-signal px-3 py-2 text-white">
                 <span className="unslant">Next round · {nextEvent.round}</span>
@@ -163,7 +171,6 @@ export function Events() {
   );
 }
 
-/** Race-calendar row: date block, round, title and venue. Links to the event's page. */
 export function EventRow({ event: e }: { event: Event }) {
   return (
     <Link
@@ -199,8 +206,7 @@ export function EventRow({ event: e }: { event: Event }) {
 
 export function Gallery() {
   return (
-    // data-strip="on" is set by components/motion.tsx on desktop (with motion allowed):
-    // the grid becomes a horizontal filmstrip that pans while the section is pinned.
+    // motion.tsx sets data-strip="on" on desktop (motion allowed), grid becomes a pinned horizontal filmstrip
     <section
       id="gallery"
       className="group py-20 md:py-28 lg:data-[strip=on]:overflow-hidden lg:data-[strip=on]:py-20"
@@ -225,7 +231,7 @@ export function Gallery() {
                         : "aspect-square lg:group-data-[strip=on]:aspect-[3/4]"
                     }`}
                   />
-                  {/* Credit sits under the photo, never on it */}
+                  {/* credit under the photo, never on it */}
                   <figcaption className="type-data text-xs text-ink-muted">
                     P{i + 1} · {g.caption} · Photo: {g.credit}
                   </figcaption>
@@ -247,14 +253,14 @@ export function Gallery() {
 type MerchGroup = (typeof merch.groups)[number];
 type MerchItem = MerchGroup["items"][number];
 
-/** Lowest price in a group, marked "from" when items differ or a price is only a starting price. */
+/** lowest price in a group, "from" if prices differ or it is only a starting price */
 function groupPrice(g: MerchGroup) {
   const prices = g.items.map((i) => i.price);
   const from = g.items.some((i) => "from" in i && i.from) || new Set(prices).size > 1;
   return `${from ? "From " : ""}${peso(Math.min(...prices))}`;
 }
 
-/** Pre-order button while the form is open, otherwise the checkered "finished" mark from the race calendar. */
+/** pre-order button while the form is open, else the checkered finished mark */
 export function MerchStatus() {
   return merch.open ? (
     <Button href={merch.form}>Pre-order now</Button>
@@ -269,7 +275,6 @@ export function MerchStatus() {
   );
 }
 
-/** Name and price, then what it is and who made it. Sits under each merch photo. */
 export function MerchCaption({ item, creditLabel = "Design by" }: { item: MerchItem; creditLabel?: string }) {
   return (
     <span className="flex flex-col gap-1">

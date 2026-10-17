@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "../styles/globals.css";
 
-// Official Formula1 Display, supplied by the organizers: race numbers, labels, timing numbers
+// official F1 Display from the organizers
 const f1 = localFont({
   variable: "--font-f1",
   src: [
@@ -14,18 +14,15 @@ const f1 = localFont({
   ],
 });
 
-// Formula1 Display Wide: section titles and the wordmark
 const f1Wide = localFont({ variable: "--font-f1-wide", src: "./fonts/f1-wide.woff2" });
 
-// Tall condensed poster type for the hero headline and the 26/27 and BOX BOX watermarks (F1 has no narrow cut).
-// The opsz axis picks its display cut automatically at large sizes.
+// tall condensed poster type (F1 has no narrow cut), opsz axis picks the display cut at large sizes
 const bigShoulders = Big_Shoulders({
   variable: "--font-big-shoulders",
   subsets: ["latin"],
   axes: ["opsz"],
 });
 
-// Body text and headings: DIN-like, so it sits with F1's geometry
 const barlow = Barlow({
   variable: "--font-barlow",
   subsets: ["latin"],
@@ -38,8 +35,7 @@ export const metadata: Metadata = {
     "Junior Philippine Computer Society, Tarlac State University chapter, College of Computer Studies.",
 };
 
-// Runs before first paint: saved choice wins, otherwise follow the OS setting. Also marks whether the splash
-// plays: skipped on repeat visits in this tab and under reduced motion (components/splash.tsx).
+// runs before first paint. saved theme wins, else OS setting. also sets data-splash (skipped on repeat visits and reduced motion)
 const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}try{document.documentElement.setAttribute("data-splash",sessionStorage.getItem("splash")||matchMedia("(prefers-reduced-motion: reduce)").matches?"skip":"play")}catch(e){}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

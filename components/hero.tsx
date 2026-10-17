@@ -2,10 +2,9 @@ import { nextEvent } from "@/lib/content";
 import { Countdown } from "./countdown";
 import { Button, Chevrons, Container, InProgress, SpeedSlashes } from "./ui";
 
-export const LIGHT_STEP = 0.55; // seconds between each start light
+export const LIGHT_STEP = 0.55; // seconds between lights
 export const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
 
-/** Five-column start-light gantry. Lights fill one by one, then go out. */
 function StartLights() {
   return (
     <div data-anim="gantry" className="flex justify-center gap-2 sm:gap-3" role="img" aria-label="Five start lights filling one by one, then going out">
@@ -29,7 +28,7 @@ function StartLights() {
 function HeroVisual() {
   return (
     <div className="telemetry-grid grain relative flex aspect-[4/3] flex-col justify-between overflow-hidden border border-line bg-surface p-5 sm:p-8 lg:aspect-auto lg:h-full">
-      {/* Season mark watermark, sits behind the gantry */}
+      {/* season mark watermark behind the gantry */}
       <span
         aria-hidden
         data-anim="watermark"
@@ -45,7 +44,7 @@ function HeroVisual() {
 
       <StartLights />
 
-      {/* Speed stripe: three skewed bars in the official palette */}
+      {/* three skewed bars */}
       <div aria-hidden className="relative h-16">
         <span data-anim="stripe" className="slant absolute inset-x-[-10%] top-0 h-4 bg-jpcs-maroon" />
         <span data-anim="stripe" className="slant absolute inset-x-[-10%] top-6 h-4 bg-accent" />

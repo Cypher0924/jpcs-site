@@ -5,7 +5,6 @@ import { navLinks } from "@/lib/content";
 import { ThemeToggle } from "./theme-toggle";
 import { Button, Container, LogoMark } from "./ui";
 
-/** Pit-wall nav: links read like a timing tower, active section gets a slanted bar. */
 export function Nav({ base = "" }: { base?: string }) {
   const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -17,7 +16,7 @@ export function Nav({ base = "" }: { base?: string }) {
       },
       { rootMargin: "-45% 0px -50% 0px" },
     );
-    // "top" (the hero) clears the highlight when scrolled back up
+    // "top" (hero) clears the highlight when scrolled back up
     for (const id of ["top", ...navLinks.map((l) => l.id)]) {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -31,7 +30,7 @@ export function Nav({ base = "" }: { base?: string }) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">
-      {/* Lap progress: fills with page scroll (components/motion.tsx) */}
+      {/* lap progress bar, filled by motion.tsx */}
       <span
         aria-hidden
         data-anim="lap"
@@ -93,8 +92,8 @@ export function Nav({ base = "" }: { base?: string }) {
         </div>
       </Container>
 
-      {/* The header's backdrop blur makes it the containing block for fixed children, so bottom-0 would end at
-          the header. An explicit viewport height keeps the menu full screen. */}
+      {/* header backdrop blur makes it the containing block for fixed children, so bottom-0 would stop at the header.
+          explicit viewport height keeps the menu full screen */}
       {open && (
         <div id="mobile-menu" className="fixed inset-x-0 top-18 z-40 h-[calc(100dvh-4.5rem)] overflow-y-auto bg-canvas lg:hidden">
           <Container className="py-6">

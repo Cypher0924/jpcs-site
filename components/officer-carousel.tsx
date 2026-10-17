@@ -2,7 +2,6 @@
 
 import { useRef, useState, type ReactNode } from "react";
 
-/** Mobile swipe carousel with position dots; from md up the cards wrap in centred rows. */
 export function OfficerCarousel({ count, children }: { count: number; children: ReactNode }) {
   const ref = useRef<HTMLUListElement>(null);
   const [active, setActive] = useState(0);

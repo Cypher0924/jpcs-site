@@ -9,7 +9,6 @@ const buttonStyles: Record<ButtonVariant, string> = {
   signal: "bg-signal text-white hover:brightness-110",
 };
 
-/** Slanted CTA, the skewed label box from the pubmats. */
 export function Button({
   variant = "primary",
   className = "",
@@ -26,7 +25,7 @@ export function Button({
   );
 }
 
-/** "///" speed marks from the Midterms Pitstop pubmat. */
+/** "///" marks from the Midterms Pitstop pubmat */
 export function SpeedSlashes({ className = "" }: { className?: string }) {
   return (
     <span aria-hidden data-anim="slashes" className={`inline-flex gap-1 ${className}`}>
@@ -37,7 +36,7 @@ export function SpeedSlashes({ className = "" }: { className?: string }) {
   );
 }
 
-/** Double chevron from the 26/27 season mark. */
+/** double chevron from the 26/27 season mark */
 export function Chevrons({ className = "" }: { className?: string }) {
   return (
     <svg aria-hidden viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="3.5">
@@ -46,7 +45,7 @@ export function Chevrons({ className = "" }: { className?: string }) {
   );
 }
 
-/** Envelope, drawn to match the Chevrons stroke. */
+/** envelope, stroke matches Chevrons */
 export function MailIcon() {
   return (
     <svg aria-hidden viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2">
@@ -55,7 +54,7 @@ export function MailIcon() {
   );
 }
 
-/** Facebook and Messenger marks, from Simple Icons (CC0). */
+/** Facebook and Messenger marks from Simple Icons (CC0) */
 export function FacebookIcon() {
   return (
     <svg aria-hidden viewBox="0 0 24 24" className="size-5" fill="currentColor">
@@ -72,7 +71,6 @@ export function MessengerIcon() {
   );
 }
 
-/** Live status for a round that's running now, in place of the countdown. */
 export function InProgress() {
   return (
     <span className="type-data inline-flex items-center gap-2 text-xl text-ink">
@@ -86,10 +84,7 @@ export function CheckeredStrip({ className = "", anim }: { className?: string; a
   return <div aria-hidden data-anim={anim} className={`checkered h-4 w-full opacity-90 ${className}`} />;
 }
 
-/**
- * Section title in the race-broadcast voice ("Driver lineup", "Race calendar") with one plain-language
- * line underneath, so the F1 name never hides what the section is. No eyebrow labels above titles.
- */
+/** Section title with one plain line under it so the F1 name never hides what the section is. No eyebrow labels. */
 export function SectionHeader({
   title,
   sub,
@@ -102,7 +97,7 @@ export function SectionHeader({
   const centered = align === "center";
   return (
     <header className={`mb-12 md:mb-16 ${centered ? "text-center" : ""}`}>
-      {/* Broadcast wipe: an orange slanted bar sweeps across as the title reveals (components/motion.tsx) */}
+      {/* orange bar wipes across as the title reveals (motion.tsx) */}
       <div className="relative inline-block">
         <span
           aria-hidden
@@ -126,29 +121,29 @@ const viewfinderCorners = [
   "right-3 bottom-3 border-r-2 border-b-2",
 ];
 
-/**
- * Photo frame with F1 broadcast viewfinder corners. With `src` it shows the real photo (label becomes the
- * alt text); without it, it is a labelled stand-in (no AI images allowed, IRR p.8).
- */
+/** Photo frame. Without src it's a labelled placeholder (no AI images, IRR p.8). */
 export function PhotoSlot({
   label,
   src,
   sizes = "100vw",
   tone = "surface-2",
+  contain = false,
   className = "",
 }: {
   label: string;
   src?: string;
   sizes?: string;
-  /** Use "surface" when the slot sits on a surface-2 section, so it stays visible. */
+  /** "surface" when the slot sits on a surface-2 section, so it stays visible */
   tone?: "surface" | "surface-2";
+  /** whole image on a dark backdrop instead of cropping, for square pubmats in wide frames */
+  contain?: boolean;
   className?: string;
 }) {
   return (
     <div
-      className={`relative grid place-items-center overflow-hidden text-ink-muted ${tone === "surface" ? "bg-surface" : "bg-surface-2"} ${className}`}
+      className={`relative grid place-items-center overflow-hidden text-ink-muted ${contain ? "bg-carbon-950" : tone === "surface" ? "bg-surface" : "bg-surface-2"} ${className}`}
     >
-      {src && <Image src={src} alt={label} fill sizes={sizes} className="object-cover" />}
+      {src && <Image src={src} alt={label} fill sizes={sizes} className={contain ? "object-contain" : "object-cover"} />}
       {viewfinderCorners.map((pos) => (
         <span key={pos} aria-hidden className={`absolute size-4 ${src ? "border-white" : "border-ink-muted"} ${pos}`} />
       ))}
@@ -157,7 +152,7 @@ export function PhotoSlot({
   );
 }
 
-/** Official JPCS TSU-Chapter logo, shown as a white badge so it reads on both themes. */
+/** JPCS logo on a white badge so it reads on both themes */
 export function LogoMark({ size = 40, className = "" }: { size?: number; className?: string }) {
   return (
     <Image
