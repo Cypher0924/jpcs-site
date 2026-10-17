@@ -5,7 +5,7 @@ import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
 import { Stat } from "./stat";
-import { Button, CheckeredStrip, Chevrons, Container, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
+import { Button, CheckeredStrip, Chevrons, Container, InProgress, LogoMark, PhotoSlot, SectionHeader, SpeedSlashes } from "./ui";
 
 export function About() {
   return (
@@ -107,11 +107,11 @@ export function Events() {
                 <span className="unslant">Next round · {nextEvent.round}</span>
               </span>
               <h3 className="type-heading">{nextEvent.title}</h3>
-              <p className="type-data text-sm text-ink-muted">Date TBA · {nextEvent.venue}</p>
+              <p className="type-data text-sm text-ink-muted">{nextEvent.venue}</p>
               <p className="text-ink-muted">{nextEvent.blurb}</p>
               <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-4">
-                <Countdown to={nextEvent.date} />
-                <Button href="#" variant="outline">
+                {nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
+                <Button href={contact.facebook} variant="outline">
                   Details
                 </Button>
               </div>
@@ -241,7 +241,7 @@ export function Join() {
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <a
-            href="#"
+            href={contact.registration}
             className="slant type-label inline-flex min-h-12 items-center justify-center bg-carbon-950 px-8 text-white transition-colors hover:bg-jpcs-maroon"
           >
             <span className="unslant">Box, box: register now</span>
@@ -299,7 +299,7 @@ export function Footer({ base = "" }: { base?: string }) {
           <p className="mt-4 text-sm text-paper-400">
             Tarlac State University
             <br />
-            Brgy. San Isidro, Tarlac City
+            Brgy. San Isidro, Tarlac City 2300
           </p>
         </div>
 
@@ -330,7 +330,7 @@ export function Footer({ base = "" }: { base?: string }) {
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white">
+              <a href={contact.messenger} className="hover:text-white">
                 Messenger
               </a>
             </li>

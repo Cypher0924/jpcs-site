@@ -1,6 +1,6 @@
 import { nextEvent } from "@/lib/content";
 import { Countdown } from "./countdown";
-import { Button, Chevrons, Container, SpeedSlashes } from "./ui";
+import { Button, Chevrons, Container, InProgress, SpeedSlashes } from "./ui";
 
 export const LIGHT_STEP = 0.55; // seconds between each start light
 export const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
@@ -99,7 +99,7 @@ export function Hero() {
             className="mt-8 inline-flex flex-wrap items-center gap-x-4 gap-y-2 border-l-4 border-signal bg-surface px-4 py-3"
           >
             <span className="type-label text-signal">Next round · {nextEvent.round}</span>
-            <Countdown to={nextEvent.date} />
+            {nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
           </a>
         </div>
 

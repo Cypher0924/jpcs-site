@@ -236,18 +236,9 @@ export const officerGroups = officerGroupList.map(
   }),
 );
 
-export const nextEvent = {
-  round: "R5",
-  title: "TBA",
-  date: "2026-01-01T00:00:00+08:00", // TODO: R5 date unknown. A past date keeps the countdown at 00.
-  venue: "Venue TBA",
-  blurb: "Details to be announced.",
-};
-
-// Past activities from the competition materials. Each one gets a page at /events/[slug].
-// Ordered by date. TODO: venues, and replace each
-// summary with official wording. Photos are the curated picks in public/events/<slug>/, named by their
-// number in the original folder.
+// Past activities from the competition materials and the TSUJPCS Facebook page. Each one gets a page at
+// /events/[slug]. Ordered by date, so rounds follow the calendar. Photos are the curated picks in
+// public/events/<slug>/, named by their number in the original folder.
 const eventPhotos = (slug: string, nums: number[]) =>
   nums.map((n) => `/events/${slug}/${String(n).padStart(2, "0")}.webp`);
 
@@ -258,10 +249,11 @@ export const events = [
     month: "JUL",
     day: "03", // July 3, 2026
     title: "JPCS-TSU General Assembly",
-    venue: "Agenda and officer responsibilities",
+    venue: "General Assembly of Officers",
     done: true,
     summary:
-      "The chapter's general assembly: the officers walked members through the year's agenda and the responsibilities of each officer, then closed with a group photo.",
+      "The chapter's first General Assembly of Officers: it welcomed the newly elected officers, introduced the org's direction and mapped out the key initiatives for A.Y. 2026-2027.",
+    credit: "JPCS-TSU",
     cover: "/photos/general-assembly-group.webp",
     photos: eventPhotos(
       "general-assembly",
@@ -269,15 +261,33 @@ export const events = [
     ),
   },
   {
-    slug: "ready-set-join",
+    slug: "ccs-cares",
     round: "R2",
+    month: "JUL",
+    day: "15", // July 15, 2026, 8:00 AM (per The Browser). JPCS posted the photos Jul 29.
+    title: "Project CCS C.A.R.E.S",
+    venue: "CCS Grounds, TSU San Isidro Campus",
+    done: true,
+    summary:
+      "Cleanup, Accountability, and Regular Environmental Stewardship: a college-wide clean-up drive by the CCS Student Council with The Browser's Project LiniCCS. Members and officers swept, wiped and bagged their way through classrooms, hallways, restrooms and the AVR.",
+    credit: "Aira Celerio, John Kaede Isip, Nash Joshua Supan",
+    cover: "/photos/ccs-cares.webp",
+    photos: eventPhotos(
+      "ccs-cares",
+      [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45],
+    ),
+  },
+  {
+    slug: "ready-set-join",
+    round: "R3",
     month: "JUL",
     day: "27", // July 27, 2026
     title: "Ready, Set, Join: Become a JPCS Member",
     venue: "Membership sign-ups for BSCS students",
     done: true,
     summary:
-      "Officers set up sign-up tables in classrooms and around campus so new BS Computer Science students could register as JPCS members, pick up freshman stickers and meet the chapter.",
+      "Fresh faces, new beginnings. Officers set up sign-up tables in classrooms and around campus so freshmen could register as JPCS members, pick up freshman stickers and meet the chapter.",
+    credit: "Nash Joshua Supan",
     cover: "/photos/ready-set-join.webp",
     photos: eventPhotos(
       "ready-set-join",
@@ -286,41 +296,34 @@ export const events = [
   },
   {
     slug: "meet-and-greet-booth",
-    round: "R3",
+    round: "R4",
     month: "JUL",
     day: "28", // July 28, 2026
     title: "Meet & Greet Booth",
-    venue: "The JPCS Booth, games and performances",
+    venue: "JAVANJI: Welcome to the Realm",
     done: true,
     summary:
-      "The jungle-themed CS Booth at the campus fair: balloon giveaways, games on the plaza and performances, with the CS Community out in full orange.",
+      "The JPCS booth at JAVANJI: Welcome to the Realm, the CCS Freshmen Meet and Greet organized by the CCS Student Council. A morning of flag raising, a freshman parade, org showcases, games and a raffle, with the CS Community out in full orange.",
+    credit: "JPCS-TSU",
     cover: "/photos/meet-and-greet-group.webp",
     photos: eventPhotos(
       "meet-and-greet-booth",
       [1, 2, 3, 4, 5, 25, 30, 36, 44, 53, 61, 66],
     ),
   },
-  {
-    slug: "ccs-cares",
-    round: "R4",
-    month: "JUL",
-    day: "29", // July 29, 2026
-    title: "Project CCS C.A.R.E.S",
-    venue: "Clean-up drive around the CCS building",
-    done: true,
-    summary:
-      "Members and officers swept, wiped and bagged their way through classrooms, hallways, restrooms and the AVR to leave the College of Computer Studies building clean.",
-    cover: "/photos/ccs-cares.webp",
-    photos: eventPhotos(
-      "ccs-cares",
-      [3, 4, 5, 7, 14, 15, 23, 26, 32, 34, 37, 45],
-    ),
-  },
 ];
 
 export type Event = (typeof events)[number];
 
-// TODO: credit the actual photographers. "JPCS-TSU" is used because the photos carry the chapter's frame.
+// Happening now, so it shows "In progress" instead of a countdown. Set `date` only once a real start time exists.
+export const nextEvent: { round: string; title: string; date?: string; venue: string; blurb: string } = {
+  round: `R${events.length + 1}`,
+  title: "Full Throttle Frontend: Interface Design Challenge",
+  venue: "Open to all CCS students",
+  blurb: "An interface design challenge for CCS students. Top three win PHP 500, 300 and 200, plus certificates.",
+};
+
+// Photographers as credited on the TSUJPCS Facebook posts. "JPCS-TSU" where no one was credited.
 export const gallery = [
   {
     src: "/photos/meet-and-greet-group.webp",
@@ -330,12 +333,12 @@ export const gallery = [
   {
     src: "/photos/ready-set-join.webp",
     caption: "Ready, Set, Join",
-    credit: "JPCS-TSU",
+    credit: "Nash Joshua Supan",
   },
   {
     src: "/photos/ccs-cares.webp",
     caption: "Project CCS C.A.R.E.S",
-    credit: "JPCS-TSU",
+    credit: "Aira Celerio, John Kaede Isip, Nash Joshua Supan",
   },
   {
     src: "/photos/meet-and-greet-booth.webp",
@@ -350,22 +353,32 @@ export const gallery = [
 ];
 
 export const faqs = [
-  { time: "14:02", q: "Who can join?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+  {
+    time: "14:02",
+    q: "Who can join?",
+    a: "BS Computer Science students of Tarlac State University. First years can also apply to the Apprenticeship Program.",
+  },
   {
     time: "14:05",
-    q: "How much is the membership fee?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    q: "Is there a membership fee?",
+    a: "No, it's free. Just fill out the membership form.",
   },
   {
     time: "14:09",
     q: "When do events usually happen?",
-    a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    a: "There's no fixed schedule. Every event is announced on our Facebook page, fb.com/TSUJPCS.",
   },
-  { time: "14:12", q: "How do I get my JPCS merch?", a: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+  {
+    time: "14:12",
+    q: "How do I get my JPCS merch?",
+    a: "Through the pre-order form we post on Facebook. The 2026 run was open from September 8 to 25.",
+  },
 ];
 
 export const contact = {
   email: "tsujpcs@gmail.com",
   facebook: "https://www.facebook.com/TSUJPCS",
   handle: "/TSUJPCS",
+  messenger: "https://m.me/TSUJPCS",
+  registration: "https://forms.gle/zqVqGttcoXE4nRYs5",
 };

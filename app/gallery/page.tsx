@@ -15,10 +15,13 @@ export default function GalleryPage() {
         {events.map((e) => (
           <section key={e.slug} aria-labelledby={`g-${e.slug}`}>
             <div className="mb-5 flex flex-wrap items-baseline justify-between gap-3">
-              <h2 id={`g-${e.slug}`} className="type-heading">
-                <span className="type-data mr-2 text-sm text-accent-text">{e.round}</span>
-                {e.title}
-              </h2>
+              <div>
+                <h2 id={`g-${e.slug}`} className="type-heading">
+                  <span className="type-data mr-2 text-sm text-accent-text">{e.round}</span>
+                  {e.title}
+                </h2>
+                <p className="type-data mt-1 text-xs text-ink-muted">Photos: {e.credit}</p>
+              </div>
               <Link href={`/events/${e.slug}`} className="type-label text-accent-text hover:underline">
                 Event details →
               </Link>
@@ -34,7 +37,7 @@ export default function GalleryPage() {
         ))}
       </div>
       <p className="mt-12 text-center text-sm text-ink-muted">
-        Photos: JPCS-TSU. More on{" "}
+        More on{" "}
         <a href={contact.facebook} className="text-accent-text hover:underline">
           fb.com{contact.handle}
         </a>

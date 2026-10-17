@@ -51,7 +51,10 @@ async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["p
             {event.month === "TBA" ? "Date TBA" : `${event.month} ${event.day}`} · {event.venue}
           </p>
         </div>
-        <p className="text-ink-muted lg:col-span-5">{event.summary}</p>
+        <div className="lg:col-span-5">
+          <p className="text-ink-muted">{event.summary}</p>
+          <p className="type-data mt-3 text-xs text-ink-muted">Photos: {event.credit}</p>
+        </div>
       </header>
 
       <PhotoSlot

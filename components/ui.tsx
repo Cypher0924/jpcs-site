@@ -46,6 +46,16 @@ export function Chevrons({ className = "" }: { className?: string }) {
   );
 }
 
+/** Live status for a round that's running now, in place of the countdown. */
+export function InProgress() {
+  return (
+    <span className="type-data inline-flex items-center gap-2 text-xl text-ink">
+      <span aria-hidden className="size-2.5 rounded-full bg-signal motion-safe:animate-pulse" />
+      In progress
+    </span>
+  );
+}
+
 export function CheckeredStrip({ className = "", anim }: { className?: string; anim?: string }) {
   return <div aria-hidden data-anim={anim} className={`checkered h-4 w-full opacity-90 ${className}`} />;
 }
