@@ -75,11 +75,6 @@ async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["p
         photos={event.photos}
         label={event.title}
         sizes="(min-width: 768px) 400px, 50vw"
-        captions={event.photos.map((_, i) => (
-          <span key={i} className="type-data text-xs text-ink-muted">
-            P{i + 1} · Photo: {event.credit}
-          </span>
-        ))}
         className={`grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 ${event.square ? "mt-10" : "mt-4"}`}
         tileClassName={event.square ? "aspect-square" : "aspect-[16/9]"}
       />

@@ -415,7 +415,7 @@ export function Footer({ base = "" }: { base?: string }) {
             </span>
           </div>
           <p className="mt-4 text-sm text-paper-400">
-            Tarlac State University
+            Tarlac State University, San Isidro Campus
             <br />
             Brgy. San Isidro, Tarlac City 2300
           </p>

@@ -93,8 +93,10 @@ export function Nav({ base = "" }: { base?: string }) {
         </div>
       </Container>
 
+      {/* The header's backdrop blur makes it the containing block for fixed children, so bottom-0 would end at
+          the header. An explicit viewport height keeps the menu full screen. */}
       {open && (
-        <div id="mobile-menu" className="fixed inset-x-0 top-18 bottom-0 z-40 overflow-y-auto bg-canvas lg:hidden">
+        <div id="mobile-menu" className="fixed inset-x-0 top-18 z-40 h-[calc(100dvh-4.5rem)] overflow-y-auto bg-canvas lg:hidden">
           <Container className="py-6">
             <Button href={`${base}#join`} className="w-full" onClick={() => setOpen(false)}>
               Box, box: join now
