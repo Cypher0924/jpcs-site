@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { Field, FormMessage, Input, buttonClass } from "@/components/admin/form";
+import { Field, FormMessage, Input } from "@/components/admin/form";
+import { buttonClass } from "@/components/admin/styles";
 import { browserClient } from "@/lib/supabase/browser";
 
 export function LoginForm() {

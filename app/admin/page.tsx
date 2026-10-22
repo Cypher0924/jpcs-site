@@ -4,6 +4,8 @@ import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Dashboard" };
+// admin pages wait for the session check on navigation, which is fine here
+export const instant = false;
 
 export default async function DashboardPage() {
   const staff = await requireStaff();

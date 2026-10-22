@@ -1,5 +1,6 @@
 import "server-only";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { cache } from "react";
 import { sessionClient } from "./supabase/server";
 
@@ -8,6 +9,8 @@ export type Staff = { id: string; email: string; role: Role };
 
 // once per request. a signed-in user without a profiles row has no access
 export const getStaff = cache(async (): Promise<Staff | null> => {
+  // per-request: the session check reads the clock, which prerendering (even with cookies) does not allow
+  await connection();
   const supabase = await sessionClient();
   const { data } = await supabase.auth.getClaims();
   const id = data?.claims?.sub;

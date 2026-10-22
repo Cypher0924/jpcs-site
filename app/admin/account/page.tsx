@@ -1,10 +1,12 @@
-import { buttonClass } from "@/components/admin/form";
+import { buttonClass } from "@/components/admin/styles";
 import { PageHeader, Panel } from "@/components/admin/shell";
 import { requireStaff } from "@/lib/auth";
 import { signOut } from "./actions";
 import { PasswordForm } from "./password-form";
 
 export const metadata = { title: "Account" };
+// admin pages wait for the session check on navigation, which is fine here
+export const instant = false;
 
 export default async function AccountPage() {
   const staff = await requireStaff();
