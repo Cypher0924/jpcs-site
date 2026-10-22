@@ -15,7 +15,7 @@ export function CodeChip({ code, pos }: { code: string; pos?: number }) {
 /** centered card for sign in, forgot password and set password. always the dark race-control look */
 export function AuthCard({ title, sub, children }: { title: string; sub: string; children: ReactNode }) {
   return (
-    <main data-theme="dark" className="telemetry-grid grid min-h-dvh place-items-center bg-canvas px-4 py-10 text-ink">
+    <main data-theme="dark" className="grid min-h-dvh place-items-center bg-canvas px-4 py-10 text-ink">
       <div className="w-full max-w-sm border border-line bg-surface">
         <div className="flex items-center gap-3 border-b border-line bg-surface-2 px-5 py-4">
           <LogoMark size={36} />
