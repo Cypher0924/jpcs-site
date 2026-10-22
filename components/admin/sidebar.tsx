@@ -86,7 +86,11 @@ export function AdminSidebar({ email, role, next = null }: { email: string | nul
             <span className="block font-wide text-xs whitespace-nowrap">JPCS-TSU</span>
             {/* phones show where you are, desktop shows the tower title */}
             <span className="block truncate text-xs text-ink-muted md:hidden">
-              <span className="type-data text-accent-text">{current.code}</span> {current.name}
+              <span className="type-data text-accent-text">
+                {current.pos ? `${current.pos} ` : ""}
+                {current.code}
+              </span>{" "}
+              {current.name}
             </span>
             <span className="hidden text-xs text-ink-muted md:block">Race control</span>
           </span>
@@ -147,7 +151,9 @@ export function AdminSidebar({ email, role, next = null }: { email: string | nul
                 {email}
               </p>
             )}
-            {role && <p className="type-data mt-0.5 text-[0.6875rem] tracking-wide text-ink-muted uppercase">{role}</p>}
+            {role && (
+              <p className="type-data mt-1 inline-block border border-line px-1.5 text-[0.6875rem] tracking-wide text-ink-muted uppercase">{role}</p>
+            )}
           </div>
           <Link
             href="/"

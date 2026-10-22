@@ -1,7 +1,8 @@
 // lets each admin page read cookies behind a Suspense boundary. shaped like a page so nothing jumps
 export default function Loading() {
   return (
-    <div aria-busy="true" aria-label="Loading" className="motion-safe:animate-pulse">
+    <div role="status" aria-busy="true" className="motion-safe:animate-pulse">
+      <span className="sr-only">Loading</span>
       <div className="mb-8 flex items-center gap-3 border-b border-line pb-5">
         <span className="h-7 w-16 -skew-x-12 bg-surface-2" />
         <span className="h-7 w-48 bg-surface-2" />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { linkClass } from "@/components/admin/styles";
 import Link from "next/link";
 import { AuthCard } from "@/components/admin/shell";
 import { LoginForm } from "./login-form";
@@ -10,7 +11,7 @@ export default function LoginPage() {
     <AuthCard title="Sign in" sub="For JPCS-TSU officers who update the website.">
       <LoginForm />
       <p className="mt-4 text-sm">
-        <Link href="/forgot-password" className="font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-accent">
+        <Link href="/forgot-password" className={linkClass}>
           Forgot your password?
         </Link>
       </p>

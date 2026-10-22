@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { sections } from "@/components/admin/sections";
+import { sections, type Code } from "@/components/admin/sections";
 import { PageHeader, Panel } from "@/components/admin/shell";
 import { StatusChip } from "@/components/admin/status";
 import { linkClass } from "@/components/admin/styles";
@@ -49,7 +49,7 @@ export default async function DashboardPage() {
 
   // what each tower row reports on the board: a number in timing type, then words
   type Line = { num?: string; label: string; chip?: { status: "live" | "pending"; text: string }; edited?: Edited };
-  const board: Record<string, Line> = {
+  const board: Partial<Record<Code, Line>> = {
     EVT: { num: String(events), label: events === 1 ? "round" : "rounds", edited: edited[0] },
     OFF: { num: String(officers), label: year ? `officers in ${year}` : "officers, no current year", edited: edited[1] },
     NXT: {
@@ -69,7 +69,7 @@ export default async function DashboardPage() {
     TEM: { num: String(team), label: team === 1 ? "member" : "members" },
     AUD: { label: "Every change, with before and after" },
   };
-  const rows = sections.filter((s) => s.code !== "DSH" && (!s.adminOnly || staff.role === "admin"));
+  const rows = sections.filter((s) => board[s.code] && (!s.adminOnly || staff.role === "admin"));
 
   return (
     <>
@@ -98,7 +98,7 @@ export default async function DashboardPage() {
         </div>
         <ol>
           {rows.map((s) => {
-            const b = board[s.code];
+            const b = board[s.code]!;
             const edit = b.edited ? lastEdited(b.edited, editors) : "";
             return (
               <li key={s.code} className="border-b border-line last:border-0">

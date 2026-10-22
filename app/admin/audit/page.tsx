@@ -82,8 +82,8 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
               Newer
             </Link>
           )}
-          <span className="type-data text-ink-muted">
-            {page} / {pages}
+          <span className="text-ink-muted">
+            Page <span className="type-data">{page}</span> of <span className="type-data">{pages}</span>
           </span>
           {page < pages && (
             <Link href={href(page + 1)} className={buttonClass("secondary")}>

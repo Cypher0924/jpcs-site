@@ -3,7 +3,7 @@ import { ConfirmButton } from "@/components/admin/confirm-button";
 import { ActionForm, Field, Input, SubmitButton } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 import { MoveButtons } from "@/components/admin/move-buttons";
-import { CodeChip, ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
+import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -34,9 +34,7 @@ export default async function PaddockPage() {
               <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-surface-2 sm:w-44">
                 <Image src={g.src} alt={g.caption} fill sizes="176px" className="object-cover" />
                 {i === 0 && (
-                  <span className="absolute top-2 left-3">
-                    <CodeChip code="Large tile" />
-                  </span>
+                  <span className="absolute top-2 left-2 bg-canvas/90 px-2 py-0.5 text-xs font-semibold text-ink">Large tile</span>
                 )}
               </div>
               <div className="min-w-0 flex-1">

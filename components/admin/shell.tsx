@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { LogoMark } from "../ui";
-import { sectionByCode } from "./sections";
+import { sectionByCode, type Code } from "./sections";
 
 /** the active tower row, repeated as a slanted chip: position and code */
 export function CodeChip({ code, pos }: { code: string; pos?: number }) {
@@ -34,7 +34,7 @@ export function AuthCard({ title, sub, children }: { title: string; sub: string;
   );
 }
 
-export function PageHeader({ code, title, sub, actions }: { code: string; title: string; sub?: string; actions?: ReactNode }) {
+export function PageHeader({ code, title, sub, actions }: { code: Code; title: string; sub?: string; actions?: ReactNode }) {
   const section = sectionByCode(code);
   return (
     <header className="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-line pb-5">

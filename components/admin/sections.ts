@@ -1,6 +1,7 @@
 // the timing tower: one list for the nav, the page headers and the dashboard
 
-export type Section = { pos: number; code: string; name: string; href: string; adminOnly?: boolean };
+export type Code = "DSH" | "EVT" | "OFF" | "NXT" | "PAD" | "MER" | "STA" | "TEM" | "AUD" | "SET";
+export type Section = { pos: number; code: Code; name: string; href: string; adminOnly?: boolean };
 
 export const sections: Section[] = [
   { pos: 1, code: "DSH", name: "Dashboard", href: "/admin" },
@@ -17,7 +18,7 @@ export const sections: Section[] = [
 // pinned under the tower, so it has no position
 export const settingsSection: Section = { pos: 0, code: "SET", name: "Settings", href: "/admin/account" };
 
-export const sectionByCode = (code: string) => [...sections, settingsSection].find((s) => s.code === code)!;
+export const sectionByCode = (code: Code) => [...sections, settingsSection].find((s) => s.code === code)!;
 
 /** the section a path belongs to, e.g. /admin/events/12 is EVT */
 export function sectionFor(pathname: string) {
