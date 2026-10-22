@@ -215,7 +215,6 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">
             {o.name}
-            {o.is_adviser && <span className="ml-2 border border-line px-1.5 text-[0.6875rem] font-normal text-ink-muted">Adviser</span>}
           </p>
           <p className="truncate text-xs text-ink-muted">{o.role}</p>
         </div>

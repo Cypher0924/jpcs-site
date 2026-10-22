@@ -58,8 +58,8 @@ export default async function EventsPage() {
         <ol className="border border-line bg-surface sm:hidden">
           {list.map((e, i) => (
             <li key={e.id} className="border-b border-line last:border-0">
-              <Link href={`/admin/events/${e.id}`} className="grid grid-cols-[2.25rem_1fr] gap-x-2 px-3 py-3 hover:bg-surface-2">
-                <span className="type-data pt-0.5 text-right text-sm text-ink-muted">R{i + 1}</span>
+              <Link href={`/admin/events/${e.id}`} className="grid grid-cols-[2.25rem_1fr_1rem] items-center gap-x-2 px-3 py-3 hover:bg-surface-2">
+                <span className="type-data self-start pt-0.5 text-right text-sm text-ink-muted">R{i + 1}</span>
                 <span className="min-w-0">
                   <span className="block font-semibold">{e.title}</span>
                   <span className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-muted">
@@ -71,6 +71,9 @@ export default async function EventsPage() {
                   </span>
                   <span className="mt-1 block text-xs text-ink-muted">{lastEdited(e, editors)}</span>
                 </span>
+                <svg aria-hidden viewBox="0 0 16 16" className="size-4 text-ink-muted" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="m6 4 4 4-4 4" />
+                </svg>
               </Link>
             </li>
           ))}
