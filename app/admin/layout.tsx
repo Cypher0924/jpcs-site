@@ -27,14 +27,14 @@ async function SidebarForUser() {
   // the tower's next-round readout. same numbering as the site: one after the last event
   const db = await sessionClient();
   const [{ data: next }, { count }] = await Promise.all([
-    db.from("next_event").select("starts_at").single(),
+    db.from("next_event").select("*").single(),
     db.from("events").select("id", { count: "exact", head: true }),
   ]);
   return (
     <AdminSidebar
       email={staff.email}
       role={staff.role}
-      next={next ? { round: (count ?? 0) + 1, startsAt: next.starts_at } : null}
+      next={next ? { round: (count ?? 0) + 1, startsAt: next.starts_at, tba: Boolean(next.tba) } : null}
     />
   );
 }

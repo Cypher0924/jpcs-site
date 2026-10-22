@@ -1,7 +1,7 @@
 import { getNextEvent } from "@/lib/data";
 import { Countdown } from "./countdown";
 import { LIGHT_STEP, LIGHTS_OUT } from "./lights";
-import { Button, Chevrons, Container, InProgress, SpeedSlashes } from "./ui";
+import { Button, Chevrons, Container, InProgress, SpeedSlashes, ToBeAnnounced } from "./ui";
 
 function StartLights() {
   return (
@@ -97,7 +97,7 @@ export async function Hero() {
             className="mt-8 inline-flex flex-wrap items-center gap-x-4 gap-y-2 border-l-4 border-signal bg-surface px-4 py-3"
           >
             <span className="type-label text-signal">Next round · {nextEvent.round}</span>
-            {nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
+            {nextEvent.tba ? <ToBeAnnounced /> : nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
           </a>
         </div>
 

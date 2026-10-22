@@ -31,7 +31,7 @@ export default async function DashboardPage() {
       .eq("school_years.is_current", true)
       .then((r) => r.count ?? 0),
     db.from("school_years").select("label").eq("is_current", true).maybeSingle().then((r) => r.data?.label as string | undefined),
-    db.from("next_event").select("title, starts_at").single().then((r) => r.data),
+    db.from("next_event").select("*").single().then((r) => r.data),
     count("gallery_items"),
     count("merch_items"),
     db.from("merch_settings").select("open").single().then((r) => Boolean(r.data?.open)),
@@ -43,7 +43,7 @@ export default async function DashboardPage() {
     Promise.all(["events", "officers", "next_event", "gallery_items", "merch_items", "stats"].map(latest)),
   ]);
 
-  const nextDate = next?.starts_at
+  const nextDate = next?.starts_at && !next.tba
     ? new Date(next.starts_at).toLocaleDateString("en-PH", { timeZone: "Asia/Manila", month: "short", day: "numeric" })
     : null;
 
@@ -54,8 +54,12 @@ export default async function DashboardPage() {
     OFF: { num: String(officers), label: year ? `officers in ${year}` : "officers, no current year", edited: edited[1] },
     NXT: {
       num: `R${events + 1}`,
-      label: next?.title ?? "Not set",
-      chip: nextDate ? { status: "live", text: nextDate } : { status: "pending", text: "In progress" },
+      label: next?.tba ? "No upcoming round" : (next?.title ?? "Not set"),
+      chip: next?.tba
+        ? { status: "pending", text: "To be announced" }
+        : nextDate
+          ? { status: "live", text: nextDate }
+          : { status: "pending", text: "In progress" },
       edited: edited[2],
     },
     PAD: { num: String(gallery), label: gallery === 1 ? "photo" : "photos", edited: edited[3] },

@@ -80,6 +80,11 @@ export function InProgress() {
   );
 }
 
+/** next round when nothing is scheduled yet */
+export function ToBeAnnounced() {
+  return <span className="type-data text-xl text-ink-muted">To be announced</span>;
+}
+
 export function CheckeredStrip({ className = "", anim }: { className?: string; anim?: string }) {
   return <div aria-hidden data-anim={anim} className={`checkered h-4 w-full opacity-90 ${className}`} />;
 }

@@ -134,23 +134,32 @@ export async function Events() {
           <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
             <figure>
               <PhotoSlot
-                label={`${nextEvent.title} pubmat`}
-                src={nextEvent.photo}
+                label={nextEvent.tba ? "Next round pubmat" : `${nextEvent.title} pubmat`}
+                src={nextEvent.tba ? undefined : nextEvent.photo}
                 contain
                 sizes="(min-width: 1024px) 480px, 100vw"
                 className="aspect-[16/9]"
               />
-              <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">{nextEvent.photoCaption}</figcaption>
+              {!nextEvent.tba && <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">{nextEvent.photoCaption}</figcaption>}
             </figure>
             <div className="flex flex-1 flex-col gap-3 p-6">
               <span className="slant type-label self-start bg-signal px-3 py-2 text-white">
                 <span className="unslant">Next round · {nextEvent.round}</span>
               </span>
-              <h3 className="type-heading">{nextEvent.title}</h3>
-              <p className="type-data text-sm text-ink-muted">{nextEvent.venue}</p>
-              <p className="text-ink-muted">{nextEvent.blurb}</p>
+              {nextEvent.tba ? (
+                <>
+                  <h3 className="type-heading">To be announced</h3>
+                  <p className="text-ink-muted">The next event will be posted here and on our Facebook page.</p>
+                </>
+              ) : (
+                <>
+                  <h3 className="type-heading">{nextEvent.title}</h3>
+                  <p className="type-data text-sm text-ink-muted">{nextEvent.venue}</p>
+                  <p className="text-ink-muted">{nextEvent.blurb}</p>
+                </>
+              )}
               <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-4">
-                {nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
+                {nextEvent.tba ? <span /> : nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
                 <Button href={contact.facebook} variant="outline">
                   Details
                 </Button>

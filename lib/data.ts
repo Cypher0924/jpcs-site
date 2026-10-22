@@ -90,6 +90,7 @@ export async function getNextEvent() {
   ]);
   if (count.error) throw new Error(count.error.message);
   const e = must<{
+    tba?: boolean;
     title: string;
     starts_at: string | null;
     venue: string;
@@ -99,8 +100,10 @@ export async function getNextEvent() {
   }>(row);
   return {
     round: `R${(count.count ?? 0) + 1}`,
+    // nothing scheduled yet: the site says "To be announced"
+    tba: Boolean(e.tba),
     title: e.title,
-    date: opt(e.starts_at),
+    date: e.tba ? undefined : opt(e.starts_at),
     venue: e.venue,
     blurb: e.blurb,
     photo: opt(e.photo),

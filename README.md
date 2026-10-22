@@ -106,7 +106,7 @@ The site always keeps at least one admin. You can't remove or demote the last on
 
 - **Events**: add, edit and delete rounds, upload photos, mark an event as done. No date shows "TBA". Round numbers (R1, R2...) follow the date order. The web address (`/events/<slug>`) is set when the event is created and can't change after.
 - **Officers**: one lineup per school year. Only the current year shows in Driver lineup. For a new year, press **Start school year** (it can copy the groups from the year you're viewing), add the officers, then **Make this the current year**. Older years show under "Past seasons" on the homepage.
-- **Next round**: the red card and the hero badge. A date and time shows a countdown, no date shows "In progress".
+- **Next round**: the red card and the hero badge. A date and time shows a countdown that turns into "In progress" once it starts. No date shows "In progress" right away. After the event, press **Finish round**: it moves the round to Events as a finished round and opens it for the recap photos, and the site shows "To be announced" until the next round is set. Tick **No upcoming round yet** for the same "To be announced" at any time.
 - **Paddock**: the homepage photo grid. The first photo is the large tile.
 - **Merch**: open or close pre-orders, the order form link, and the items.
 - **Stats and contact**: the numbers strip and the footer contact links.

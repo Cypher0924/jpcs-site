@@ -8,12 +8,12 @@ import { ThemeToggle } from "../theme-toggle";
 import { LogoMark } from "../ui";
 import { sectionFor, sections, settingsSection, type Section } from "./sections";
 
-export type NextRound = { round: number; startsAt: string | null } | null;
+export type NextRound = { round: number; startsAt: string | null; tba: boolean } | null;
 
 // "12d 04h", or "3h 20m" on the day
 function untilText(startsAt: string, now: number) {
   const ms = new Date(startsAt).getTime() - now;
-  if (ms <= 0) return "Lights out";
+  if (ms <= 0) return "In progress";
   const m = Math.floor(ms / 60000);
   const d = Math.floor(m / 1440);
   const h = Math.floor((m % 1440) / 60);
@@ -30,7 +30,7 @@ function Readout({ next }: { next: NextRound }) {
     return () => clearInterval(id);
   }, []);
   if (!next) return null;
-  const status = next.startsAt ? (now === null ? "" : untilText(next.startsAt, now)) : "In progress";
+  const status = next.tba ? "To be announced" : next.startsAt ? (now === null ? "" : untilText(next.startsAt, now)) : "In progress";
   return (
     <Link
       href="/admin/next-round"
@@ -39,7 +39,7 @@ function Readout({ next }: { next: NextRound }) {
       <span className="block text-xs text-ink-muted">Next round</span>
       <span className="mt-0.5 flex items-baseline gap-2 text-sm whitespace-nowrap">
         <span className="type-data text-ink-muted">R{next.round}</span>
-        <span className={next.startsAt ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
+        <span className={next.startsAt && !next.tba ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
       </span>
     </Link>
   );

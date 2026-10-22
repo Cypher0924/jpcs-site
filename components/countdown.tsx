@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { InProgress } from "./ui";
 
 function parts(ms: number) {
   const s = Math.max(0, Math.floor(ms / 1000));
@@ -14,17 +15,23 @@ function parts(ms: number) {
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** dashes on the server, ticks after mount */
+/** dashes on the server, ticks after mount, "In progress" once the start time passes */
 export function Countdown({ to, className = "" }: { to: string; className?: string }) {
   const [left, setLeft] = useState<ReturnType<typeof parts> | null>(null);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     const target = new Date(to).getTime();
-    const tick = () => setLeft(parts(target - Date.now()));
+    const tick = () => {
+      setLeft(parts(target - Date.now()));
+      setStarted(Date.now() >= target);
+    };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, [to]);
+
+  if (started) return <InProgress />;
 
   const cells = [
     ["d", left ? pad(left.d) : "--"],
