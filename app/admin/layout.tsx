@@ -24,17 +24,13 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
 async function SidebarForUser() {
   const staff = await getStaff();
   if (!staff) return <AdminSidebar email={null} role={null} />;
-  // the tower's next-round readout. same numbering as the site: one after the last event
-  const db = await sessionClient();
-  const [{ data: next }, { count }] = await Promise.all([
-    db.from("next_event").select("*").single(),
-    db.from("events").select("id", { count: "exact", head: true }),
-  ]);
-  return (
-    <AdminSidebar
-      email={staff.email}
-      role={staff.role}
-      next={next ? { round: (count ?? 0) + 1, startsAt: next.starts_at, tba: Boolean(next.tba) } : null}
-    />
-  );
+  // the tower's next-round readout, numbered like the site: by date, cancelled rounds left out
+  const { data } = await (await sessionClient())
+    .from("events")
+    .select("id, starts_at, ends_at, status")
+    .neq("status", "cancelled")
+    .order("starts_at", { nullsFirst: false })
+    .order("id");
+  const rounds = (data ?? []).map((e, i) => ({ id: e.id as number, round: i + 1, startsAt: e.starts_at, endsAt: e.ends_at, status: e.status }));
+  return <AdminSidebar email={staff.email} role={staff.role} rounds={rounds} />;
 }

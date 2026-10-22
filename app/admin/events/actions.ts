@@ -5,6 +5,7 @@ import { z } from "zod";
 import { failed, optional, parse, required, saved, type ActionState } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { pickImage, uploadImage } from "@/lib/media";
+import { fromManilaInput } from "@/lib/rounds";
 import { sessionClient } from "@/lib/supabase/server";
 
 const checkbox = z
@@ -14,12 +15,10 @@ const checkbox = z
 
 const fields = {
   title: required("Title"),
-  // empty date means TBA
-  date: z
-    .string()
-    .trim()
-    .transform((v) => v || null),
-  done: checkbox,
+  // typed in Manila time. empty start means Date TBA, empty end means it ends that night
+  starts_at: z.string().trim().transform(fromManilaInput),
+  ends_at: z.string().trim().transform(fromManilaInput),
+  status: z.enum(["scheduled", "postponed", "cancelled"]),
   venue: z.string().trim(),
   summary: z.string().trim(),
   credit: required("Credit"),
@@ -29,20 +28,25 @@ const fields = {
 };
 
 const id = z.coerce.number().int().positive();
+const endAfterStart = (v: { starts_at: string | null; ends_at: string | null }) =>
+  !v.ends_at || (!!v.starts_at && new Date(v.ends_at) >= new Date(v.starts_at));
+const endMessage = "Set a start before the end, and make the end come after it.";
+
 const create = z.object({
   ...fields,
   slug: z
     .string()
     .trim()
     .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Slug can only have lowercase letters, numbers and hyphens."),
-});
-const update = z.object({ ...fields, id });
+}).refine(endAfterStart, endMessage);
+const update = z.object({ ...fields, id }).refine(endAfterStart, endMessage);
 
 type Fields = Omit<z.infer<typeof update>, "id">;
 const toRow = (p: Fields, cover: string | null) => ({
   title: p.title,
-  event_date: p.date,
-  done: p.done,
+  starts_at: p.starts_at,
+  ends_at: p.ends_at,
+  status: p.status,
   venue: p.venue,
   summary: p.summary,
   credit: p.credit,

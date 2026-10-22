@@ -6,22 +6,21 @@ import { useEffect, useState } from "react";
 import type { Role } from "@/lib/auth";
 import { ThemeToggle } from "../theme-toggle";
 import { LogoMark } from "../ui";
+import { phase, pickNext, type Timing } from "@/lib/rounds";
 import { sectionFor, sections, settingsSection, type Section } from "./sections";
 
-export type NextRound = { round: number; startsAt: string | null; tba: boolean } | null;
+export type TowerRound = Timing & { id: number; round: number };
 
 // "12d 04h", or "3h 20m" on the day
 function untilText(startsAt: string, now: number) {
-  const ms = new Date(startsAt).getTime() - now;
-  if (ms <= 0) return "In progress";
-  const m = Math.floor(ms / 60000);
+  const m = Math.max(0, Math.floor((new Date(startsAt).getTime() - now) / 60000));
   const d = Math.floor(m / 1440);
   const h = Math.floor((m % 1440) / 60);
   return d > 0 ? `${d}d ${String(h).padStart(2, "0")}h` : `${h}h ${String(m % 60).padStart(2, "0")}m`;
 }
 
-/** next round readout at the top of the tower. ticks once a minute */
-function Readout({ next }: { next: NextRound }) {
+/** next round readout at the top of the tower, picked from the events list. ticks once a minute */
+function Readout({ rounds }: { rounds: TowerRound[] }) {
   const [now, setNow] = useState<number | null>(null);
   useEffect(() => {
     const tick = () => setNow(Date.now());
@@ -29,17 +28,27 @@ function Readout({ next }: { next: NextRound }) {
     const id = setInterval(tick, 60_000);
     return () => clearInterval(id);
   }, []);
-  if (!next) return null;
-  const status = next.tba ? "To be announced" : next.startsAt ? (now === null ? "" : untilText(next.startsAt, now)) : "In progress";
+  if (now === null) return null;
+  const [next] = pickNext(rounds, now);
+  const p = next && phase(next, now);
+  const status = !next
+    ? "To be announced"
+    : p === "upcoming"
+      ? untilText(next.startsAt!, now)
+      : p === "live"
+        ? "In progress"
+        : p === "postponed"
+          ? "Postponed"
+          : "Date TBA";
   return (
     <Link
-      href="/admin/next-round"
+      href={next ? `/admin/events/${next.id}` : "/admin/events"}
       className="mx-3 mb-3 block border border-line px-3 py-2 transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-accent"
     >
       <span className="block text-xs text-ink-muted">Next round</span>
       <span className="mt-0.5 flex items-baseline gap-2 text-sm whitespace-nowrap">
-        <span className="type-data text-ink-muted">R{next.round}</span>
-        <span className={next.startsAt && !next.tba ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
+        <span className="type-data text-ink-muted">R{next ? next.round : rounds.length + 1}</span>
+        <span className={p === "upcoming" ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
       </span>
     </Link>
   );
@@ -67,7 +76,7 @@ function Row({ s, active, onPick }: { s: Section; active: boolean; onPick: () =>
 }
 
 /** the timing tower: dark in both themes, like the broadcast graphic */
-export function AdminSidebar({ email, role, next = null }: { email: string | null; role: Role | null; next?: NextRound }) {
+export function AdminSidebar({ email, role, rounds = [] }: { email: string | null; role: Role | null; rounds?: TowerRound[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const current = sectionFor(pathname);
@@ -116,7 +125,7 @@ export function AdminSidebar({ email, role, next = null }: { email: string | nul
         id="admin-menu"
         className={`${open ? "flex" : "hidden"} max-h-[calc(100dvh-4rem)] flex-col overflow-y-auto border-t border-line pt-3 md:flex md:max-h-none md:flex-1 md:border-t-0 md:pt-0`}
       >
-        <Readout next={next} />
+        <Readout rounds={rounds} />
         <nav aria-label="Admin" className="flex flex-1 flex-col pb-3">
           <ul className="flex flex-col">
             {visible

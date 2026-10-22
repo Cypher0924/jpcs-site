@@ -1,5 +1,6 @@
 import { cacheLife, cacheTag } from "next/cache";
 import { merchSizes } from "./content";
+import { manilaDate, type Status, type Timing } from "./rounds";
 import { publicClient } from "./supabase/public";
 
 // Public reads. Each getter is cached and tagged, and admin saves call updateTag(<tag>) so the next visit is fresh.
@@ -14,14 +15,13 @@ const opt = (v: string | null) => v ?? undefined;
 
 const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 
-export type Event = {
+export type Event = Timing & {
   slug: string;
   round: string;
   month: string;
   day: string;
   title: string;
   venue: string;
-  done: boolean;
   summary: string;
   credit: string;
   cover?: string;
@@ -32,8 +32,9 @@ export type Event = {
 
 type EventRow = {
   slug: string;
-  event_date: string | null;
-  done: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  status: Status;
   title: string;
   venue: string;
   summary: string;
@@ -45,6 +46,10 @@ type EventRow = {
   event_photos: { src: string }[];
 };
 
+/**
+ * Every round that isn't cancelled, in date order (undated ones last). Whether a round is upcoming,
+ * in progress or finished depends on the clock, so pages work that out with lib/rounds.ts, not here.
+ */
 export async function getEvents(): Promise<Event[]> {
   "use cache";
   cacheLife("days");
@@ -52,22 +57,25 @@ export async function getEvents(): Promise<Event[]> {
   const rows = must<EventRow[]>(
     await publicClient()
       .from("events")
-      .select("slug, event_date, done, title, venue, summary, credit, cover, square, link_href, link_label, event_photos(src)")
-      .order("event_date", { nullsFirst: false })
+      .select("slug, starts_at, ends_at, status, title, venue, summary, credit, cover, square, link_href, link_label, event_photos(src)")
+      .neq("status", "cancelled")
+      .order("starts_at", { nullsFirst: false })
       .order("id")
       .order("sort", { referencedTable: "event_photos" }),
   );
   // rounds follow the calendar, so they're numbered here instead of stored
   return rows.map((e, i) => {
-    const [, m, d] = e.event_date?.split("-") ?? [];
+    const [, m, d] = e.starts_at ? manilaDate(e.starts_at).split("-") : [];
     return {
       slug: e.slug,
       round: `R${i + 1}`,
       month: m ? MONTHS[Number(m) - 1] : "TBA",
       day: d ?? "",
+      startsAt: e.starts_at,
+      endsAt: e.ends_at,
+      status: e.status,
       title: e.title,
       venue: e.venue,
-      done: e.done,
       summary: e.summary,
       credit: e.credit,
       cover: opt(e.cover),
@@ -78,37 +86,28 @@ export async function getEvents(): Promise<Event[]> {
   });
 }
 
-export async function getNextEvent() {
+export type Round = Pick<Event, "slug" | "round" | "title" | "venue" | "summary" | "cover" | "credit" | "startsAt" | "endsAt" | "status">;
+
+/** only what the card needs, so the page doesn't ship every photo list to the browser */
+export const toRound = (e: Event): Round => ({
+  slug: e.slug,
+  round: e.round,
+  title: e.title,
+  venue: e.venue,
+  summary: e.summary,
+  cover: e.cover,
+  credit: e.credit,
+  startsAt: e.startsAt,
+  endsAt: e.endsAt,
+  status: e.status,
+});
+
+/** when the events above were read. the next-round card renders against this first, then switches to the visitor's clock */
+export async function eventsCheckedAt() {
   "use cache";
   cacheLife("days");
-  // its round number depends on how many events exist
-  cacheTag("next-event", "events");
-  const db = publicClient();
-  const [row, count] = await Promise.all([
-    db.from("next_event").select("*").single(),
-    db.from("events").select("id", { count: "exact", head: true }),
-  ]);
-  if (count.error) throw new Error(count.error.message);
-  const e = must<{
-    tba?: boolean;
-    title: string;
-    starts_at: string | null;
-    venue: string;
-    blurb: string;
-    photo: string | null;
-    photo_caption: string | null;
-  }>(row);
-  return {
-    round: `R${(count.count ?? 0) + 1}`,
-    // nothing scheduled yet: the site says "To be announced"
-    tba: Boolean(e.tba),
-    title: e.title,
-    date: e.tba ? undefined : opt(e.starts_at),
-    venue: e.venue,
-    blurb: e.blurb,
-    photo: opt(e.photo),
-    photoCaption: opt(e.photo_caption),
-  };
+  cacheTag("events");
+  return Date.now();
 }
 
 type OfficerRow = { name: string; role: string; slug: string; photo: string | null; quote: string | null; is_adviser: boolean };

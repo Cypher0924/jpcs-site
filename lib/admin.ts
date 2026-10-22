@@ -1,8 +1,15 @@
 import "server-only";
 import { refresh, updateTag } from "next/cache";
+import { connection } from "next/server";
 import { cache } from "react";
 import { z } from "zod";
 import { sessionClient } from "./supabase/server";
+
+/** the time of this request, for working out which rounds are upcoming, live or finished */
+export async function requestNow() {
+  await connection();
+  return Date.now();
+}
 
 /** team emails by id, once per request, for "last edited by" */
 export const getEditors = cache(async () => {

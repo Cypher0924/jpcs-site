@@ -3,9 +3,10 @@ import { sections, type Code } from "@/components/admin/sections";
 import { PageHeader, Panel } from "@/components/admin/shell";
 import { StatusChip } from "@/components/admin/status";
 import { linkClass } from "@/components/admin/styles";
-import { getEditors, lastEdited } from "@/lib/admin";
+import { getEditors, lastEdited, requestNow } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
+import { dateRange, phase, pickNext, type Status } from "@/lib/rounds";
 import type { AuditRow } from "./audit/describe";
 import { Message } from "./audit/message";
 
@@ -22,8 +23,17 @@ export default async function DashboardPage() {
   const latest = async (table: string) =>
     (await db.from(table).select("updated_at, updated_by").order("updated_at", { ascending: false }).limit(1).maybeSingle()).data as Edited;
 
-  const [events, officers, year, next, gallery, merch, merchOpen, stats, team, editors, recent, edited] = await Promise.all([
-    count("events"),
+  const [rounds, officers, year, gallery, merch, merchOpen, stats, team, editors, recent, edited] = await Promise.all([
+    // numbered like the site: by date, cancelled rounds left out
+    db
+      .from("events")
+      .select("title, starts_at, ends_at, status")
+      .neq("status", "cancelled")
+      .order("starts_at", { nullsFirst: false })
+      .order("id")
+      .then((r) =>
+        (r.data ?? []).map((e, i) => ({ round: i + 1, title: e.title as string, startsAt: e.starts_at, endsAt: e.ends_at, status: e.status as Status })),
+      ),
     // officers in the current school year only
     db
       .from("officers")
@@ -31,7 +41,6 @@ export default async function DashboardPage() {
       .eq("school_years.is_current", true)
       .then((r) => r.count ?? 0),
     db.from("school_years").select("label").eq("is_current", true).maybeSingle().then((r) => r.data?.label as string | undefined),
-    db.from("next_event").select("*").single().then((r) => r.data),
     count("gallery_items"),
     count("merch_items"),
     db.from("merch_settings").select("open").single().then((r) => Boolean(r.data?.open)),
@@ -40,36 +49,34 @@ export default async function DashboardPage() {
     getEditors(),
     // RLS returns nothing here for editors, the audit log is admin-only
     db.from("audit_log").select("*").order("at", { ascending: false }).limit(10).then((r) => (r.data ?? []) as AuditRow[]),
-    Promise.all(["events", "officers", "next_event", "gallery_items", "merch_items", "stats"].map(latest)),
+    Promise.all(["events", "officers", "gallery_items", "merch_items", "stats"].map(latest)),
   ]);
 
-  const nextDate = next?.starts_at && !next.tba
-    ? new Date(next.starts_at).toLocaleDateString("en-PH", { timeZone: "Asia/Manila", month: "short", day: "numeric" })
-    : null;
+  const now = await requestNow();
+  const events = rounds.length;
+  const [next] = pickNext(rounds, now);
+  const nextPhase = next && phase(next, now);
+  const nextChip: { status: "live" | "pending"; text: string } = !next
+    ? { status: "pending", text: "Next round to be announced" }
+    : nextPhase === "live"
+      ? { status: "live", text: `R${next.round} in progress` }
+      : nextPhase === "upcoming"
+        ? { status: "live", text: `Next: R${next.round} · ${dateRange(next.startsAt, next.endsAt)}` }
+        : { status: "pending", text: `Next: R${next.round} ${nextPhase === "postponed" ? "postponed" : "date TBA"}` };
 
   // what each tower row reports on the board: a number in timing type, then words
   type Line = { num?: string; label: string; chip?: { status: "live" | "pending"; text: string }; edited?: Edited };
   const board: Partial<Record<Code, Line>> = {
-    EVT: { num: String(events), label: events === 1 ? "round" : "rounds", edited: edited[0] },
+    EVT: { num: String(events), label: events === 1 ? "round" : "rounds", chip: nextChip, edited: edited[0] },
     OFF: { num: String(officers), label: year ? `officers in ${year}` : "officers, no current year", edited: edited[1] },
-    NXT: {
-      num: `R${events + 1}`,
-      label: next?.tba ? "No upcoming round" : (next?.title ?? "Not set"),
-      chip: next?.tba
-        ? { status: "pending", text: "To be announced" }
-        : nextDate
-          ? { status: "live", text: nextDate }
-          : { status: "pending", text: "In progress" },
-      edited: edited[2],
-    },
-    PAD: { num: String(gallery), label: gallery === 1 ? "photo" : "photos", edited: edited[3] },
+    PAD: { num: String(gallery), label: gallery === 1 ? "photo" : "photos", edited: edited[2] },
     MER: {
       num: String(merch),
       label: merch === 1 ? "item" : "items",
       chip: merchOpen ? { status: "live", text: "Pre-orders open" } : { status: "pending", text: "Pre-orders closed" },
-      edited: edited[4],
+      edited: edited[3],
     },
-    STA: { num: String(stats), label: stats === 1 ? "stat" : "stats", edited: edited[5] },
+    STA: { num: String(stats), label: stats === 1 ? "stat" : "stats", edited: edited[4] },
     TEM: { num: String(team), label: team === 1 ? "member" : "members" },
     AUD: { label: "Every change, with before and after" },
   };

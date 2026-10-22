@@ -5,7 +5,9 @@ import { Suspense } from "react";
 import { Subpage } from "@/components/subpage";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Button, PhotoSlot } from "@/components/ui";
-import { getEvents } from "@/lib/data";
+import { RoundStatus } from "@/components/next-round";
+import { eventsCheckedAt, getEvents } from "@/lib/data";
+import { dateRange } from "@/lib/rounds";
 
 export async function generateStaticParams() {
   const events = await getEvents();
@@ -33,7 +35,7 @@ export default function EventPage({ params }: PageProps<"/events/[slug]">) {
 
 async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["params"] }) {
   const { slug } = await params;
-  const events = await getEvents();
+  const [events, at] = await Promise.all([getEvents(), eventsCheckedAt()]);
   const i = events.findIndex((e) => e.slug === slug);
   if (i === -1) notFound();
   const event = events[i];
@@ -46,12 +48,12 @@ async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["p
         <div className="lg:col-span-7">
           <span className="slant type-label inline-block bg-accent px-3 py-2 text-accent-ink">
             <span className="unslant inline-block">
-              Round {event.round.slice(1)} · {event.done ? "Finished" : "Upcoming"}
+              Round {event.round.slice(1)} · <RoundStatus round={event} at={at} />
             </span>
           </span>
           <h1 className="type-title mt-4 text-ink">{event.title}</h1>
           <p className="type-data mt-3 text-sm text-ink-muted">
-            {event.month === "TBA" ? "Date TBA" : `${event.month} ${event.day}`} · {event.venue}
+            {event.status === "postponed" ? "Postponed · new date to be announced" : dateRange(event.startsAt, event.endsAt)} · {event.venue}
           </p>
         </div>
         <div className="lg:col-span-5">

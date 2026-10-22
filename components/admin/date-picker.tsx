@@ -27,6 +27,7 @@ export function DatePicker({
   defaultValue = "",
   withTime = false,
   emptyText = "Not set",
+  defaultTime = "09:00",
 }: {
   name: string;
   label: string;
@@ -34,9 +35,10 @@ export function DatePicker({
   defaultValue?: string;
   withTime?: boolean;
   emptyText?: string;
+  defaultTime?: string;
 }) {
   const [date, setDate] = useState(defaultValue.slice(0, 10));
-  const [time, setTime] = useState(defaultValue.slice(11, 16) || "09:00");
+  const [time, setTime] = useState(defaultValue.slice(11, 16) || defaultTime);
   const [open, setOpen] = useState(false);
   const [focus, setFocus] = useState(date || todayIso());
   const root = useRef<HTMLDivElement>(null);
@@ -52,11 +54,11 @@ export function DatePicker({
     const form = root.current?.closest("form");
     const reset = () => {
       setDate(defaultValue.slice(0, 10));
-      setTime(defaultValue.slice(11, 16) || "09:00");
+      setTime(defaultValue.slice(11, 16) || defaultTime);
     };
     form?.addEventListener("reset", reset);
     return () => form?.removeEventListener("reset", reset);
-  }, [defaultValue]);
+  }, [defaultValue, defaultTime]);
 
   // close on outside click
   useEffect(() => {

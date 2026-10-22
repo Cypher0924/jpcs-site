@@ -1,13 +1,15 @@
 import { DatePicker } from "@/components/admin/date-picker";
 import { Field, Input, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
-import { checkboxClass } from "@/components/admin/styles";
+import { checkboxClass, selectClass } from "@/components/admin/styles";
+import { toManilaInput, type Status } from "@/lib/rounds";
 
 export type EventRow = {
   id: number;
   slug: string;
-  event_date: string | null;
-  done: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  status: Status;
   title: string;
   venue: string;
   summary: string;
@@ -39,7 +41,32 @@ export function EventFields({ event }: { event?: EventRow }) {
         <Input name="title" defaultValue={event?.title} required />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
-        <DatePicker name="date" label="Date" hint="Leave empty to show TBA." emptyText="TBA" defaultValue={event?.event_date ?? ""} />
+        <DatePicker
+          name="starts_at"
+          label="Starts (Manila time)"
+          hint="Leave empty to show Date TBA."
+          emptyText="Date TBA"
+          defaultValue={toManilaInput(event?.starts_at ?? null)}
+          withTime
+        />
+        <DatePicker
+          name="ends_at"
+          label="Ends (optional)"
+          hint="For events that run over days. Leave empty and it ends that night."
+          emptyText="Same day"
+          defaultValue={toManilaInput(event?.ends_at ?? null)}
+          defaultTime="17:00"
+          withTime
+        />
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label="Status" hint="Postponed keeps it as the next round with no countdown. Cancelled hides it from the site.">
+          <select name="status" defaultValue={event?.status ?? "scheduled"} className={`${selectClass} w-full`}>
+            <option value="scheduled">Scheduled</option>
+            <option value="postponed">Postponed, new date to be announced</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </Field>
         <Field label="Venue" hint="Short line under the title.">
           <Input name="venue" defaultValue={event?.venue} />
         </Field>
@@ -52,10 +79,6 @@ export function EventFields({ event }: { event?: EventRow }) {
       </Field>
       <ImageInput name="cover" label="Cover image" current={event?.cover} square={event?.square} />
       <div className="flex flex-wrap gap-x-6 gap-y-2">
-        <label className={check}>
-          <input type="checkbox" name="done" defaultChecked={event?.done} className={checkboxClass} />
-          Finished
-        </label>
         <label className={check}>
           <input type="checkbox" name="square" defaultChecked={event?.square} className={checkboxClass} />
           Square photos (pubmats), don&apos;t crop to 16:9

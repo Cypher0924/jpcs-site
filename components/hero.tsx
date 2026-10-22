@@ -1,7 +1,7 @@
-import { getNextEvent } from "@/lib/data";
-import { Countdown } from "./countdown";
+import { eventsCheckedAt, getEvents, toRound } from "@/lib/data";
+import { NextRoundBadge } from "./next-round";
 import { LIGHT_STEP, LIGHTS_OUT } from "./lights";
-import { Button, Chevrons, Container, InProgress, SpeedSlashes, ToBeAnnounced } from "./ui";
+import { Button, Chevrons, Container, SpeedSlashes } from "./ui";
 
 function StartLights() {
   return (
@@ -58,7 +58,7 @@ function HeroVisual() {
 }
 
 export async function Hero() {
-  const nextEvent = await getNextEvent();
+  const [events, at] = await Promise.all([getEvents(), eventsCheckedAt()]);
   return (
     <section id="top" className="relative overflow-hidden" style={{ background: "var(--hero-wash)" }}>
       <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-12 lg:gap-6 lg:py-24">
@@ -96,8 +96,7 @@ export async function Hero() {
             href="#events"
             className="mt-8 inline-flex flex-wrap items-center gap-x-4 gap-y-2 border-l-4 border-signal bg-surface px-4 py-3"
           >
-            <span className="type-label text-signal">Next round · {nextEvent.round}</span>
-            {nextEvent.tba ? <ToBeAnnounced /> : nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
+            <NextRoundBadge rounds={events.map(toRound)} at={at} />
           </a>
         </div>
 

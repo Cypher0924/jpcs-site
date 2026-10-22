@@ -1,19 +1,20 @@
 import Link from "next/link";
 import { about, faqs, navLinks, peso } from "@/lib/content";
 import {
+  eventsCheckedAt,
+  toRound,
   getContact,
   getEvents,
   getFormerOfficers,
   getGallery,
   getMerch,
-  getNextEvent,
   getOfficerGroups,
   getStats,
   type Event,
   type MerchItem,
 } from "@/lib/data";
 import { Fragment } from "react";
-import { Countdown } from "./countdown";
+import { NextRoundCard, RowStatus } from "./next-round";
 import { FormerOfficers } from "./former-officers";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
@@ -25,7 +26,6 @@ import {
   Chevrons,
   Container,
   FacebookIcon,
-  InProgress,
   LogoMark,
   MailIcon,
   MessengerIcon,
@@ -125,52 +125,18 @@ export async function Officers() {
 }
 
 export async function Events() {
-  const [events, nextEvent, contact] = await Promise.all([getEvents(), getNextEvent(), getContact()]);
+  const [events, at, contact] = await Promise.all([getEvents(), eventsCheckedAt(), getContact()]);
   return (
     <section id="events" className="bg-surface-2 py-20 md:py-28">
       <Container>
         <SectionHeader title="Race calendar" sub="Every JPCS-TSU event this year, round by round." />
         <div className="grid gap-6 lg:grid-cols-12">
-          <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
-            <figure>
-              <PhotoSlot
-                label={nextEvent.tba ? "Next round pubmat" : `${nextEvent.title} pubmat`}
-                src={nextEvent.tba ? undefined : nextEvent.photo}
-                contain
-                sizes="(min-width: 1024px) 480px, 100vw"
-                className="aspect-[16/9]"
-              />
-              {!nextEvent.tba && <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">{nextEvent.photoCaption}</figcaption>}
-            </figure>
-            <div className="flex flex-1 flex-col gap-3 p-6">
-              <span className="slant type-label self-start bg-signal px-3 py-2 text-white">
-                <span className="unslant">Next round · {nextEvent.round}</span>
-              </span>
-              {nextEvent.tba ? (
-                <>
-                  <h3 className="type-heading">To be announced</h3>
-                  <p className="text-ink-muted">The next event will be posted here and on our Facebook page.</p>
-                </>
-              ) : (
-                <>
-                  <h3 className="type-heading">{nextEvent.title}</h3>
-                  <p className="type-data text-sm text-ink-muted">{nextEvent.venue}</p>
-                  <p className="text-ink-muted">{nextEvent.blurb}</p>
-                </>
-              )}
-              <div className="mt-auto flex flex-wrap items-center justify-between gap-4 pt-4">
-                {nextEvent.tba ? <span /> : nextEvent.date ? <Countdown to={nextEvent.date} /> : <InProgress />}
-                <Button href={contact.facebook} variant="outline">
-                  Details
-                </Button>
-              </div>
-            </div>
-          </article>
+          <NextRoundCard rounds={events.map(toRound)} at={at} facebook={contact.facebook} />
 
           <ol data-anim="launch" className="flex flex-col gap-3 lg:col-span-7">
             {events.map((e) => (
               <li key={e.slug}>
-                <EventRow event={e} />
+                <EventRow event={e} at={at} />
               </li>
             ))}
             <li className="pt-2 text-center lg:text-right">
@@ -185,7 +151,7 @@ export async function Events() {
   );
 }
 
-export function EventRow({ event: e }: { event: Event }) {
+export function EventRow({ event: e, at }: { event: Event; at: number }) {
   return (
     <Link
       href={`/events/${e.slug}`}
@@ -203,16 +169,7 @@ export function EventRow({ event: e }: { event: Event }) {
           <span className="type-heading text-lg">{e.title}</span>
           <span className="block text-sm text-ink-muted">{e.venue}</span>
         </span>
-        {e.done ? (
-          <span className="flex items-center gap-2">
-            <span aria-hidden className="checkered block size-6 border border-line [background-size:8px_8px]" />
-            <span className="type-label hidden text-ink-muted sm:inline">Finished</span>
-          </span>
-        ) : (
-          <span aria-hidden className="text-2xl text-ink-muted transition-transform group-hover:translate-x-1 group-hover:text-accent-text">
-            ›
-          </span>
-        )}
+        <RowStatus round={e} at={at} />
       </span>
     </Link>
   );
