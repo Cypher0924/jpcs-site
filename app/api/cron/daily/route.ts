@@ -3,7 +3,7 @@ import { adminClient } from "@/lib/supabase/admin";
 
 const TABLES = [
   "profiles", "school_years", "officer_groups", "officers", "events", "event_photos", "gallery_items",
-  "merch_groups", "merch_items", "stats", "next_event", "merch_settings", "contact", "audit_log",
+  "merch_groups", "merch_items", "stats", "merch_settings", "contact", "audit_log",
 ] as const;
 const KEEP_BACKUPS = 8;
 const PAGE = 1000;
