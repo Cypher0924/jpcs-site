@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LIGHT_STEP, LIGHTS_OUT } from "./hero";
+import { LIGHT_STEP, LIGHTS_OUT } from "./lights";
 import { LogoMark } from "./ui";
 
 // finishes every CSS animation so cleanup runs and the headline lands at once

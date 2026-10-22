@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PhotoSlot } from "./ui";
 
-type Officer = { number: string; code: string; name: string; role: string; slug: string; year: string; quote?: string };
+type Officer = { number: string; code: string; name: string; role: string; year: string; photo?: string; quote?: string };
 
 export function OfficerCard({ officer }: { officer: Officer }) {
   const [flipped, setFlipped] = useState(false);
@@ -22,7 +22,7 @@ export function OfficerCard({ officer }: { officer: Officer }) {
           <span className="relative">
             <PhotoSlot
               label={`${officer.name}, ${officer.role}`}
-              src={`/officers/${officer.slug}.webp`}
+              src={officer.photo}
               sizes="(min-width: 1024px) 280px, (min-width: 768px) 33vw, 75vw"
               className="aspect-square"
             />

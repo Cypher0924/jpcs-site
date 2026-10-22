@@ -5,20 +5,22 @@ import { Suspense } from "react";
 import { Subpage } from "@/components/subpage";
 import { PhotoGrid } from "@/components/photo-grid";
 import { Button, PhotoSlot } from "@/components/ui";
-import { events } from "@/lib/content";
+import { getEvents } from "@/lib/data";
 
-export function generateStaticParams() {
-  return events.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  const events = await getEvents();
+  // cache components needs at least one param. "none" just renders the 404
+  return events.length ? events.map((e) => ({ slug: e.slug })) : [{ slug: "none" }];
 }
 
 export async function generateMetadata({ params }: PageProps<"/events/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const event = events.find((e) => e.slug === slug);
+  const event = (await getEvents()).find((e) => e.slug === slug);
   return { title: event ? `${event.title} · JPCS-TSU` : "Event not found · JPCS-TSU" };
 }
 
 // nav, back link and footer are an instant shell. the event reads params so it sits behind Suspense (Partial Prefetching).
-// all slugs are prerendered so the fallback rarely shows
+// slugs that exist at build time are prerendered, new ones render on demand
 export default function EventPage({ params }: PageProps<"/events/[slug]">) {
   return (
     <Subpage back={{ href: "/events", label: "Race calendar" }}>
@@ -31,6 +33,7 @@ export default function EventPage({ params }: PageProps<"/events/[slug]">) {
 
 async function EventDetails({ params }: { params: PageProps<"/events/[slug]">["params"] }) {
   const { slug } = await params;
+  const events = await getEvents();
   const i = events.findIndex((e) => e.slug === slug);
   if (i === -1) notFound();
   const event = events[i];

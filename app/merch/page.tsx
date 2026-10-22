@@ -3,11 +3,13 @@ import { PhotoGrid } from "@/components/photo-grid";
 import { MerchCaption, MerchStatus } from "@/components/sections";
 import { Subpage } from "@/components/subpage";
 import { SectionHeader } from "@/components/ui";
-import { merch } from "@/lib/content";
+import { merchSizes } from "@/lib/content";
+import { getMerch } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Team kit · JPCS-TSU" };
 
-export default function MerchPage() {
+export default async function MerchPage() {
+  const merch = await getMerch();
   return (
     <Subpage back={{ href: "/#merch", label: "Home" }}>
       <SectionHeader title="Team kit" sub="Every item in the JPCS 26/27 collection, with prices and the people who designed it." />
@@ -34,14 +36,14 @@ export default function MerchPage() {
               <h2 id={`m-${g.id}`} className="type-heading">
                 {g.title}
               </h2>
-              {"note" in g && <p className="mt-1 text-sm text-ink-muted">{g.note}</p>}
+              {g.note && <p className="mt-1 text-sm text-ink-muted">{g.note}</p>}
             </div>
             <PhotoGrid
               photos={g.items.map((i) => i.image)}
               label={g.title}
               sizes="(min-width: 768px) 380px, 50vw"
               captions={g.items.map((i) => (
-                <MerchCaption key={i.name} item={i} creditLabel={"creditLabel" in g ? g.creditLabel : undefined} />
+                <MerchCaption key={i.name} item={i} creditLabel={g.creditLabel} />
               ))}
               className="grid grid-cols-2 gap-x-3 gap-y-8 md:grid-cols-3 md:gap-x-4"
               tileClassName="aspect-square"
@@ -58,7 +60,7 @@ export default function MerchPage() {
                   </tr>
                 </thead>
                 <tbody className="type-data">
-                  {merch.sizes.map(([size, width, length]) => (
+                  {merchSizes.map(([size, width, length]) => (
                     <tr key={size} className="border-b border-line">
                       <th scope="row" className="py-2 font-[inherit]">{size}</th>
                       <td className="py-2">{width}</td>

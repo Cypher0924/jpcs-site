@@ -1,9 +1,7 @@
-import { nextEvent } from "@/lib/content";
+import { getNextEvent } from "@/lib/data";
 import { Countdown } from "./countdown";
+import { LIGHT_STEP, LIGHTS_OUT } from "./lights";
 import { Button, Chevrons, Container, InProgress, SpeedSlashes } from "./ui";
-
-export const LIGHT_STEP = 0.55; // seconds between lights
-export const LIGHTS_OUT = LIGHT_STEP * 5 + 0.6;
 
 function StartLights() {
   return (
@@ -59,7 +57,8 @@ function HeroVisual() {
   );
 }
 
-export function Hero() {
+export async function Hero() {
+  const nextEvent = await getNextEvent();
   return (
     <section id="top" className="relative overflow-hidden" style={{ background: "var(--hero-wash)" }}>
       <Container className="grid gap-10 py-14 md:py-20 lg:grid-cols-12 lg:gap-6 lg:py-24">

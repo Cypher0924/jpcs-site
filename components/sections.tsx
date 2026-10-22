@@ -1,18 +1,16 @@
 import Link from "next/link";
+import { about, faqs, navLinks, peso } from "@/lib/content";
 import {
-  about,
-  contact,
-  events,
-  faqs,
-  gallery,
-  merch,
-  navLinks,
-  nextEvent,
-  officerGroups,
-  peso,
-  stats,
+  getContact,
+  getEvents,
+  getGallery,
+  getMerch,
+  getNextEvent,
+  getOfficerGroups,
+  getStats,
   type Event,
-} from "@/lib/content";
+  type MerchItem,
+} from "@/lib/data";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
 import { OfficerCard } from "./officer-card";
@@ -71,7 +69,8 @@ export function About() {
   );
 }
 
-export function Stats() {
+export async function Stats() {
+  const stats = await getStats();
   return (
     <section aria-label="JPCS-TSU in numbers" className="telemetry-grid border-y border-line bg-surface-2 py-14">
       <Container data-anim="rise" className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-6">
@@ -83,19 +82,20 @@ export function Stats() {
   );
 }
 
-export function Officers() {
+export async function Officers() {
+  const { year, groups } = await getOfficerGroups();
   return (
     <section id="officers" className="py-20 md:py-28">
       <Container>
         <SectionHeader
           title="Driver lineup"
-          sub="The JPCS-TSU officers, executive associates and apprentices for A.Y. 2026-2027. Tap a card to flip it."
+          sub={`The JPCS-TSU officers, executive associates and apprentices for A.Y. ${year}. Tap a card to flip it.`}
         />
         {/* one block per category, adviser alone on top. mobile: swipe carousel per group (~1.3 cards) with dots.
             md+: centred rows of 3/4 so short rows sit in the middle like a pyramid */}
         <div className="flex flex-col gap-12 md:gap-14">
-          {officerGroups.map((g) => (
-            <div key={g.officers[0].slug}>
+          {groups.map((g) => (
+            <div key={g.title}>
               <h3 className="type-heading mb-6 text-center">
                 {g.title}
                 {g.officers.length > 1 && (
@@ -120,7 +120,8 @@ export function Officers() {
   );
 }
 
-export function Events() {
+export async function Events() {
+  const [events, nextEvent, contact] = await Promise.all([getEvents(), getNextEvent(), getContact()]);
   return (
     <section id="events" className="bg-surface-2 py-20 md:py-28">
       <Container>
@@ -204,7 +205,8 @@ export function EventRow({ event: e }: { event: Event }) {
   );
 }
 
-export function Gallery() {
+export async function Gallery() {
+  const gallery = await getGallery();
   return (
     // motion.tsx sets data-strip="on" on desktop (motion allowed), grid becomes a pinned horizontal filmstrip
     <section
@@ -250,26 +252,24 @@ export function Gallery() {
   );
 }
 
-type MerchGroup = (typeof merch.groups)[number];
-type MerchItem = MerchGroup["items"][number];
-
 /** lowest price in a group, "from" if prices differ or it is only a starting price */
-function groupPrice(g: MerchGroup) {
-  const prices = g.items.map((i) => i.price);
-  const from = g.items.some((i) => "from" in i && i.from) || new Set(prices).size > 1;
+function groupPrice(items: MerchItem[]) {
+  const prices = items.map((i) => i.price);
+  const from = items.some((i) => i.from) || new Set(prices).size > 1;
   return `${from ? "From " : ""}${peso(Math.min(...prices))}`;
 }
 
 /** pre-order button while the form is open, else the checkered finished mark */
-export function MerchStatus() {
-  return merch.open ? (
+export async function MerchStatus() {
+  const merch = await getMerch();
+  return merch.open && merch.form ? (
     <Button href={merch.form}>Pre-order now</Button>
   ) : (
     <p className="flex items-center gap-3">
       <span aria-hidden className="checkered block size-6 shrink-0 border border-line [background-size:8px_8px]" />
       <span>
         <span className="font-semibold">Pre-orders closed.</span>{" "}
-        <span className="text-ink-muted">The 2026-2027 run was open {merch.window}.</span>
+        {merch.window && <span className="text-ink-muted">The last run was open {merch.window}.</span>}
       </span>
     </p>
   );
@@ -281,12 +281,12 @@ export function MerchCaption({ item, creditLabel = "Design by" }: { item: MerchI
       <span className="flex items-baseline justify-between gap-3">
         <span className="font-semibold">{item.name}</span>
         <span className="type-data shrink-0 text-sm text-accent-text">
-          {"from" in item && item.from ? "From " : ""}
+          {item.from ? "From " : ""}
           {peso(item.price)}
         </span>
       </span>
       {item.details && <span className="text-sm text-ink-muted">{item.details}</span>}
-      {"credit" in item && item.credit && (
+      {item.credit && (
         <span className="type-data text-xs text-ink-muted">
           {creditLabel} {item.credit}
         </span>
@@ -295,8 +295,10 @@ export function MerchCaption({ item, creditLabel = "Design by" }: { item: MerchI
   );
 }
 
-export function Merch() {
-  const shirts = merch.groups[0].items;
+export async function Merch() {
+  const merch = await getMerch();
+  // the first group (shirts) is the featured pair
+  const shirts = merch.groups[0]?.items.slice(0, 2) ?? [];
   return (
     <section id="merch" className="bg-surface-2 py-20 md:py-28">
       <Container>
@@ -325,7 +327,9 @@ export function Merch() {
                     className="group flex items-baseline justify-between gap-4 border-b border-line py-4 hover:text-accent-text"
                   >
                     <span className="type-heading text-lg">{g.title}</span>
-                    <span className="type-data text-sm text-ink-muted group-hover:text-accent-text">{groupPrice(g)}</span>
+                    {g.items.length > 0 && (
+                      <span className="type-data text-sm text-ink-muted group-hover:text-accent-text">{groupPrice(g.items)}</span>
+                    )}
                   </Link>
                 </li>
               ))}
@@ -340,7 +344,8 @@ export function Merch() {
   );
 }
 
-export function Join() {
+export async function Join() {
+  const contact = await getContact();
   return (
     <section id="join" className="grain overflow-hidden bg-accent text-accent-ink">
       <CheckeredStrip anim="strip-a" className="[--ink:var(--color-carbon-950)]" />
@@ -406,7 +411,8 @@ export function Faq() {
   );
 }
 
-export function Footer({ base = "" }: { base?: string }) {
+export async function Footer({ base = "" }: { base?: string }) {
+  const contact = await getContact();
   return (
     <footer className="bg-carbon-950 text-paper-100">
       <CheckeredStrip className="[--ink:var(--color-paper-100)]" />

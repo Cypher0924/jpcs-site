@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { Subpage } from "@/components/subpage";
 import { PhotoGrid } from "@/components/photo-grid";
 import { SectionHeader } from "@/components/ui";
-import { contact, events } from "@/lib/content";
+import { getContact, getEvents } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Paddock · JPCS-TSU" };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const [events, contact] = await Promise.all([getEvents(), getContact()]);
   return (
     <Subpage back={{ href: "/#gallery", label: "Home" }}>
       <SectionHeader title="Paddock" sub="Photos from every JPCS-TSU event this year, grouped by round." />
@@ -27,7 +28,7 @@ export default function GalleryPage() {
               </Link>
             </div>
             <PhotoGrid
-              photos={[e.cover, ...e.photos]}
+              photos={e.cover ? [e.cover, ...e.photos] : e.photos}
               label={e.title}
               sizes="(min-width: 768px) 300px, 50vw"
               className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4"

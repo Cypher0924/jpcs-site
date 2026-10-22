@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { EventRow } from "@/components/sections";
 import { Subpage } from "@/components/subpage";
 import { SectionHeader } from "@/components/ui";
-import { events } from "@/lib/content";
+import { getEvents } from "@/lib/data";
 
 export const metadata: Metadata = { title: "Race calendar · JPCS-TSU" };
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const events = await getEvents();
   return (
     <Subpage back={{ href: "/#events", label: "Home" }}>
       <SectionHeader title="Race calendar" sub="Every JPCS-TSU event this year, round by round. Pick one to see its photos." />
