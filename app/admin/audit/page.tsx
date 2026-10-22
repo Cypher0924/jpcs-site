@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { PageHeader, Panel } from "@/components/admin/shell";
-import { buttonClass, inputClass } from "@/components/admin/styles";
+import { buttonClass, selectClass } from "@/components/admin/styles";
 import { requireAdmin } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
-import { changes, describe, entities, when, type AuditRow } from "./describe";
+import { entities, type AuditRow } from "./describe";
+import { Message } from "./message";
 
 export const metadata = { title: "Audit log" };
 export const instant = false;
@@ -31,11 +32,11 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
 
   return (
     <>
-      <PageHeader title="Audit log" sub="Every change made in the admin: who, when, and what changed." />
-      <form className="mb-4 flex flex-wrap items-end gap-3">
+      <PageHeader code="AUD" title="Audit log" sub="Every change made in the admin: who, when, and what changed." />
+      <form className="mb-6 flex flex-wrap items-end gap-3">
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           Section
-          <select name="entity" defaultValue={entity} className={`${inputClass} h-10 w-52 font-normal`}>
+          <select name="entity" defaultValue={entity} className={`${selectClass} w-52 font-normal`}>
             <option value="">Everything</option>
             {Object.entries(entities).map(([k, v]) => (
               <option key={k} value={k}>
@@ -46,7 +47,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
         </label>
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           Person
-          <select name="actor" defaultValue={actor} className={`${inputClass} h-10 w-64 font-normal`}>
+          <select name="actor" defaultValue={actor} className={`${selectClass} w-64 max-w-full font-normal`}>
             <option value="">Everyone</option>
             {(people ?? []).map((p) => (
               <option key={p.email} value={p.email}>
@@ -60,35 +61,16 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
         </button>
       </form>
 
-      <Panel>
+      <Panel title="Race control messages" meta={`${count ?? 0} ${count === 1 ? "entry" : "entries"}`}>
         {rows.length === 0 ? (
-          <p className="text-sm text-ink-muted">Nothing recorded yet{entity || actor ? " for this filter" : ""}.</p>
+          <p className="text-sm text-ink-muted">
+            {entity || actor ? "Nothing recorded for this filter. Try Everything or Everyone." : "Nothing recorded yet. Edits made in the admin show up here."}
+          </p>
         ) : (
           <ul className="flex flex-col divide-y divide-line">
-            {rows.map((r) => {
-              const d = describe(r);
-              const diff = changes(r);
-              return (
-                <li key={r.id} className="flex flex-col gap-1 py-3 first:pt-0 last:pb-0 text-sm">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                    <span>
-                      <span className="font-semibold">{r.actor_email ?? "Database"}</span> {d.verb} {d.what.toLowerCase()}
-                      {d.name && <span className="text-ink"> “{d.name}”</span>}
-                    </span>
-                    <span className="type-data text-xs text-ink-muted">{when(r.at)}</span>
-                  </div>
-                  {diff.length > 0 && (
-                    <ul className="text-xs text-ink-muted">
-                      {diff.map((c) => (
-                        <li key={c} className="break-words">
-                          {c}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              );
-            })}
+            {rows.map((r) => (
+              <Message key={r.id} row={r} detail />
+            ))}
           </ul>
         )}
       </Panel>
@@ -100,8 +82,8 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
               Newer
             </Link>
           )}
-          <span className="text-ink-muted">
-            Page {page} of {pages}
+          <span className="type-data text-ink-muted">
+            {page} / {pages}
           </span>
           {page < pages && (
             <Link href={href(page + 1)} className={buttonClass("secondary")}>

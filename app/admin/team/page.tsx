@@ -1,7 +1,7 @@
 import { ConfirmButton } from "@/components/admin/confirm-button";
 import { ActionForm, Field, Input, SubmitButton } from "@/components/admin/form";
 import { PageHeader, Panel } from "@/components/admin/shell";
-import { inputClass } from "@/components/admin/styles";
+import { selectClass } from "@/components/admin/styles";
 import { requireAdmin } from "@/lib/auth";
 import { adminClient } from "@/lib/supabase/admin";
 import { sessionClient } from "@/lib/supabase/server";
@@ -21,13 +21,12 @@ export default async function TeamPage() {
     adminClient().auth.admin.listUsers({ perPage: 1000 }),
   ]);
   const lastSignIn = new Map(auth.users.map((u) => [u.id, u.last_sign_in_at]));
-  const roleSelect = `${inputClass.replace("w-full ", "")} h-10 w-32`;
 
   return (
     <>
-      <PageHeader title="Team" sub="Who can sign in to the admin. Editors change content, admins also manage the team and see the audit log." />
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
-        <Panel title={`Members (${team?.length ?? 0})`}>
+      <PageHeader code="TEM" title="Team" sub="Who can sign in to the admin. Editors change content, admins also manage the team and see the audit log." />
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_24rem]">
+        <Panel title="Members" meta={team?.length ?? 0}>
           <ul className="flex flex-col divide-y divide-line">
             {(team ?? []).map((m) => {
               const seen = lastSignIn.get(m.id);
@@ -35,17 +34,19 @@ export default async function TeamPage() {
               return (
                 <li key={m.id} className="flex flex-col gap-3 py-4 first:pt-0 last:pb-0">
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <span className="font-semibold break-all">
-                      {m.email} {self && <span className="text-xs font-normal text-ink-muted">(you)</span>}
+                    <span className="flex flex-wrap items-center gap-2 font-semibold break-all">
+                      {m.email}
+                      <span className="type-data border border-line px-1.5 text-[0.6875rem] font-normal tracking-wide text-ink-muted uppercase">{m.role}</span>
+                      {self && <span className="text-xs font-normal text-ink-muted">(you)</span>}
                     </span>
                     <span className="text-xs text-ink-muted">
                       {seen ? `Last signed in ${date(seen)}` : "Invite not used yet"} · added {date(m.created_at)}
                     </span>
                   </div>
-                  <div className="flex flex-wrap items-start gap-2">
-                    <ActionForm action={changeRole} className="flex flex-wrap items-start gap-2">
+                  <div className="flex flex-wrap items-start gap-3">
+                    <ActionForm action={changeRole} className="flex flex-wrap items-start gap-3">
                       <input type="hidden" name="id" value={m.id} />
-                      <select name="role" defaultValue={m.role} aria-label={`Role for ${m.email}`} className={roleSelect} disabled={self}>
+                      <select name="role" defaultValue={m.role} aria-label={`Role for ${m.email}`} className={`${selectClass} w-32`} disabled={self}>
                         <option value="editor">Editor</option>
                         <option value="admin">Admin</option>
                       </select>
@@ -76,7 +77,7 @@ export default async function TeamPage() {
               <Input name="email" type="email" required autoComplete="off" />
             </Field>
             <Field label="Role" hint="Most officers should be editors.">
-              <select name="role" defaultValue="editor" className={`${inputClass} h-10`}>
+              <select name="role" defaultValue="editor" className={`${selectClass} w-full`}>
                 <option value="editor">Editor</option>
                 <option value="admin">Admin</option>
               </select>

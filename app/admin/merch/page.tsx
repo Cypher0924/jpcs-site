@@ -2,7 +2,9 @@ import { ConfirmButton } from "@/components/admin/confirm-button";
 import { ActionForm, Field, Input, SubmitButton, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 import { MoveButtons } from "@/components/admin/move-buttons";
-import { PageHeader, Panel } from "@/components/admin/shell";
+import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
+import { StatusChip } from "@/components/admin/status";
+import { checkboxClass } from "@/components/admin/styles";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -10,8 +12,6 @@ import { deleteGroup, deleteItem, saveGroup, saveItem, saveSettings } from "./ac
 
 export const metadata = { title: "Merch" };
 export const instant = false;
-
-const check = "size-4 accent-[var(--color-accent)]";
 
 export default async function MerchPage() {
   await requireStaff();
@@ -26,13 +26,16 @@ export default async function MerchPage() {
 
   return (
     <>
-      <PageHeader title="Merch" sub="Pre-order status, and the groups and items on the merch page." />
+      <PageHeader code="MER" title="Merch" sub="Pre-order status, and the groups and items on the merch page." />
       <div className="flex flex-col gap-6">
-        <Panel title="Pre-orders">
+        <Panel
+          title="Pre-orders"
+          meta={settings?.open ? <StatusChip status="live">Open</StatusChip> : <StatusChip status="pending">Closed</StatusChip>}
+        >
           {settings && (
             <ActionForm action={saveSettings} className="grid gap-4 md:grid-cols-2">
               <label className="flex items-center gap-2 text-sm font-semibold md:col-span-2">
-                <input type="checkbox" name="open" defaultChecked={settings.open} className={check} />
+                <input type="checkbox" name="open" defaultChecked={settings.open} className={checkboxClass} />
                 Pre-orders are open
               </label>
               <Field label="Order form link" hint="Required when pre-orders are open. Shown as the Pre-order now button.">
@@ -52,7 +55,7 @@ export default async function MerchPage() {
         {list.map((g, gi) => {
           const mine = (items ?? []).filter((i) => i.group_id === g.id);
           return (
-            <Panel key={g.id} title={g.title}>
+            <Panel key={g.id} title={g.title} meta={`${mine.length} ${mine.length === 1 ? "item" : "items"}`}>
               {gi === 0 && (
                 <p className="mb-4 text-sm text-ink-muted">The first two items of this group are featured on the homepage.</p>
               )}
@@ -74,35 +77,32 @@ export default async function MerchPage() {
                   <SubmitButton>Save group</SubmitButton>
                 </div>
               </ActionForm>
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <span className="text-xs text-ink-muted">{lastEdited(g, editors)}</span>
-                <div className="flex gap-2">
-                  <MoveButtons table="merch_groups" id={g.id} first={gi === 0} last={gi === list.length - 1} />
-                  <form action={deleteGroup}>
-                    <input type="hidden" name="id" value={g.id} />
-                    <ConfirmButton message={`Delete the "${g.title}" group? Its ${mine.length} item(s) are deleted too.`} small>
-                      Delete group
-                    </ConfirmButton>
-                  </form>
-                </div>
-              </div>
+              <ItemFooter edited={lastEdited(g, editors)}>
+                <MoveButtons table="merch_groups" id={g.id} first={gi === 0} last={gi === list.length - 1} />
+                <form action={deleteGroup}>
+                  <input type="hidden" name="id" value={g.id} />
+                  <ConfirmButton message={`Delete the "${g.title}" group? Its ${mine.length} item(s) are deleted too.`} small>
+                    Delete group
+                  </ConfirmButton>
+                </form>
+              </ItemFooter>
 
               <div className="mt-5 border-t border-line pt-4">
-                <h3 className="mb-3 text-sm font-semibold">Items ({mine.length})</h3>
+                <h3 className="mb-3 text-sm font-semibold">Items</h3>
                 <ul className="flex flex-col gap-2">
                   {mine.map((it, ii) => (
-                    <li key={it.id} className="border border-line">
+                    <li key={it.id} className="border border-line bg-canvas">
                       <details>
                         <summary className="flex cursor-pointer items-center gap-3 p-2">
                           {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnail, already optimised on upload */}
                           <img src={it.image} alt="" className="size-12 shrink-0 border border-line object-cover" />
                           <span className="min-w-0 flex-1">
                             <span className="block truncate text-sm font-semibold">{it.name}</span>
-                            <span className="block text-xs text-ink-muted">
+                            <span className="type-data block text-xs text-ink-muted">
                               {it.from_price ? "From " : ""}PHP {it.price}
                             </span>
                           </span>
-                          <span className="text-xs font-semibold text-ink-muted">Edit</span>
+                          <span className="text-xs font-semibold text-accent-text">Edit</span>
                         </summary>
                         <div className="border-t border-line p-3">
                           <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
@@ -113,25 +113,22 @@ export default async function MerchPage() {
                               <SubmitButton>Save item</SubmitButton>
                             </div>
                           </ActionForm>
-                          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                            <span className="text-xs text-ink-muted">{lastEdited(it, editors)}</span>
-                            <div className="flex gap-2">
-                              <MoveButtons table="merch_items" id={it.id} first={ii === 0} last={ii === mine.length - 1} />
-                              <form action={deleteItem}>
-                                <input type="hidden" name="id" value={it.id} />
-                                <ConfirmButton message={`Delete "${it.name}"?`} small>
-                                  Delete
-                                </ConfirmButton>
-                              </form>
-                            </div>
-                          </div>
+                          <ItemFooter edited={lastEdited(it, editors)}>
+                            <MoveButtons table="merch_items" id={it.id} first={ii === 0} last={ii === mine.length - 1} />
+                            <form action={deleteItem}>
+                              <input type="hidden" name="id" value={it.id} />
+                              <ConfirmButton message={`Delete "${it.name}"?`} small>
+                                Delete
+                              </ConfirmButton>
+                            </form>
+                          </ItemFooter>
                         </div>
                       </details>
                     </li>
                   ))}
                 </ul>
                 <details className="mt-3 border border-line">
-                  <summary className="cursor-pointer p-2 text-sm font-semibold">Add item</summary>
+                  <summary className="cursor-pointer p-3 text-sm font-semibold text-accent-text">Add item</summary>
                   <div className="border-t border-line p-3">
                     <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
                       <input type="hidden" name="group_id" value={g.id} />
@@ -185,7 +182,7 @@ function ItemFields({ item }: { item?: Item }) {
           <Input name="price" type="number" min={0} step={1} defaultValue={item?.price} required />
         </Field>
         <label className="flex items-center gap-2 text-xs text-ink-muted">
-          <input type="checkbox" name="from_price" defaultChecked={item?.from_price} className={check} />
+          <input type="checkbox" name="from_price" defaultChecked={item?.from_price} className={checkboxClass} />
           Starting price, larger sizes may cost more
         </label>
       </div>

@@ -46,7 +46,7 @@ export function PhotoUploader({ eventId }: { eventId: number }) {
         multiple
         disabled={busy}
         onChange={onChange}
-        className="text-sm file:mr-3 file:border file:border-line-strong file:bg-transparent file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-ink"
+        className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60"
       />
       {status && (
         <p role="status" className="text-sm text-ink-muted">
@@ -54,7 +54,7 @@ export function PhotoUploader({ eventId }: { eventId: number }) {
         </p>
       )}
       {errors.map((m) => (
-        <p key={m} className="text-sm text-signal">
+        <p key={m} role="alert" className="text-sm text-signal">
           {m}
         </p>
       ))}

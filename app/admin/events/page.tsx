@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { PageHeader } from "@/components/admin/shell";
-import { buttonClass } from "@/components/admin/styles";
+import { PageHeader, Panel } from "@/components/admin/shell";
+import { StatusChip } from "@/components/admin/status";
+import { buttonClass, linkClass, tableClass } from "@/components/admin/styles";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -20,46 +21,66 @@ export default async function EventsPage() {
     getEditors(),
   ]);
 
+  const list = events ?? [];
+  const th = tableClass.th;
+  const td = tableClass.td;
+
   return (
     <>
       <PageHeader
+        code="EVT"
         title="Events"
-        sub="In the same order as the site, which numbers the rounds by date."
+        sub="Every round on the site. Round numbers follow the dates, so set a date and the order sorts itself."
         actions={
           <Link href="/admin/events/new" className={buttonClass()}>
             New event
           </Link>
         }
       />
-      <div className="overflow-x-auto border border-line bg-surface">
-        <table className="w-full min-w-[40rem] text-left text-sm">
-          <thead className="border-b border-line text-xs text-ink-muted">
-            <tr>
-              <th className="px-3 py-2 font-semibold">Date</th>
-              <th className="px-3 py-2 font-semibold">Title</th>
-              <th className="px-3 py-2 font-semibold">Status</th>
-              <th className="px-3 py-2 font-semibold">Photos</th>
-              <th className="px-3 py-2 font-semibold">Last edited</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(events ?? []).map((e) => (
-              <tr key={e.id} className="border-b border-line last:border-0 hover:bg-surface-2">
-                <td className="whitespace-nowrap px-3 py-2">{e.event_date ?? "TBA"}</td>
-                <td className="px-3 py-2">
-                  <Link href={`/admin/events/${e.id}`} className="font-semibold accent-text hover:underline">
-                    {e.title}
-                  </Link>
-                </td>
-                <td className="px-3 py-2">{e.done ? "Finished" : "Upcoming"}</td>
-                <td className="px-3 py-2">{e.event_photos[0]?.count ?? 0}</td>
-                <td className="px-3 py-2 text-xs text-ink-muted">{lastEdited(e, editors)}</td>
+      {list.length === 0 ? (
+        <Panel>
+          <p className="text-sm text-ink-muted">No events yet. Press New event to add the first round.</p>
+        </Panel>
+      ) : (
+        <div className={tableClass.wrap}>
+          <table className={`${tableClass.table} min-w-[44rem]`}>
+            <thead>
+              <tr>
+                <th className={`${th} w-14 text-right`}>Rnd</th>
+                <th className={`${th} w-32`}>Date</th>
+                <th className={th}>Event</th>
+                <th className={`${th} w-32`}>Status</th>
+                <th className={`${th} w-20 text-right`}>Photos</th>
+                <th className={th}>Last edited</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {!events?.length && <p className="p-4 text-sm text-ink-muted">No events yet.</p>}
-      </div>
+            </thead>
+            <tbody>
+              {list.map((e, i) => (
+                <tr key={e.id} className={tableClass.tr}>
+                  <td className={`${td} type-data text-right text-accent-text`}>R{i + 1}</td>
+                  <td className={`${td} type-data whitespace-nowrap`}>{e.event_date ?? "TBA"}</td>
+                  <td className={td}>
+                    <Link href={`/admin/events/${e.id}`} className={linkClass}>
+                      {e.title}
+                    </Link>
+                  </td>
+                  <td className={td}>
+                    {e.done ? (
+                      <StatusChip status="finished">Finished</StatusChip>
+                    ) : e.event_date ? (
+                      <StatusChip status="live">Upcoming</StatusChip>
+                    ) : (
+                      <StatusChip status="pending">Date TBA</StatusChip>
+                    )}
+                  </td>
+                  <td className={`${td} type-data text-right`}>{e.event_photos[0]?.count ?? 0}</td>
+                  <td className={`${td} text-xs text-ink-muted`}>{lastEdited(e, editors)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </>
   );
 }

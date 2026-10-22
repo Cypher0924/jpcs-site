@@ -12,7 +12,7 @@ export default async function AccountPage() {
   const staff = await requireStaff();
   return (
     <>
-      <PageHeader title="Settings" sub={`${staff.email} · ${staff.role}`} />
+      <PageHeader code="SET" title="Settings" sub={`${staff.email} · ${staff.role}`} />
       <div className="grid max-w-xl gap-6">
         <Panel title="Change password">
           <PasswordForm />

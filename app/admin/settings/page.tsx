@@ -1,7 +1,7 @@
 import { ConfirmButton } from "@/components/admin/confirm-button";
 import { ActionForm, Field, Input, SubmitButton } from "@/components/admin/form";
 import { MoveButtons } from "@/components/admin/move-buttons";
-import { PageHeader, Panel } from "@/components/admin/shell";
+import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -21,13 +21,13 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="Stats and contact" sub="The numbers strip on the homepage, and the links used in Join and the footer." />
-      <div className="grid gap-6 xl:grid-cols-2">
-        <Panel title="Stats strip">
+      <PageHeader code="STA" title="Stats and contact" sub="The numbers strip on the homepage, and the links used in Join and the footer." />
+      <div className="grid items-start gap-6 xl:grid-cols-2">
+        <Panel title="Stats strip" meta={`${stats?.length ?? 0} stats`}>
           <p className="mb-4 text-sm text-ink-muted">Leave a value empty to show 000 until the real number is known.</p>
           <ul className="flex flex-col gap-3">
             {(stats ?? []).map((s, i, all) => (
-              <li key={s.id} className="border border-line p-3">
+              <li key={s.id} className="border border-line bg-canvas p-3">
                 <ActionForm action={saveStat} className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem_auto] sm:items-end">
                   <input type="hidden" name="id" value={s.id} />
                   <Field label="Label">
@@ -41,18 +41,15 @@ export default async function SettingsPage() {
                   </Field>
                   <SubmitButton>Save</SubmitButton>
                 </ActionForm>
-                <div className="mt-2 flex items-center justify-between gap-3">
-                  <span className="text-xs text-ink-muted">{lastEdited(s, editors)}</span>
-                  <div className="flex gap-2">
-                    <MoveButtons table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
-                    <form action={deleteStat}>
-                      <input type="hidden" name="id" value={s.id} />
-                      <ConfirmButton message={`Delete the "${s.label}" stat?`} small>
-                        Delete
-                      </ConfirmButton>
-                    </form>
-                  </div>
-                </div>
+                <ItemFooter edited={lastEdited(s, editors)}>
+                  <MoveButtons table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
+                  <form action={deleteStat}>
+                    <input type="hidden" name="id" value={s.id} />
+                    <ConfirmButton message={`Delete the "${s.label}" stat?`} small>
+                      Delete
+                    </ConfirmButton>
+                  </form>
+                </ItemFooter>
               </li>
             ))}
           </ul>

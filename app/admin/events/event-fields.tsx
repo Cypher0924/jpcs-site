@@ -1,6 +1,7 @@
 import { DatePicker } from "@/components/admin/date-picker";
 import { Field, Input, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
+import { checkboxClass } from "@/components/admin/styles";
 
 export type EventRow = {
   id: number;
@@ -52,11 +53,11 @@ export function EventFields({ event }: { event?: EventRow }) {
       <ImageInput name="cover" label="Cover image" current={event?.cover} square={event?.square} />
       <div className="flex flex-wrap gap-x-6 gap-y-2">
         <label className={check}>
-          <input type="checkbox" name="done" defaultChecked={event?.done} className="size-4 accent-accent" />
+          <input type="checkbox" name="done" defaultChecked={event?.done} className={checkboxClass} />
           Finished
         </label>
         <label className={check}>
-          <input type="checkbox" name="square" defaultChecked={event?.square} className="size-4 accent-accent" />
+          <input type="checkbox" name="square" defaultChecked={event?.square} className={checkboxClass} />
           Square photos (pubmats), don&apos;t crop to 16:9
         </label>
       </div>

@@ -26,6 +26,7 @@ export default async function NextRoundPage() {
   return (
     <>
       <PageHeader
+        code="NXT"
         title="Next round"
         sub="The red card in Race calendar and the badge in the hero. Its round number is the one after the last event."
       />

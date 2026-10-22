@@ -32,6 +32,7 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
   return (
     <>
       <PageHeader
+        code="EVT"
         title={event.title}
         sub={lastEdited(event, editors)}
         actions={
@@ -45,7 +46,7 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           </>
         }
       />
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid items-start gap-6 xl:grid-cols-2">
         <div className="flex flex-col gap-6">
           <Panel title="Details">
             <ActionForm action={updateEvent}>
@@ -65,11 +66,11 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           </Panel>
         </div>
 
-        <Panel title={`Photos (${photos?.length ?? 0})`}>
+        <Panel title="Photos" meta={photos?.length ?? 0}>
           <PhotoUploader eventId={event.id} />
           <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {(photos ?? []).map((p, i, all) => (
-              <li key={p.id} className="flex flex-col gap-2 border border-line p-2">
+              <li key={p.id} className="flex flex-col gap-2 border border-line bg-canvas p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element -- small admin thumbnails */}
                 <img src={p.src} alt="" loading="lazy" className={`w-full bg-surface-2 object-cover ${event.square ? "aspect-square" : "aspect-video"}`} />
                 <div className="flex items-center justify-between gap-2">
@@ -84,7 +85,7 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
               </li>
             ))}
           </ul>
-          {!photos?.length && <p className="mt-4 text-sm text-ink-muted">No photos yet.</p>}
+          {!photos?.length && <p className="mt-4 text-sm text-ink-muted">No photos yet. Pick one or more above, they upload one by one.</p>}
         </Panel>
       </div>
     </>

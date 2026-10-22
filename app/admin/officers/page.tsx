@@ -3,7 +3,9 @@ import { ConfirmButton } from "@/components/admin/confirm-button";
 import { ActionForm, Field, Input, SubmitButton, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 import { MoveButtons } from "@/components/admin/move-buttons";
-import { PageHeader, Panel } from "@/components/admin/shell";
+import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
+import { StatusChip } from "@/components/admin/status";
+import { checkboxClass } from "@/components/admin/styles";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -34,7 +36,7 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
   const years = yearRows ?? [];
   const shown = years.find((y) => String(y.id) === year) ?? years.find((y) => y.is_current) ?? years[0];
 
-  const header = <PageHeader title="Officers" sub="Groups and officers for each school year. Only the current year shows on the site." />;
+  const header = <PageHeader code="OFF" title="Officers" sub="Groups and officers for each school year. Only the current year shows on the site." />;
   if (!shown) {
     return (
       <>
@@ -58,27 +60,31 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
     <>
       {header}
 
-      <nav aria-label="School years" className="mb-4 flex flex-wrap gap-2">
+      <nav aria-label="School years" className="mb-6 flex flex-wrap gap-x-1 border-b border-line">
         {years.map((y) => (
           <Link
             key={y.id}
             href={`/admin/officers?year=${y.id}`}
             aria-current={y.id === shown.id ? "page" : undefined}
-            className={`border px-3 py-1.5 text-sm font-semibold ${
-              y.id === shown.id ? "border-accent bg-surface-2 text-ink" : "border-line text-ink-muted hover:text-ink"
+            className={`-mb-px flex h-11 items-center gap-2 border-b-2 px-4 text-sm transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
+              y.id === shown.id ? "border-accent font-semibold text-ink" : "border-transparent text-ink-muted hover:text-ink"
             }`}
           >
-            {y.label}
-            {y.is_current && <span className="ml-2 text-xs font-normal text-accent-text">Current</span>}
+            <span className="type-data">{y.label}</span>
+            {y.is_current && <span aria-hidden className="size-1.5 rounded-full bg-live" />}
+            {y.is_current && <span className="sr-only">(current)</span>}
           </Link>
         ))}
       </nav>
 
-      <div className="mb-6 grid gap-6 xl:grid-cols-2">
-        <Panel title={`School year ${shown.label}`}>
+      <div className="mb-6 grid items-start gap-6 xl:grid-cols-2">
+        <Panel
+          title={`School year ${shown.label}`}
+          meta={shown.is_current ? <StatusChip status="live">On the site</StatusChip> : <StatusChip status="pending">Not shown</StatusChip>}
+        >
           <p className="text-sm text-ink-muted">
-            {shown.is_current ? "Current, shown on the site." : "Not shown on the site."} {officers.length} {officers.length === 1 ? "officer" : "officers"} in {groups.length}{" "}
-            {groups.length === 1 ? "group" : "groups"}.
+            {officers.length} {officers.length === 1 ? "officer" : "officers"} in {groups.length} {groups.length === 1 ? "group" : "groups"}.{" "}
+            {shown.is_current ? "This is the lineup on the site now." : "Older years show under Past seasons on the homepage."}
           </p>
           <div className="mt-3 flex flex-wrap items-start gap-3">
             {!shown.is_current && (
@@ -105,8 +111,8 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
         {groups.map((g, i) => {
           const members = officers.filter((o) => o.group_id === g.id);
           return (
-            <Panel key={g.id}>
-              <ActionForm action={saveGroup} className="grid gap-3 md:grid-cols-[1fr_1fr_10rem_auto] md:items-end">
+            <Panel key={g.id} title={g.title} meta={`${members.length} ${members.length === 1 ? "officer" : "officers"}`}>
+              <ActionForm action={saveGroup} className="grid gap-3 md:grid-cols-[1fr_1fr_10rem_auto] md:items-start">
                 <input type="hidden" name="id" value={g.id} />
                 <Field label="Group title">
                   <Input name="title" defaultValue={g.title} required />
@@ -117,22 +123,21 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
                 <Field label="Row breaks" hint="Ends a desktop row after these positions, counting from 0.">
                   <Input name="breaks" defaultValue={(g.breaks as number[]).join(", ")} placeholder="1, 3" />
                 </Field>
-                <SubmitButton>Save group</SubmitButton>
-              </ActionForm>
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <span className="text-xs text-ink-muted">{lastEdited(g, editors)}</span>
-                <div className="flex items-start gap-2">
-                  <MoveButtons table="officer_groups" id={g.id} first={i === 0} last={i === groups.length - 1} />
-                  {members.length === 0 && (
-                    <ActionForm action={deleteGroup} className="flex flex-col gap-1">
-                      <input type="hidden" name="id" value={g.id} />
-                      <ConfirmButton message={`Delete the "${g.title}" group?`} small>
-                        Delete group
-                      </ConfirmButton>
-                    </ActionForm>
-                  )}
+                <div className="md:pt-[1.625rem]">
+                  <SubmitButton>Save group</SubmitButton>
                 </div>
-              </div>
+              </ActionForm>
+              <ItemFooter edited={lastEdited(g, editors)}>
+                <MoveButtons table="officer_groups" id={g.id} first={i === 0} last={i === groups.length - 1} />
+                {members.length === 0 && (
+                  <ActionForm action={deleteGroup} className="flex flex-col gap-1">
+                    <input type="hidden" name="id" value={g.id} />
+                    <ConfirmButton message={`Delete the "${g.title}" group?`} small>
+                      Delete group
+                    </ConfirmButton>
+                  </ActionForm>
+                )}
+              </ItemFooter>
 
               <ul className="mt-4 flex flex-col border-t border-line">
                 {members.map((o, j) => (
@@ -141,8 +146,8 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
                 {members.length === 0 && <li className="py-3 text-sm text-ink-muted">No officers in this group.</li>}
               </ul>
 
-              <details className="mt-2 border border-line">
-                <summary className="cursor-pointer px-3 py-2 text-sm font-semibold">Add officer to {g.title}</summary>
+              <details className="mt-3 border border-line bg-canvas">
+                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold text-accent-text">Add officer to {g.title}</summary>
                 <div className="border-t border-line p-3">
                   <OfficerForm groupId={g.id} />
                 </div>
@@ -154,7 +159,7 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
 
       <div className="mt-6">
         <Panel title="Add group">
-          <ActionForm action={saveGroup} className="grid gap-3 md:grid-cols-[1fr_1fr_10rem_auto] md:items-end">
+          <ActionForm action={saveGroup} className="grid gap-3 md:grid-cols-[1fr_1fr_10rem_auto] md:items-start">
             <input type="hidden" name="school_year_id" value={shown.id} />
             <Field label="Group title">
               <Input name="title" placeholder="Executive Board" required />
@@ -165,7 +170,9 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
             <Field label="Row breaks">
               <Input name="breaks" placeholder="1, 3" />
             </Field>
-            <SubmitButton>Add group</SubmitButton>
+            <div className="md:pt-[1.625rem]">
+              <SubmitButton>Add group</SubmitButton>
+            </div>
           </ActionForm>
         </Panel>
       </div>
@@ -182,7 +189,7 @@ function NewYear({ copyFrom }: { copyFrom?: { id: number; label: string } }) {
       </Field>
       {copyFrom && (
         <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="copy" defaultChecked />
+          <input type="checkbox" name="copy" defaultChecked className={checkboxClass} />
           Copy the groups from {copyFrom.label}
         </label>
       )}
@@ -208,25 +215,24 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">
             {o.name}
-            {o.is_adviser && <span className="ml-2 text-xs font-normal text-accent-text">Adviser</span>}
+            {o.is_adviser && <span className="type-data ml-2 border border-line px-1.5 text-[0.6875rem] font-normal text-accent-text">TP</span>}
           </p>
           <p className="truncate text-xs text-ink-muted">{o.role}</p>
         </div>
         <MoveButtons table="officers" id={o.id} first={first} last={last} />
       </div>
       <details className="mt-2">
-        <summary className="cursor-pointer text-sm font-semibold text-accent-text">Edit</summary>
-        <div className="mt-3 border border-line p-3">
+        <summary className="cursor-pointer py-1 text-sm font-semibold text-accent-text">Edit</summary>
+        <div className="mt-3 border border-line bg-canvas p-3">
           <OfficerForm groupId={groupId} o={o} />
-          <div className="mt-3 flex flex-wrap items-start justify-between gap-3 border-t border-line pt-3">
-            <span className="text-xs text-ink-muted">{lastEdited(o, editors)}</span>
+          <ItemFooter edited={lastEdited(o, editors)}>
             <ActionForm action={deleteOfficer} className="flex flex-col gap-1">
               <input type="hidden" name="id" value={o.id} />
               <ConfirmButton message={`Delete ${o.name}?`} small>
                 Delete
               </ConfirmButton>
             </ActionForm>
-          </div>
+          </ItemFooter>
         </div>
       </details>
     </li>
@@ -254,7 +260,7 @@ function OfficerForm({ groupId, o }: { groupId: number; o?: Officer }) {
         <Textarea name="quote" rows={2} defaultValue={o?.quote ?? ""} />
       </Field>
       <label className="flex items-center gap-2 text-sm">
-        <input type="checkbox" name="is_adviser" defaultChecked={o?.is_adviser} />
+        <input type="checkbox" name="is_adviser" defaultChecked={o?.is_adviser} className={checkboxClass} />
         Adviser (shows as TP instead of a race number)
       </label>
       <div>
