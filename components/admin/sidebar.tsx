@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Role } from "@/lib/auth";
+import { ThemeToggle } from "../theme-toggle";
 import { LogoMark } from "../ui";
 
 const links = [
@@ -43,10 +44,12 @@ export function AdminSidebar({ email, role }: { email: string | null; role: Role
     <aside className="border-b border-line bg-surface md:sticky md:top-0 md:flex md:h-dvh md:flex-col md:border-r md:border-b-0">
       <div className="flex items-center gap-3 px-4 py-4">
         <LogoMark size={32} />
-        <span className="leading-tight">
-          <span className="block font-wide text-xs">JPCS-TSU</span>
+        <span className="flex-1 leading-tight">
+          <span className="block font-wide text-xs whitespace-nowrap">JPCS-TSU</span>
           <span className="block text-xs text-ink-muted">Site admin</span>
         </span>
+        {/* same toggle and slanted wipe as the public site */}
+        <ThemeToggle />
       </div>
       <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-2 pb-3 md:block md:flex-1 md:overflow-y-auto">
         <ul className="flex gap-1 md:flex-col">{links.map(item)}</ul>
