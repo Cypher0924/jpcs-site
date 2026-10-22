@@ -52,7 +52,7 @@ function Row({ s, active, onPick }: { s: Section; active: boolean; onPick: () =>
         href={s.href}
         onClick={onPick}
         aria-current={active ? "page" : undefined}
-        className={`group relative isolate grid h-10 grid-cols-[1.5rem_3.25rem_1fr] items-center gap-x-1 pr-3 pl-2 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
+        className={`group relative isolate grid h-10 grid-cols-[1.5rem_3.25rem_1fr] items-center gap-x-1 pr-3 pl-2 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink ${
           active
             ? "font-semibold text-accent-ink before:absolute before:inset-y-0 before:right-1 before:-left-3 before:-z-10 before:-skew-x-12 before:bg-accent"
             : "text-ink hover:bg-surface-2"
