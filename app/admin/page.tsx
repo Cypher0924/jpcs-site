@@ -3,7 +3,7 @@ import { PageHeader, Panel } from "@/components/admin/shell";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
 
-export const metadata = { title: "Dashboard" };
+export const metadata = { title: { absolute: "Dashboard · Admin · JPCS-TSU" } };
 // admin pages wait for the session check on navigation, which is fine here
 export const instant = false;
 

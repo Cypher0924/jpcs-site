@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps, ReactNode } from "react";
+import { useActionState, type ComponentProps, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { buttonClass, inputClass, type ButtonVariant } from "./styles";
 
@@ -38,6 +38,27 @@ export function SubmitButton({
     <button type="submit" disabled={pending} className={buttonClass(variant)}>
       {pending ? pendingText : children}
     </button>
+  );
+}
+
+type State = { error?: string; ok?: string } | null;
+
+/** a form for a server action that returns { error } or { ok }, with the result shown under it */
+export function ActionForm({
+  action,
+  children,
+  className = "flex flex-col gap-4",
+}: {
+  action: (state: State, form: FormData) => Promise<State>;
+  children: ReactNode;
+  className?: string;
+}) {
+  const [state, formAction] = useActionState(action, null);
+  return (
+    <form action={formAction} className={className}>
+      {children}
+      <FormMessage state={state} />
+    </form>
   );
 }
 

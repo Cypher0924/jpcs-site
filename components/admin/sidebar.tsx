@@ -48,14 +48,16 @@ export function AdminSidebar({ email, role }: { email: string | null; role: Role
           <span className="block text-xs text-ink-muted">Site admin</span>
         </span>
       </div>
-      <nav aria-label="Admin" className="overflow-x-auto px-2 pb-3 md:flex-1 md:overflow-y-auto">
+      <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-2 pb-3 md:block md:flex-1 md:overflow-y-auto">
         <ul className="flex gap-1 md:flex-col">{links.map(item)}</ul>
         {role === "admin" && (
           <>
             <p className="mt-4 hidden px-3 pb-1 text-xs font-semibold text-ink-muted md:block">Admin</p>
-            <ul className="mt-1 flex gap-1 md:flex-col">{adminLinks.map(item)}</ul>
+            <ul className="flex gap-1 md:mt-1 md:flex-col">{adminLinks.map(item)}</ul>
           </>
         )}
+        {/* the footer with Account is desktop-only, so phones get it in the tab row */}
+        <ul className="flex gap-1 md:hidden">{item({ href: "/admin/account", label: "Account" })}</ul>
       </nav>
       <div className="hidden border-t border-line px-4 py-3 text-xs md:block">
         {email && (

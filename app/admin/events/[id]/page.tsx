@@ -1,0 +1,92 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ConfirmButton } from "@/components/admin/confirm-button";
+import { ActionForm, SubmitButton } from "@/components/admin/form";
+import { MoveButtons } from "@/components/admin/move-buttons";
+import { PageHeader, Panel } from "@/components/admin/shell";
+import { buttonClass } from "@/components/admin/styles";
+import { getEditors, lastEdited } from "@/lib/admin";
+import { requireStaff } from "@/lib/auth";
+import { sessionClient } from "@/lib/supabase/server";
+import { deleteEvent, deleteEventPhoto, updateEvent } from "../actions";
+import { EventFields } from "../event-fields";
+import { PhotoUploader } from "./photo-uploader";
+
+export const metadata = { title: "Edit event" };
+export const instant = false;
+
+export default async function EditEventPage({ params }: PageProps<"/admin/events/[id]">) {
+  await requireStaff();
+  const { id: raw } = await params;
+  const id = Number(raw);
+  if (!Number.isInteger(id) || id <= 0) notFound();
+
+  const db = await sessionClient();
+  const [{ data: event }, { data: photos }, editors] = await Promise.all([
+    db.from("events").select("*").eq("id", id).maybeSingle(),
+    db.from("event_photos").select("id, src").eq("event_id", id).order("sort").order("id"),
+    getEditors(),
+  ]);
+  if (!event) notFound();
+
+  return (
+    <>
+      <PageHeader
+        title={event.title}
+        sub={lastEdited(event, editors)}
+        actions={
+          <>
+            <Link href="/admin/events" className={buttonClass("secondary")}>
+              All events
+            </Link>
+            <Link href={`/events/${event.slug}`} target="_blank" className={buttonClass("secondary")}>
+              View on site
+            </Link>
+          </>
+        }
+      />
+      <div className="grid gap-6 xl:grid-cols-2">
+        <div className="flex flex-col gap-6">
+          <Panel title="Details">
+            <ActionForm action={updateEvent}>
+              <input type="hidden" name="id" value={event.id} />
+              <EventFields event={event} />
+              <div>
+                <SubmitButton>Save event</SubmitButton>
+              </div>
+            </ActionForm>
+          </Panel>
+          <Panel title="Delete event">
+            <p className="mb-3 text-sm text-ink-muted">Removes the event and all of its photos from the site.</p>
+            <form action={deleteEvent}>
+              <input type="hidden" name="id" value={event.id} />
+              <ConfirmButton message={`Delete "${event.title}" and all of its photos? This can't be undone.`}>Delete event</ConfirmButton>
+            </form>
+          </Panel>
+        </div>
+
+        <Panel title={`Photos (${photos?.length ?? 0})`}>
+          <PhotoUploader eventId={event.id} />
+          <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {(photos ?? []).map((p, i, all) => (
+              <li key={p.id} className="flex flex-col gap-2 border border-line p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element -- small admin thumbnails */}
+                <img src={p.src} alt="" loading="lazy" className={`w-full bg-surface-2 object-cover ${event.square ? "aspect-square" : "aspect-video"}`} />
+                <div className="flex items-center justify-between gap-2">
+                  <MoveButtons table="event_photos" id={p.id} first={i === 0} last={i === all.length - 1} />
+                  <form action={deleteEventPhoto}>
+                    <input type="hidden" name="id" value={p.id} />
+                    <ConfirmButton message="Delete this photo?" small>
+                      Delete
+                    </ConfirmButton>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+          {!photos?.length && <p className="mt-4 text-sm text-ink-muted">No photos yet.</p>}
+        </Panel>
+      </div>
+    </>
+  );
+}
