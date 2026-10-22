@@ -1,3 +1,4 @@
+import { DatePicker } from "@/components/admin/date-picker";
 import { Field, Input, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 
@@ -37,9 +38,7 @@ export function EventFields({ event }: { event?: EventRow }) {
         <Input name="title" defaultValue={event?.title} required />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Date" hint="Leave empty to show TBA.">
-          <Input name="date" type="date" defaultValue={event?.event_date ?? ""} />
-        </Field>
+        <DatePicker name="date" label="Date" hint="Leave empty to show TBA." emptyText="TBA" defaultValue={event?.event_date ?? ""} />
         <Field label="Venue" hint="Short line under the title.">
           <Input name="venue" defaultValue={event?.venue} />
         </Field>

@@ -1,3 +1,4 @@
+import { DatePicker } from "@/components/admin/date-picker";
 import { ActionForm, Field, Input, SubmitButton, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 import { PageHeader, Panel } from "@/components/admin/shell";
@@ -35,9 +36,14 @@ export default async function NextRoundPage() {
               <Field label="Title">
                 <Input name="title" defaultValue={e.title} required />
               </Field>
-              <Field label="Starts at (Manila time)" hint="Shows a live countdown. Leave empty to show “In progress” instead.">
-                <Input name="starts_at" type="datetime-local" defaultValue={toLocalInput(e.starts_at)} />
-              </Field>
+              <DatePicker
+                name="starts_at"
+                label="Starts at (Manila time)"
+                hint="Shows a live countdown. Clear it to show “In progress” instead."
+                emptyText="In progress (no countdown)"
+                defaultValue={toLocalInput(e.starts_at)}
+                withTime
+              />
               <Field label="Venue or short line" hint="Shown under the title, e.g. Open to all CCS students.">
                 <Input name="venue" defaultValue={e.venue} />
               </Field>
