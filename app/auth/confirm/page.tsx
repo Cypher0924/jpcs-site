@@ -17,7 +17,8 @@ export default function ConfirmPage({ searchParams }: PageProps<"/auth/confirm">
 }
 
 async function LinkForm({ searchParams }: { searchParams: PageProps<"/auth/confirm">["searchParams"] }) {
-  const { token_hash, type } = await searchParams;
+  const { token_hash, code, type } = await searchParams;
+  if (typeof code === "string") return <SetPasswordForm code={code} type="recovery" />;
   if (typeof token_hash !== "string" || (type !== "invite" && type !== "recovery")) {
     return <p className="text-sm text-signal">This link is incomplete. Ask an admin for a new one.</p>;
   }

@@ -8,7 +8,8 @@ export type State = { error?: string; ok?: string } | null;
 
 const schema = z
   .object({
-    token_hash: z.string().min(1, "This link is incomplete. Ask an admin for a new one."),
+    token_hash: z.string().optional(),
+    code: z.string().optional(),
     type: z.enum(["invite", "recovery"]),
     password: z.string().min(8, "Use at least 8 characters."),
     confirm: z.string(),
@@ -19,10 +20,13 @@ const schema = z
 export async function setPassword(_: State, form: FormData): Promise<State> {
   const parsed = schema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
-  const { token_hash, type, password } = parsed.data;
+  const { token_hash, code, type, password } = parsed.data;
 
   const supabase = await sessionClient();
-  const { error } = await supabase.auth.verifyOtp({ type, token_hash });
+  // admin links carry token_hash. Supabase's default reset email (no custom SMTP yet) comes back with a code instead
+  const { error } = code
+    ? await supabase.auth.exchangeCodeForSession(code)
+    : await supabase.auth.verifyOtp({ type, token_hash: token_hash ?? "" });
   if (error) return { error: "This link has expired or was already used. Ask an admin for a new one." };
   const { error: updateError } = await supabase.auth.updateUser({ password });
   // the link is used up by now but the person is signed in, so they can retry from Account

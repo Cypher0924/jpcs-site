@@ -11,8 +11,10 @@ export function ForgotForm() {
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
-    // the email template links to /auth/confirm. errors are ignored on purpose so this doesn't reveal who has an account
-    await browserClient().auth.resetPasswordForEmail(String(new FormData(e.currentTarget).get("email")));
+    // the email's link comes back to /auth/confirm?code=.. errors are ignored on purpose so this doesn't reveal who has an account
+    await browserClient().auth.resetPasswordForEmail(String(new FormData(e.currentTarget).get("email")), {
+      redirectTo: `${location.origin}/auth/confirm`,
+    });
     setSent(true);
     setPending(false);
   }
