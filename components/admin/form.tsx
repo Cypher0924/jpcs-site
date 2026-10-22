@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, type ComponentProps, type ReactNode } from "react";
+import { useActionState, useState, type ComponentProps, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { buttonClass, inputClass, type ButtonVariant } from "./styles";
 
@@ -41,7 +41,7 @@ export function SubmitButton({
   );
 }
 
-type State = { error?: string; ok?: string } | null;
+type State = { error?: string; ok?: string; link?: string } | null;
 
 /** a form for a server action that returns { error } or { ok }, with the result shown under it */
 export function ActionForm({
@@ -63,11 +63,32 @@ export function ActionForm({
 }
 
 /** result line under a form. role="status" so screen readers hear it */
-export function FormMessage({ state }: { state: { error?: string; ok?: string } | null }) {
+export function FormMessage({ state }: { state: State }) {
   if (!state?.error && !state?.ok) return null;
   return (
-    <p role="status" className={`text-sm ${state.error ? "text-signal" : "text-ink-muted"}`}>
-      {state.error ?? state.ok}
-    </p>
+    <div role="status" className="flex flex-col gap-2">
+      <p className={`text-sm ${state.error ? "text-signal" : "text-ink-muted"}`}>{state.error ?? state.ok}</p>
+      {state.link && <CopyLink link={state.link} />}
+    </div>
+  );
+}
+
+/** read-only link with a copy button. invites and resets go out by Messenger until email is set up */
+export function CopyLink({ link }: { link: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <div className="flex gap-2">
+      <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className={`${inputClass} h-10 min-w-0 flex-1 font-mono text-xs`} />
+      <button
+        type="button"
+        onClick={async () => {
+          await navigator.clipboard.writeText(link);
+          setCopied(true);
+        }}
+        className={buttonClass("secondary")}
+      >
+        {copied ? "Copied" : "Copy"}
+      </button>
+    </div>
   );
 }

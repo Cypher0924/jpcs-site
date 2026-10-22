@@ -23,7 +23,8 @@ export function lastEdited(row: { updated_at: string; updated_by: string | null 
   return `Edited ${when} by ${who}`;
 }
 
-export type ActionState = { error?: string; ok?: string } | null;
+// link: an invite or reset link for the admin to copy and send
+export type ActionState = { error?: string; ok?: string; link?: string } | null;
 
 // optional form text: "" becomes null so the column stays empty
 export const optional = z
