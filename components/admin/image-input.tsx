@@ -65,7 +65,7 @@ export function ImageInput({
     <div className="flex flex-col gap-1.5">
       <span className="text-sm font-semibold text-ink">{label}</span>
       <div className="flex flex-wrap items-center gap-4">
-        <div className={`grid shrink-0 place-items-center overflow-hidden border border-line bg-surface-2 ${square ? "size-24" : "h-24 w-40"}`}>
+        <div className={`grid shrink-0 place-items-center overflow-hidden border border-line bg-surface-2 bg-[linear-gradient(45deg,transparent_48%,var(--line)_48%,var(--line)_52%,transparent_52%)] ${square ? "size-24" : "h-24 w-40"}`}>
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element -- local blob previews, next/image can't load those
             <img src={preview} alt="" className="size-full object-cover" />
@@ -81,7 +81,7 @@ export function ImageInput({
             accept="image/*"
             required={required && !current}
             onChange={onChange}
-            className="w-full min-w-0 text-sm file:mr-3 file:border file:border-line-strong file:bg-transparent file:px-3 file:py-1.5 file:text-sm file:font-semibold file:text-ink"
+            className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           />
           <span className="text-xs text-ink-muted">
             {busy ? "Preparing photo…" : current ? "Leave empty to keep the current image." : "JPG, PNG or WebP. It's resized for you."}

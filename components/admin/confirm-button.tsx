@@ -21,7 +21,7 @@ export function ConfirmButton({
       onClick={(e) => {
         if (!confirm(message)) e.preventDefault();
       }}
-      className={`${buttonClass(variant)} ${small ? "h-8 px-3 text-xs" : ""}`}
+      className={buttonClass(variant, small ? "sm" : "md")}
     >
       {children}
     </button>

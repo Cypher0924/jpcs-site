@@ -4,7 +4,7 @@ import { useActionState, useState, type ComponentProps, type ReactNode } from "r
 import { useFormStatus } from "react-dom";
 import { buttonClass, inputClass, type ButtonVariant } from "./styles";
 
-// plain dashboard controls on the site's tokens: square, dense, no motion
+// dashboard controls on the site's tokens: square, dense, no decorative motion
 
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
@@ -62,12 +62,17 @@ export function ActionForm({
   );
 }
 
-/** result line under a form. role="status" so screen readers hear it */
+/** result line under a form. errors are announced right away, saves politely */
 export function FormMessage({ state }: { state: State }) {
   if (!state?.error && !state?.ok) return null;
   return (
-    <div role="status" className="flex flex-col gap-2">
-      <p className={`text-sm ${state.error ? "text-signal" : "text-ink-muted"}`}>{state.error ?? state.ok}</p>
+    <div role={state.error ? "alert" : "status"} className="flex flex-col gap-2">
+      <p className={`flex items-start gap-2 text-sm font-semibold ${state.error ? "text-signal" : "text-live-text"}`}>
+        <svg aria-hidden viewBox="0 0 16 16" className="mt-0.5 size-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+          {state.error ? <path d="M8 4v5M8 11.5v.5" /> : <path d="m3 8.5 3 3 7-7" />}
+        </svg>
+        {state.error ?? state.ok}
+      </p>
       {state.link && <CopyLink link={state.link} />}
     </div>
   );
@@ -78,7 +83,7 @@ export function CopyLink({ link }: { link: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <div className="flex gap-2">
-      <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className={`${inputClass} h-10 min-w-0 flex-1 font-mono text-xs`} />
+      <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className={`${inputClass} h-10 min-w-0 flex-1 text-xs`} />
       <button
         type="button"
         onClick={async () => {

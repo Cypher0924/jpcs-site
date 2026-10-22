@@ -73,6 +73,10 @@
   --signal: var(--color-race-red);
   --highlight: var(--color-magenta);
   --gold: var(--color-chevron);
+  /* timing-screen states for the admin: green = live/saved/open, amber text = pending/TBA */
+  --live: #13a35a;
+  --live-text: #0b7a3e;
+  --pending-text: #8a5800;
 
   --grid-line: rgb(22 21 26 / 0.06);
   --glow: 0 0 0 transparent;
@@ -98,6 +102,9 @@
   --signal: #ff2a1f;
   --highlight: #ff3d84;
   --gold: var(--color-chevron);
+  --live: #2fd47a;
+  --live-text: #4ee08f;
+  --pending-text: var(--color-chevron);
 
   --grid-line: rgb(244 241 236 / 0.05);
   --glow: 0 0 24px rgb(240 138 53 / 0.35);
@@ -121,6 +128,9 @@
   --color-signal: var(--signal);
   --color-highlight: var(--highlight);
   --color-gold: var(--gold);
+  --color-live: var(--live);
+  --color-live-text: var(--live-text);
+  --color-pending-text: var(--pending-text);
 
   --font-display: var(--font-f1), "Arial Black", sans-serif;
   --font-wide: var(--font-f1-wide), "Arial Black", sans-serif;

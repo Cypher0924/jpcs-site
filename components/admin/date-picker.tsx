@@ -116,6 +116,9 @@ export function DatePicker({
   const pm = h24 >= 12;
   const setClock = (h: number, m: number, isPm: boolean) => setTime(`${pad((h % 12) + (isPm ? 12 : 0))}:${pad(m)}`);
 
+  const arrow =
+    "grid size-8 place-items-center border border-line text-ink-muted hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-accent";
+
   const shown = date
     ? `${MONTHS[parts(date)[1] - 1].slice(0, 3)} ${parts(date)[2]}, ${parts(date)[0]}${withTime ? `, ${hour12}:${pad(min)} ${pm ? "PM" : "AM"}` : ""}`
     : emptyText;
@@ -152,14 +155,18 @@ export function DatePicker({
           className="absolute top-full left-0 z-30 mt-1 w-72 border border-line-strong bg-surface p-3 shadow-[0_12px_32px_rgb(0_0_0/0.25)]"
         >
           <div className="mb-2 flex items-center justify-between">
-            <button type="button" onClick={() => shiftMonth(-1)} aria-label="Previous month" className="grid size-8 place-items-center border border-line hover:border-line-strong">
-              ‹
+            <button type="button" onClick={() => shiftMonth(-1)} aria-label="Previous month" className={arrow}>
+              <svg aria-hidden viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m10 4-4 4 4 4" />
+              </svg>
             </button>
-            <span className="text-sm font-semibold" aria-live="polite">
+            <span className="type-data text-sm" aria-live="polite">
               {MONTHS[fm - 1]} {fy}
             </span>
-            <button type="button" onClick={() => shiftMonth(1)} aria-label="Next month" className="grid size-8 place-items-center border border-line hover:border-line-strong">
-              ›
+            <button type="button" onClick={() => shiftMonth(1)} aria-label="Next month" className={arrow}>
+              <svg aria-hidden viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m6 4 4 4-4 4" />
+              </svg>
             </button>
           </div>
           <div ref={grid} className="grid grid-cols-7 gap-0.5 text-center text-sm">
@@ -178,7 +185,7 @@ export function DatePicker({
                   aria-pressed={day === date}
                   aria-label={`${MONTHS[fm - 1]} ${parts(day)[2]}, ${fy}`}
                   onClick={() => pick(day)}
-                  className={`grid h-8 place-items-center outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  className={`type-data grid h-8 place-items-center text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent ${
                     day === date ? "bg-accent font-semibold text-accent-ink" : day === today ? "border border-accent text-ink" : "hover:bg-surface-2"
                   }`}
                 >
@@ -221,16 +228,16 @@ export function DatePicker({
                 setDate("");
                 setOpen(false);
               }}
-              className={`${buttonClass("secondary")} h-8 px-3 text-xs`}
+              className={buttonClass("secondary", "sm")}
             >
               Clear
             </button>
             <div className="flex gap-2">
-              <button type="button" onClick={() => pick(today)} className={`${buttonClass("secondary")} h-8 px-3 text-xs`}>
+              <button type="button" onClick={() => pick(today)} className={buttonClass("secondary", "sm")}>
                 Today
               </button>
               {withTime && (
-                <button type="button" onClick={() => setOpen(false)} className={`${buttonClass()} h-8 px-3 text-xs`}>
+                <button type="button" onClick={() => setOpen(false)} className={buttonClass("primary", "sm")}>
                   Done
                 </button>
               )}
