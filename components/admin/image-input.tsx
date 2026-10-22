@@ -73,7 +73,7 @@ export function ImageInput({
             <span className="text-xs text-ink-muted">No image</span>
           )}
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
+        <div className="flex min-w-0 flex-1 basis-52 flex-col gap-1">
           <input
             ref={ref}
             type="file"
