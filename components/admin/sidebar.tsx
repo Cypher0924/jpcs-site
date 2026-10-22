@@ -51,7 +51,7 @@ export function AdminSidebar({ email, role }: { email: string | null; role: Role
         {/* same toggle and slanted wipe as the public site */}
         <ThemeToggle />
       </div>
-      <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-2 pb-3 md:block md:flex-1 md:overflow-y-auto">
+      <nav aria-label="Admin" className="flex gap-1 overflow-x-auto px-2 pb-3 md:flex-1 md:flex-col md:overflow-y-auto">
         <ul className="flex gap-1 md:flex-col">{links.map(item)}</ul>
         {role === "admin" && (
           <>
@@ -59,8 +59,8 @@ export function AdminSidebar({ email, role }: { email: string | null; role: Role
             <ul className="flex gap-1 md:mt-1 md:flex-col">{adminLinks.map(item)}</ul>
           </>
         )}
-        {/* the footer with Account is desktop-only, so phones get it in the tab row */}
-        <ul className="flex gap-1 md:hidden">{item({ href: "/admin/account", label: "Account" })}</ul>
+        {/* pinned to the bottom on desktop */}
+        <ul className="flex gap-1 md:mt-auto md:flex-col md:pt-4">{item({ href: "/admin/account", label: "Settings" })}</ul>
       </nav>
       <div className="hidden border-t border-line px-4 py-3 text-xs md:block">
         {email && (
@@ -69,14 +69,9 @@ export function AdminSidebar({ email, role }: { email: string | null; role: Role
           </p>
         )}
         {role && <p className="mt-0.5 text-ink-muted capitalize">{role}</p>}
-        <div className="mt-3 flex gap-3">
-          <Link href="/admin/account" className="text-accent-text hover:underline">
-            Account
-          </Link>
-          <Link href="/" className="text-accent-text hover:underline">
-            View site
-          </Link>
-        </div>
+        <Link href="/" className="mt-3 inline-block text-accent-text hover:underline">
+          View site
+        </Link>
       </div>
     </aside>
   );

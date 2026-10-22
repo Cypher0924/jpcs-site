@@ -4,7 +4,7 @@ import { requireStaff } from "@/lib/auth";
 import { signOut } from "./actions";
 import { PasswordForm } from "./password-form";
 
-export const metadata = { title: "Account" };
+export const metadata = { title: "Settings" };
 // admin pages wait for the session check on navigation, which is fine here
 export const instant = false;
 
@@ -12,7 +12,7 @@ export default async function AccountPage() {
   const staff = await requireStaff();
   return (
     <>
-      <PageHeader title="Account" sub={`${staff.email} · ${staff.role}`} />
+      <PageHeader title="Settings" sub={`${staff.email} · ${staff.role}`} />
       <div className="grid max-w-xl gap-6">
         <Panel title="Change password">
           <PasswordForm />
