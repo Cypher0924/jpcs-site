@@ -35,17 +35,14 @@ export function NextRoundCard({ rounds, at, facebook }: { rounds: Round[]; at: n
   const [next, then] = pickNext(rounds, now);
 
   return (
-    <article data-anim="slide-in" className="cut-corner flex flex-col border border-line bg-surface lg:col-span-5">
-      <figure>
-        <PhotoSlot
-          label={next ? `${next.title} pubmat` : "Next round pubmat"}
-          src={next?.cover}
-          contain
-          sizes="(min-width: 1024px) 480px, 100vw"
-          className="aspect-[16/9]"
-        />
-        {next?.cover && <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">Pubmat · {next.credit}</figcaption>}
-      </figure>
+    // self-start: only as tall as its content, not stretched to the calendar list beside it
+    <article data-anim="slide-in" className="cut-corner flex flex-col self-start border border-line bg-surface lg:col-span-5">
+      {next && (
+        <figure>
+          <PhotoSlot label={`${next.title} pubmat`} src={next.cover} contain sizes="(min-width: 1024px) 480px, 100vw" className="aspect-[16/9]" />
+          {next.cover && <figcaption className="type-data px-6 pt-3 text-xs text-ink-muted">Pubmat · {next.credit}</figcaption>}
+        </figure>
+      )}
       <div className="flex flex-1 flex-col gap-3 p-6">
         <span className="slant type-label self-start bg-signal px-3 py-2 text-white">
           <span className="unslant">Next round · {next ? next.round : `R${rounds.length + 1}`}</span>
