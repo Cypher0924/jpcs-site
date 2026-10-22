@@ -102,7 +102,7 @@ export default async function MerchPage() {
                               {it.from_price ? "From " : ""}PHP {it.price}
                             </span>
                           </span>
-                          <span className="text-xs font-semibold text-accent-text">Edit</span>
+                          <span className="text-xs font-semibold text-ink-muted">Edit</span>
                         </summary>
                         <div className="border-t border-line p-3">
                           <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
@@ -128,7 +128,7 @@ export default async function MerchPage() {
                   ))}
                 </ul>
                 <details className="mt-3 border border-line">
-                  <summary className="cursor-pointer p-3 text-sm font-semibold text-accent-text">Add item</summary>
+                  <summary className="cursor-pointer p-3 text-sm font-semibold">Add item</summary>
                   <div className="border-t border-line p-3">
                     <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
                       <input type="hidden" name="group_id" value={g.id} />

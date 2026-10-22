@@ -31,5 +31,5 @@ export const tableClass = {
   td: "h-11 px-3",
 };
 
-/** text link in the accent colour */
-export const linkClass = `font-semibold text-accent-text underline-offset-4 hover:underline ${focus}`;
+/** text link. orange stays for the active row and main actions, so links use an underline */
+export const linkClass = `font-semibold text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-accent ${focus}`;

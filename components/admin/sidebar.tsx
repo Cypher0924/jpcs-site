@@ -38,7 +38,7 @@ function Readout({ next }: { next: NextRound }) {
     >
       <span className="block text-xs text-ink-muted">Next round</span>
       <span className="mt-0.5 flex items-baseline gap-2 text-sm whitespace-nowrap">
-        <span className="type-data text-accent-text">R{next.round}</span>
+        <span className="type-data text-ink-muted">R{next.round}</span>
         <span className={next.startsAt ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
       </span>
     </Link>
@@ -151,7 +151,7 @@ export function AdminSidebar({ email, role, next = null }: { email: string | nul
           </div>
           <Link
             href="/"
-            className="inline-flex items-center gap-1 font-semibold text-accent-text hover:underline focus-visible:outline-2 focus-visible:outline-accent"
+            className="inline-flex items-center gap-1 font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-accent focus-visible:outline-2 focus-visible:outline-accent"
           >
             View site
             <svg aria-hidden viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2">

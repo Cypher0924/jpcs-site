@@ -107,7 +107,7 @@ export default async function DashboardPage() {
                   className="group grid min-h-14 grid-cols-[1.5rem_2.75rem_1fr_1rem] items-center gap-x-3 px-4 py-2.5 transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent lg:grid-cols-[2rem_3rem_11rem_1fr_17rem_1rem]"
                 >
                   <span className="type-data text-right text-sm text-ink-muted">{s.pos}</span>
-                  <span className="type-data text-sm text-accent-text">{s.code}</span>
+                  <span className="type-data text-sm">{s.code}</span>
                   <span className="min-w-0">
                     <span className="block font-semibold">{s.name}</span>
                     {/* phones and tablets: status and edit time under the name */}

@@ -147,7 +147,7 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
               </ul>
 
               <details className="mt-3 border border-line bg-canvas">
-                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold text-accent-text">Add officer to {g.title}</summary>
+                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Add officer to {g.title}</summary>
                 <div className="border-t border-line p-3">
                   <OfficerForm groupId={g.id} />
                 </div>
@@ -215,14 +215,14 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-semibold">
             {o.name}
-            {o.is_adviser && <span className="type-data ml-2 border border-line px-1.5 text-[0.6875rem] font-normal text-accent-text">TP</span>}
+            {o.is_adviser && <span className="ml-2 border border-line px-1.5 text-[0.6875rem] font-normal text-ink-muted">Adviser</span>}
           </p>
           <p className="truncate text-xs text-ink-muted">{o.role}</p>
         </div>
         <MoveButtons table="officers" id={o.id} first={first} last={last} />
       </div>
       <details className="mt-2">
-        <summary className="cursor-pointer py-1 text-sm font-semibold text-accent-text">Edit</summary>
+        <summary className="cursor-pointer py-1 text-sm font-semibold">Edit</summary>
         <div className="mt-3 border border-line bg-canvas p-3">
           <OfficerForm groupId={groupId} o={o} />
           <ItemFooter edited={lastEdited(o, editors)}>

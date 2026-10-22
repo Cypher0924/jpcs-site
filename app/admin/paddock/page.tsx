@@ -51,7 +51,7 @@ export default async function PaddockPage() {
                     </Field>
                   </div>
                   <details>
-                    <summary className="cursor-pointer text-sm font-semibold text-accent-text">Replace photo</summary>
+                    <summary className="cursor-pointer text-sm font-semibold">Replace photo</summary>
                     <div className="mt-3">
                       <ImageInput name="photo" label="New photo" current={g.src} />
                     </div>

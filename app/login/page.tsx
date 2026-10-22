@@ -10,7 +10,7 @@ export default function LoginPage() {
     <AuthCard title="Sign in" sub="For JPCS-TSU officers who update the website.">
       <LoginForm />
       <p className="mt-4 text-sm">
-        <Link href="/forgot-password" className="text-accent-text hover:underline">
+        <Link href="/forgot-password" className="font-semibold text-ink underline decoration-line-strong underline-offset-4 hover:decoration-accent">
           Forgot your password?
         </Link>
       </p>

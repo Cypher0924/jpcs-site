@@ -46,7 +46,7 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           </>
         }
       />
-      <div className="grid items-start gap-6 xl:grid-cols-2">
+      <div className="grid grid-flow-dense items-start gap-6 xl:grid-cols-2">
         <div className="flex flex-col gap-6">
           <Panel title="Details">
             <ActionForm action={updateEvent}>
@@ -56,13 +56,6 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
                 <SubmitButton>Save event</SubmitButton>
               </div>
             </ActionForm>
-          </Panel>
-          <Panel title="Delete event">
-            <p className="mb-3 text-sm text-ink-muted">Removes the event and all of its photos from the site.</p>
-            <form action={deleteEvent}>
-              <input type="hidden" name="id" value={event.id} />
-              <ConfirmButton message={`Delete "${event.title}" and all of its photos? This can't be undone.`}>Delete event</ConfirmButton>
-            </form>
           </Panel>
         </div>
 
@@ -77,8 +70,10 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
                   <MoveButtons table="event_photos" id={p.id} first={i === 0} last={i === all.length - 1} />
                   <form action={deleteEventPhoto}>
                     <input type="hidden" name="id" value={p.id} />
-                    <ConfirmButton message="Delete this photo?" small>
-                      Delete
+                    <ConfirmButton message="Delete this photo?" label="Delete photo">
+                      <svg aria-hidden viewBox="0 0 16 16" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.75">
+                        <path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 8.5h5.8l.6-8.5" />
+                      </svg>
                     </ConfirmButton>
                   </form>
                 </div>
@@ -87,6 +82,17 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           </ul>
           {!photos?.length && <p className="mt-4 text-sm text-ink-muted">No photos yet. Pick one or more above, they upload one by one.</p>}
         </Panel>
+
+        {/* last on phones so the frequent jobs come first, under Details on wide screens */}
+        <div className="xl:col-start-1">
+          <Panel title="Delete event">
+            <p className="mb-3 text-sm text-ink-muted">Removes the event and all of its photos from the site.</p>
+            <form action={deleteEvent}>
+              <input type="hidden" name="id" value={event.id} />
+              <ConfirmButton message={`Delete "${event.title}" and all of its photos? This can't be undone.`}>Delete event</ConfirmButton>
+            </form>
+          </Panel>
+        </div>
       </div>
     </>
   );
