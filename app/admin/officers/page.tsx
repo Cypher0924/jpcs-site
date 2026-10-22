@@ -77,7 +77,8 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
       <div className="mb-6 grid gap-6 xl:grid-cols-2">
         <Panel title={`School year ${shown.label}`}>
           <p className="text-sm text-ink-muted">
-            {shown.is_current ? "Current, shown on the site." : "Not shown on the site."} {officers.length} officers in {groups.length} groups.
+            {shown.is_current ? "Current, shown on the site." : "Not shown on the site."} {officers.length} {officers.length === 1 ? "officer" : "officers"} in {groups.length}{" "}
+            {groups.length === 1 ? "group" : "groups"}.
           </p>
           <div className="mt-3 flex flex-wrap items-start gap-3">
             {!shown.is_current && (

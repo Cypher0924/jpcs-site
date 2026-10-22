@@ -3,6 +3,7 @@ import { about, faqs, navLinks, peso } from "@/lib/content";
 import {
   getContact,
   getEvents,
+  getFormerOfficers,
   getGallery,
   getMerch,
   getNextEvent,
@@ -13,6 +14,7 @@ import {
 } from "@/lib/data";
 import { Fragment } from "react";
 import { Countdown } from "./countdown";
+import { FormerOfficers } from "./former-officers";
 import { OfficerCard } from "./officer-card";
 import { OfficerCarousel } from "./officer-carousel";
 import { PhotoGrid } from "./photo-grid";
@@ -83,7 +85,7 @@ export async function Stats() {
 }
 
 export async function Officers() {
-  const { year, groups } = await getOfficerGroups();
+  const [{ year, groups }, seasons] = await Promise.all([getOfficerGroups(), getFormerOfficers()]);
   return (
     <section id="officers" className="py-20 md:py-28">
       <Container>
@@ -115,6 +117,8 @@ export async function Officers() {
             </div>
           ))}
         </div>
+        {/* shows up once a past school year has officers */}
+        {seasons.length > 0 && <FormerOfficers seasons={seasons} />}
       </Container>
     </section>
   );

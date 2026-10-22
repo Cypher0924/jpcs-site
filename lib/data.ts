@@ -147,6 +147,33 @@ export async function getOfficerGroups() {
   };
 }
 
+type PastYearRow = {
+  label: string;
+  officer_groups: { officers: { name: string; role: string; photo: string | null }[] }[];
+};
+
+/** every non-current school year that has officers, newest first, flattened in lineup order */
+export async function getFormerOfficers() {
+  "use cache";
+  cacheLife("days");
+  cacheTag("officers");
+  const years = must<PastYearRow[]>(
+    await publicClient()
+      .from("school_years")
+      .select("label, officer_groups(officers(name, role, photo))")
+      .eq("is_current", false)
+      .order("label", { ascending: false })
+      .order("sort", { referencedTable: "officer_groups" })
+      .order("sort", { referencedTable: "officer_groups.officers" }),
+  );
+  return years
+    .map((y) => ({
+      label: y.label,
+      officers: y.officer_groups.flatMap((g) => g.officers.map((o) => ({ name: o.name, role: o.role, photo: opt(o.photo) }))),
+    }))
+    .filter((y) => y.officers.length > 0);
+}
+
 export async function getGallery() {
   "use cache";
   cacheLife("days");
