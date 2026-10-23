@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { AccountMenu } from "@/components/admin/account-menu";
 import { CloseMenusOnNavigate } from "@/components/admin/close-menus";
 import { AdminSidebar } from "@/components/admin/sidebar";
+import { UnsavedGuard } from "@/components/admin/unsaved-guard";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -32,6 +33,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         <main className="mx-auto w-full max-w-[80rem] px-4 py-6 md:px-10 md:py-10">{children}</main>
       </div>
       <CloseMenusOnNavigate />
+      <UnsavedGuard />
     </div>
   );
 }

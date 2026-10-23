@@ -28,16 +28,19 @@ export function SubmitButton({
   children,
   pendingText = "Saving…",
   variant = "primary",
+  srLabel,
 }: {
   children: ReactNode;
   pendingText?: string;
   variant?: ButtonVariant;
+  // spoken name when the visible text repeats on the page, e.g. "Save role for x@y.com"
+  srLabel?: string;
 }) {
   const status = useFormStatus();
   // ActionForm submits by hand, so it reports pending itself. other forms use the native status
   const pending = useContext(Pending) ?? status.pending;
   return (
-    <button type="submit" disabled={pending} className={buttonClass(variant)}>
+    <button type="submit" disabled={pending} aria-label={srLabel} className={buttonClass(variant)}>
       {pending ? pendingText : children}
     </button>
   );
@@ -66,16 +69,38 @@ export function ActionForm({
 }) {
   const [state, formAction, pending] = useActionState(action, null);
   const ref = useRef<HTMLFormElement>(null);
+  // the last edit, and which save result was on screen when it happened
+  const [edit, setEdit] = useState<{ after: State } | null>(null);
+  const latest = useRef<State>(null);
 
   // back to the saved values (or empty, on add forms) once a save works
   useEffect(() => {
+    latest.current = state;
     if (state?.ok) ref.current?.reset();
   }, [state]);
+
+  // fields can sit outside the <form> (form="id"), so listen on the page and match the field's form
+  useEffect(() => {
+    const onEdit = (e: Event) => {
+      if ((e.target as HTMLInputElement).form === ref.current) setEdit({ after: latest.current });
+    };
+    document.addEventListener("input", onEdit);
+    document.addEventListener("change", onEdit);
+    return () => {
+      document.removeEventListener("input", onEdit);
+      document.removeEventListener("change", onEdit);
+    };
+  }, []);
+
+  // unsaved: edited since the last successful save. the result line only shows until the next edit
+  const dirty = !!edit && (edit.after === state || !state?.ok);
+  const showResult = !edit || edit.after !== state;
 
   return (
     <form
       ref={ref}
       id={id}
+      data-dirty={dirty || undefined}
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget, e.nativeEvent.submitter);
@@ -84,7 +109,7 @@ export function ActionForm({
       className={className}
     >
       <Pending value={pending}>{children}</Pending>
-      <FormMessage state={state} />
+      {showResult ? <FormMessage state={state} /> : dirty && <p className="text-xs font-semibold text-pending-text">Unsaved changes</p>}
     </form>
   );
 }
