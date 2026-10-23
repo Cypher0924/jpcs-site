@@ -9,7 +9,7 @@ import { getEditors, lastEdited, requestNow } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
 import { dateRange, phase, pickNext, type Status } from "@/lib/rounds";
-import type { AuditRow } from "./audit/describe";
+import { group, type AuditRow } from "./audit/describe";
 import { Message } from "./audit/message";
 
 export const metadata = { title: { absolute: "Dashboard · Admin · JPCS-TSU" } };
@@ -187,7 +187,7 @@ export default async function DashboardPage() {
               <li key={s.code} className="border-b border-line last:border-0">
                 <Link
                   href={s.href}
-                  className="group grid min-h-14 grid-cols-[1.5rem_2.75rem_1fr_1rem] items-center gap-x-3 px-4 py-2.5 transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent lg:grid-cols-[2rem_3rem_11rem_1fr_17rem_1rem]"
+                  className="group grid min-h-14 grid-cols-[1.5rem_2.75rem_1fr_1rem] items-center gap-x-3 px-4 py-2.5 transition-colors hover:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-text lg:grid-cols-[2rem_3rem_11rem_1fr_17rem_1rem]"
                 >
                   <span className="type-data text-right text-sm text-ink-muted">{s.pos}</span>
                   <span className="type-data text-sm">{s.code}</span>
@@ -238,8 +238,8 @@ export default async function DashboardPage() {
               <p className="text-sm text-ink-muted">No changes yet. Edits made in the admin show up here.</p>
             ) : (
               <ul className="flex flex-col divide-y divide-line">
-                {recent.map((r) => (
-                  <Message key={r.id} row={r} />
+                {group(recent).map((rows) => (
+                  <Message key={rows[0].id} rows={rows} />
                 ))}
               </ul>
             )}

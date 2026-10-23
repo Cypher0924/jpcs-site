@@ -3,7 +3,7 @@ import { PageHeader, Panel } from "@/components/admin/shell";
 import { buttonClass, selectClass } from "@/components/admin/styles";
 import { requireAdmin } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
-import { entities, type AuditRow } from "./describe";
+import { entities, group, type AuditRow } from "./describe";
 import { Message } from "./message";
 
 export const metadata = { title: "Audit log" };
@@ -68,8 +68,8 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
           </p>
         ) : (
           <ul className="flex flex-col divide-y divide-line">
-            {rows.map((r) => (
-              <Message key={r.id} row={r} detail />
+            {group(rows).map((rows) => (
+              <Message key={rows[0].id} rows={rows} detail />
             ))}
           </ul>
         )}
