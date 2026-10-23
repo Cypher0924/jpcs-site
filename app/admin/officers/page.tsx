@@ -9,7 +9,8 @@ import { checkboxClass } from "@/components/admin/styles";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
-import { createYear, deleteGroup, deleteOfficer, deleteYear, makeCurrent, saveGroup, saveOfficer } from "./actions";
+import { addOfficers, createYear, deleteGroup, deleteOfficer, deleteYear, makeCurrent, saveGroup, saveOfficer } from "./actions";
+import { breaksToSizes } from "./rows";
 
 export const metadata = { title: "Officers" };
 export const instant = false;
@@ -66,7 +67,7 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
             key={y.id}
             href={`/admin/officers?year=${y.id}`}
             aria-current={y.id === shown.id ? "page" : undefined}
-            className={`-mb-px flex h-11 items-center gap-2 border-b-2 px-4 text-sm transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent ${
+            className={`-mb-px flex h-11 items-center gap-2 border-b-2 px-4 text-sm transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-text ${
               y.id === shown.id ? "border-accent font-semibold text-ink" : "border-transparent text-ink-muted hover:text-ink"
             }`}
           >
@@ -102,9 +103,12 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
           </div>
         </Panel>
 
-        <Panel title="Start a new school year">
-          <NewYear copyFrom={shown} />
-        </Panel>
+        <details className="border border-line bg-surface">
+          <summary className="flex min-h-11 cursor-pointer items-center bg-surface-2 px-4 py-2 text-sm font-semibold">Start a new school year</summary>
+          <div className="p-4 sm:p-5">
+            <NewYear copyFrom={shown} />
+          </div>
+        </details>
       </div>
 
       <div className="flex flex-col gap-6">
@@ -112,22 +116,27 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
           const members = officers.filter((o) => o.group_id === g.id);
           return (
             <Panel key={g.id} title={g.title} meta={`${members.length} ${members.length === 1 ? "officer" : "officers"}`}>
-              <ActionForm action={saveGroup} className="grid gap-3 md:grid-cols-[1fr_1fr_10rem_auto] md:items-start">
-                <input type="hidden" name="id" value={g.id} />
-                <Field label="Group title">
-                  <Input name="title" defaultValue={g.title} required />
-                </Field>
-                <Field label="Label" hint={`Shown on cards as "${g.label} · ${shown.label}"`}>
-                  <Input name="label" defaultValue={g.label} required />
-                </Field>
-                <Field label="Row breaks" hint="Ends a desktop row after these positions, counting from 0.">
-                  <Input name="breaks" defaultValue={(g.breaks as number[]).join(", ")} placeholder="1, 3" />
-                </Field>
-                <div className="md:pt-[1.625rem]">
-                  <SubmitButton>Save group</SubmitButton>
-                </div>
-              </ActionForm>
-              <ItemFooter edited={lastEdited(g, editors)}>
+              <details className="bg-surface-2">
+                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Group settings</summary>
+                <ActionForm action={saveGroup} className="grid gap-3 px-3 pb-3 md:grid-cols-[1fr_1fr_10rem] md:items-start">
+                  <input type="hidden" name="id" value={g.id} />
+                  <Field label="Group title">
+                    <Input name="title" defaultValue={g.title} required />
+                  </Field>
+                  <Field label="Label" hint={`Shown on cards as "${g.label} · ${shown.label}"`}>
+                    <Input name="label" defaultValue={g.label} required />
+                  </Field>
+                  <Field label="Row sizes" hint="Officers in each desktop row, top to bottom, like 1, 2, 3. Empty means even rows.">
+                    <Input name="breaks" defaultValue={breaksToSizes(g.breaks as number[])} placeholder="1, 2, 3" />
+                  </Field>
+                  <div className="md:col-span-3">
+                    <SubmitButton variant="secondary" srLabel={`Save ${g.title} settings`}>
+                      Save group settings
+                    </SubmitButton>
+                  </div>
+                </ActionForm>
+              </details>
+              <ItemFooter edited={lastEdited(g, editors)} name={g.title}>
                 <MoveButtons menu table="officer_groups" id={g.id} first={i === 0} last={i === groups.length - 1} />
                 {members.length === 0 && (
                   <ActionForm action={deleteGroup} className="flex flex-col gap-1">
@@ -147,9 +156,21 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
               </ul>
 
               <details className="mt-3 bg-surface-2">
-                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Add officer to {g.title}</summary>
-                <div className="px-3 pb-3">
-                  <OfficerForm groupId={g.id} />
+                <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Add officers to {g.title}</summary>
+                <div className="flex flex-col gap-5 px-3 pb-3">
+                  <ActionForm action={addOfficers}>
+                    <input type="hidden" name="group_id" value={g.id} />
+                    <Field label="Paste a list" hint="One officer per line: name, then role. Photos and quotes can be added after with Edit.">
+                      <Textarea name="list" rows={4} placeholder={"Juan Dela Cruz, President\nMaria Santos, Vice President"} />
+                    </Field>
+                    <div>
+                      <SubmitButton pendingText="Adding…">Add officers</SubmitButton>
+                    </div>
+                  </ActionForm>
+                  <div className="border-t border-line pt-4">
+                    <p className="mb-3 text-sm font-semibold">Or add one with a photo</p>
+                    <OfficerForm groupId={g.id} />
+                  </div>
                 </div>
               </details>
             </Panel>
@@ -167,11 +188,11 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
             <Field label="Label">
               <Input name="label" placeholder="Newly elected" required />
             </Field>
-            <Field label="Row breaks">
-              <Input name="breaks" placeholder="1, 3" />
+            <Field label="Row sizes">
+              <Input name="breaks" placeholder="1, 2, 3" />
             </Field>
             <div className="md:pt-[1.625rem]">
-              <SubmitButton>Add group</SubmitButton>
+              <SubmitButton variant="secondary">Add group</SubmitButton>
             </div>
           </ActionForm>
         </Panel>
@@ -188,10 +209,16 @@ function NewYear({ copyFrom }: { copyFrom?: { id: number; label: string } }) {
         <Input name="label" placeholder="2027-2028" pattern="\d{4}-\d{4}" required />
       </Field>
       {copyFrom && (
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="copy" defaultChecked className={checkboxClass} />
-          Copy the groups from {copyFrom.label}
-        </label>
+        <div className="flex flex-col gap-2">
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="copy" defaultChecked className={checkboxClass} />
+            Copy the groups from {copyFrom.label}
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="copy_officers" className={checkboxClass} />
+            Copy the officers too, for re-elected officers (edit or delete the ones who left)
+          </label>
+        </div>
       )}
       <div>
         <SubmitButton>Start school year</SubmitButton>
@@ -209,7 +236,7 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
             // eslint-disable-next-line @next/next/no-img-element -- small admin thumbnail from the media bucket
             <img src={o.photo} alt="" className="size-full object-cover" />
           ) : (
-            <span className="text-[10px] text-ink-muted">None</span>
+            <span className="text-xs text-ink-muted">None</span>
           )}
         </div>
         <div className="min-w-0 flex-1">
@@ -218,13 +245,15 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
           </p>
           <p className="truncate text-xs text-ink-muted">{o.role}</p>
         </div>
-        <MoveButtons table="officers" id={o.id} first={first} last={last} />
+        <MoveButtons table="officers" id={o.id} first={first} last={last} name={o.name} />
       </div>
       <details className="mt-2">
-        <summary className="cursor-pointer py-1 text-sm font-semibold">Edit</summary>
+        <summary className="cursor-pointer py-1 text-sm font-semibold">
+          Edit<span className="sr-only"> {o.name}</span>
+        </summary>
         <div className="mt-3 bg-surface-2 p-3">
           <OfficerForm groupId={groupId} o={o} />
-          <ItemFooter edited={lastEdited(o, editors)}>
+          <ItemFooter edited={lastEdited(o, editors)} name={o.name}>
             <ActionForm action={deleteOfficer} className="flex flex-col gap-1">
               <input type="hidden" name="id" value={o.id} />
               <ConfirmButton message={`Delete ${o.name}?`} menu>
@@ -263,7 +292,9 @@ function OfficerForm({ groupId, o }: { groupId: number; o?: Officer }) {
         Adviser (shows as TP instead of a race number)
       </label>
       <div>
-        <SubmitButton>{o ? "Save officer" : "Add officer"}</SubmitButton>
+        <SubmitButton variant="secondary" srLabel={o ? `Save ${o.name}` : undefined}>
+          {o ? "Save officer" : "Add officer"}
+        </SubmitButton>
       </div>
     </ActionForm>
   );
