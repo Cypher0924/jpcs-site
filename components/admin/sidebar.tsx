@@ -55,6 +55,17 @@ function Readout({ rounds }: { rounds: TowerRound[] }) {
   );
 }
 
+/** Settings has no position in the tower, so it gets a cog in that slot */
+function Cog() {
+  return (
+    <svg aria-hidden viewBox="0 0 20 20" className="ml-auto size-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+      <circle cx="10" cy="10" r="2.6" />
+      <path d="M10 2.5v2.2M10 15.3v2.2M2.5 10h2.2M15.3 10h2.2M4.7 4.7l1.6 1.6M13.7 13.7l1.6 1.6M4.7 15.3l1.6-1.6M13.7 6.3l1.6-1.6" />
+      <circle cx="10" cy="10" r="5.3" />
+    </svg>
+  );
+}
+
 function Row({ s, active, onPick }: { s: Section; active: boolean; onPick: () => void }) {
   return (
     <li>
@@ -68,7 +79,7 @@ function Row({ s, active, onPick }: { s: Section; active: boolean; onPick: () =>
           active ? "font-semibold text-accent-ink" : "text-ink before:scale-x-0 hover:text-accent-ink hover:before:scale-x-100"
         }`}
       >
-        <span className={`type-data text-right text-xs ${active ? "" : "text-ink-muted transition-colors duration-200 group-hover:text-accent-ink"}`}>{s.pos || ""}</span>
+        <span className={`type-data text-right text-xs ${active ? "" : "text-ink-muted transition-colors duration-200 group-hover:text-accent-ink"}`}>{s.pos || <Cog />}</span>
         <span className="type-data pl-2 text-xs tracking-wide">{s.code}</span>
         <span className="truncate md:collapsed:sr-only">{s.name}</span>
       </Link>
