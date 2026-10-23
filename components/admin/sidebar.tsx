@@ -61,13 +61,12 @@ function Row({ s, active, onPick }: { s: Section; active: boolean; onPick: () =>
         href={s.href}
         onClick={onPick}
         aria-current={active ? "page" : undefined}
-        className={`group relative isolate grid h-10 grid-cols-[1.5rem_3.25rem_1fr] items-center gap-x-1 pr-3 pl-2 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink ${
-          active
-            ? "font-semibold text-accent-ink before:absolute before:inset-y-0 before:right-1 before:-left-3 before:-z-10 before:-skew-x-12 before:bg-accent"
-            : "text-ink hover:bg-surface-2"
+        // the orange slant sweeps in from the left on hover and stays filled on the current page
+        className={`group relative isolate grid h-10 grid-cols-[1.5rem_3.25rem_1fr] items-center gap-x-1 pr-3 pl-2 text-sm transition-colors duration-200 before:absolute before:inset-y-0 before:right-1 before:-left-3 before:-z-10 before:origin-left before:-skew-x-12 before:bg-accent before:transition-transform before:duration-300 before:ease-[var(--ease-launch)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ink ${
+          active ? "font-semibold text-accent-ink" : "text-ink before:scale-x-0 hover:text-accent-ink hover:before:scale-x-100"
         }`}
       >
-        <span className={`type-data text-right text-xs ${active ? "" : "text-ink-muted"}`}>{s.pos || ""}</span>
+        <span className={`type-data text-right text-xs ${active ? "" : "text-ink-muted transition-colors duration-200 group-hover:text-accent-ink"}`}>{s.pos || ""}</span>
         <span className="type-data pl-2 text-xs tracking-wide">{s.code}</span>
         <span className="truncate">{s.name}</span>
       </Link>
