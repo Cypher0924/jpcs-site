@@ -1,8 +1,8 @@
 // plain class helpers, usable from both server and client components
 
-const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text";
 
-export const inputClass = `w-full border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-muted hover:border-ink-muted focus:border-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:opacity-60`;
+export const inputClass = `w-full border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-muted hover:border-ink-muted focus:border-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:opacity-60`;
 
 // same control without the full width, for inline role and filter selects
 export const selectClass = inputClass.replace("w-full ", "") + " h-10 pr-8";
@@ -13,7 +13,7 @@ export const checkboxClass = "size-4 shrink-0 accent-[var(--accent)]";
 const buttonStyles = {
   primary: "text-accent-ink before:bg-accent hover:before:bg-gold",
   secondary: "text-ink before:border before:border-line-strong hover:before:bg-surface-2",
-  danger: "text-signal before:border before:border-signal hover:text-white hover:before:bg-signal",
+  danger: "text-signal before:border before:border-signal hover:text-canvas hover:before:bg-signal",
 };
 export type ButtonVariant = keyof typeof buttonStyles;
 
@@ -33,7 +33,7 @@ export const tableClass = {
 
 /** a row in a dropdown menu (account menu, the "⋯" item menu) */
 export const menuItemClass =
-  "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-surface-2 focus-visible:bg-surface-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40";
+  "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-surface-2 focus-visible:bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent-text disabled:pointer-events-none disabled:opacity-40";
 
 /** text link. orange stays for the active row and main actions, so links use an underline */
 export const linkClass = `font-semibold text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-accent ${focus}`;

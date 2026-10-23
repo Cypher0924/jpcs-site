@@ -72,7 +72,7 @@
   --accent-text: #b4471a; /* orange text on paper (5.3:1) */
   --secondary: var(--color-jpcs-maroon);
   --secondary-ink: #ffffff;
-  --signal: var(--color-race-red);
+  --signal: #c80500; /* race red, a step darker so text passes AA on paper (5.2:1) */
   --highlight: var(--color-magenta);
   --gold: var(--color-chevron);
   /* timing-screen states for the admin: green = live/saved/open, amber text = pending/TBA */

@@ -64,7 +64,7 @@ export default async function MerchPage() {
                 <Field label="Title">
                   <Input name="title" defaultValue={g.title} required />
                 </Field>
-                <Field label="Key" hint="Used in links like /merch#shirts">
+                <Field label="Key" hint={`Used in links like /merch#${g.key}`}>
                   <Input name="key" defaultValue={g.key} pattern="[a-z0-9]+(-[a-z0-9]+)*" required />
                 </Field>
                 <Field label="Note (optional)">
@@ -74,10 +74,12 @@ export default async function MerchPage() {
                   <Input name="credit_label" defaultValue={g.credit_label ?? ""} placeholder="Design by" />
                 </Field>
                 <div className="md:col-span-2">
-                  <SubmitButton>Save group</SubmitButton>
+                  <SubmitButton variant="secondary" srLabel={`Save ${g.title} group`}>
+                    Save group
+                  </SubmitButton>
                 </div>
               </ActionForm>
-              <ItemFooter edited={lastEdited(g, editors)}>
+              <ItemFooter edited={lastEdited(g, editors)} name={g.title}>
                 <MoveButtons menu table="merch_groups" id={g.id} first={gi === 0} last={gi === list.length - 1} />
                 <form action={deleteGroup}>
                   <input type="hidden" name="id" value={g.id} />
@@ -110,10 +112,12 @@ export default async function MerchPage() {
                             <input type="hidden" name="group_id" value={g.id} />
                             <ItemFields item={it} />
                             <div className="md:col-span-2">
-                              <SubmitButton>Save item</SubmitButton>
+                              <SubmitButton variant="secondary" srLabel={`Save ${it.name}`}>
+                                Save item
+                              </SubmitButton>
                             </div>
                           </ActionForm>
-                          <ItemFooter edited={lastEdited(it, editors)}>
+                          <ItemFooter edited={lastEdited(it, editors)} name={it.name}>
                             <MoveButtons menu table="merch_items" id={it.id} first={ii === 0} last={ii === mine.length - 1} />
                             <form action={deleteItem}>
                               <input type="hidden" name="id" value={it.id} />
@@ -159,7 +163,7 @@ export default async function MerchPage() {
               <Input name="credit_label" placeholder="Design by" />
             </Field>
             <div className="md:col-span-2">
-              <SubmitButton>Add group</SubmitButton>
+              <SubmitButton variant="secondary">Add group</SubmitButton>
             </div>
           </ActionForm>
         </Panel>

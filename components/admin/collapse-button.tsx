@@ -30,7 +30,7 @@ export function CollapseButton({ className = "" }: { className?: string }) {
       aria-pressed={collapsed}
       aria-label={collapsed ? "Expand the menu" : "Collapse the menu"}
       title={collapsed ? "Expand the menu" : "Collapse the menu"}
-      className={`size-8 shrink-0 place-items-center text-ink-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-accent ${className}`}
+      className={`size-8 shrink-0 place-items-center text-ink-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-accent-text ${className}`}
     >
       <svg aria-hidden viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.75">
         <rect x="2.5" y="3.5" width="15" height="13" />

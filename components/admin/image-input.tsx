@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useId, useRef, useState, type ChangeEvent } from "react";
 
 /** shrinks a phone photo before upload: Vercel rejects request bodies over 4.5 MB. the server makes the final WebP */
 async function downscale(file: File, max = 2400): Promise<File> {
@@ -36,6 +36,7 @@ export function ImageInput({
   const [preview, setPreview] = useState(current ?? undefined);
   const [busy, setBusy] = useState(false);
   const ref = useRef<HTMLInputElement>(null);
+  const inputId = useId();
 
   // forms reset after a successful save, so drop the old preview too
   useEffect(() => {
@@ -63,7 +64,9 @@ export function ImageInput({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-sm font-semibold text-ink">{label}</span>
+      <label htmlFor={inputId} className="text-sm font-semibold text-ink">
+        {label}
+      </label>
       <div className="flex flex-wrap items-center gap-4">
         <div className={`grid shrink-0 place-items-center overflow-hidden border border-line bg-surface-2 ${square ? "size-24" : "h-24 w-40"}`}>
           {preview ? (
@@ -76,12 +79,13 @@ export function ImageInput({
         <div className="flex min-w-0 flex-1 basis-52 flex-col gap-1">
           <input
             ref={ref}
+            id={inputId}
             type="file"
             name={name}
             accept="image/*"
             required={required && !current}
             onChange={onChange}
-            className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
           />
           <span className="text-xs text-ink-muted">
             {busy ? "Preparing photo…" : current ? "Leave empty to keep the current image." : "JPG, PNG or WebP. It's resized for you."}

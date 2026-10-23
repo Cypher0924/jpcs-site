@@ -41,7 +41,7 @@ export default async function SettingsPage() {
                     <Input name="unit" defaultValue={s.unit ?? ""} placeholder="e.g. yrs" form="stats-form" />
                   </Field>
                 </div>
-                <ItemFooter edited={lastEdited(s, editors)}>
+                <ItemFooter edited={lastEdited(s, editors)} name={s.label}>
                   <MoveButtons menu table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
                   <form action={deleteStat}>
                     <input type="hidden" name="id" value={s.id} />
@@ -72,7 +72,7 @@ export default async function SettingsPage() {
               <Field label="Unit">
                 <Input name="unit" />
               </Field>
-              <SubmitButton>Add</SubmitButton>
+              <SubmitButton variant="secondary">Add stat</SubmitButton>
             </ActionForm>
           </div>
         </Panel>

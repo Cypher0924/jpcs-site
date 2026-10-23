@@ -12,7 +12,7 @@ export function AccountMenu({ id, email, role }: { id: string; email: string; ro
         popoverTarget={id}
         aria-label={`Account menu for ${email}`}
         title={email}
-        className="grid size-10 shrink-0 place-items-center border border-line text-ink transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="grid size-10 shrink-0 place-items-center border border-line text-ink transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
       >
         <svg aria-hidden viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
           <circle cx="12" cy="8" r="4" />
@@ -29,7 +29,7 @@ export function AccountMenu({ id, email, role }: { id: string; email: string; ro
           <p className="truncate text-sm font-semibold" title={email}>
             {email}
           </p>
-          <p className="type-data mt-1 inline-block border border-line px-1.5 text-[0.6875rem] tracking-wide text-ink-muted uppercase">{role}</p>
+          <p className="type-data mt-1 inline-block border border-line px-1.5 text-xs tracking-wide text-ink-muted uppercase">{role}</p>
         </div>
         <div className="py-1">
           <Link href="/admin/account" className={menuItemClass}>

@@ -44,11 +44,11 @@ function Readout({ rounds }: { rounds: TowerRound[] }) {
   return (
     <Link
       href={next ? `/admin/events/${next.id}` : "/admin/events"}
-      className="mx-3 mb-3 block border border-line px-3 py-2 transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-accent md:collapsed:hidden"
+      className="mx-3 mb-3 block border border-line px-3 py-2 transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-accent-text md:collapsed:hidden"
     >
       <span className="block text-xs text-ink-muted">Next round</span>
       <span className="mt-0.5 flex items-baseline gap-2 text-sm whitespace-nowrap">
-        <span className="type-data text-ink-muted">R{next ? next.round : rounds.length + 1}</span>
+        {next && <span className="type-data text-ink-muted">R{next.round}</span>}
         <span className={p === "upcoming" ? "type-data text-ink" : "font-semibold text-ink"}>{status}</span>
       </span>
     </Link>
@@ -100,7 +100,7 @@ export function AdminSidebar({ role, rounds = [], account }: { role: Role | null
       className="sticky top-0 z-40 overflow-hidden border-b border-line bg-surface text-ink md:flex md:h-dvh md:flex-col md:border-r md:border-b-0"
     >
       <div className="flex items-center gap-3 px-4 py-3 md:h-16 md:py-0 md:collapsed:justify-center md:collapsed:gap-2 md:collapsed:px-2">
-        <Link href="/admin" onClick={close} className="flex min-w-0 flex-1 items-center gap-3 focus-visible:outline-2 focus-visible:outline-accent md:collapsed:flex-none">
+        <Link href="/admin" onClick={close} className="flex min-w-0 flex-1 items-center gap-3 focus-visible:outline-2 focus-visible:outline-accent-text md:collapsed:flex-none">
           <LogoMark size={32} />
           <span className="min-w-0 leading-tight md:collapsed:hidden">
             <span className="block font-wide text-xs whitespace-nowrap">JPCS-TSU</span>
@@ -124,7 +124,7 @@ export function AdminSidebar({ role, rounds = [], account }: { role: Role | null
         </span>
         <button
           type="button"
-          className="grid size-10 place-items-center border border-line focus-visible:outline-2 focus-visible:outline-accent md:hidden"
+          className="grid size-10 place-items-center border border-line focus-visible:outline-2 focus-visible:outline-accent-text md:hidden"
           aria-expanded={open}
           aria-controls="admin-menu"
           onClick={() => setOpen((v) => !v)}

@@ -69,11 +69,11 @@ export function Panel({ title, meta, children }: { title?: string; meta?: ReactN
 }
 
 /** the row under an item: who edited it last, and its secondary actions (move, delete) in a "⋯" menu */
-export function ItemFooter({ edited, children }: { edited: string; children?: ReactNode }) {
+export function ItemFooter({ edited, name, children }: { edited: string; name?: string; children?: ReactNode }) {
   return (
     <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
       <span className="text-xs text-ink-muted">{edited}</span>
-      {children && <ItemMenu>{children}</ItemMenu>}
+      {children && <ItemMenu label={name ? `More actions for ${name}` : undefined}>{children}</ItemMenu>}
     </div>
   );
 }

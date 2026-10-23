@@ -11,6 +11,10 @@ export function ConfirmButton({
   small,
   label,
   menu,
+  srLabel,
+  formAction,
+  name,
+  value,
 }: {
   message: string;
   children: ReactNode;
@@ -18,19 +22,27 @@ export function ConfirmButton({
   small?: boolean;
   label?: string;
   menu?: boolean;
+  srLabel?: string;
+  // for a delete button inside another form: submits here instead of to that form
+  formAction?: (form: FormData) => void | Promise<void>;
+  name?: string;
+  value?: string | number;
 }) {
   return (
     <button
       type="submit"
-      aria-label={label}
+      formAction={formAction}
+      name={name}
+      value={value}
+      aria-label={label ?? srLabel}
       onClick={(e) => {
         if (!confirm(message)) e.preventDefault();
       }}
       className={
         menu
-          ? `${menuItemClass} text-signal`
+          ? `${menuItemClass} text-signal hover:bg-signal hover:text-canvas`
           : label
-          ? "grid size-8 place-items-center border border-signal/60 text-signal transition-colors hover:bg-signal hover:text-white focus-visible:bg-signal focus-visible:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          ? "grid size-10 place-items-center border border-signal/60 text-signal transition-colors hover:bg-signal hover:text-canvas focus-visible:bg-signal focus-visible:text-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text md:size-8"
           : buttonClass(variant, small ? "sm" : "md")
       }
     >

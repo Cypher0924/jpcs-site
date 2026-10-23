@@ -11,18 +11,33 @@ const icon = (path: ReactNode, cls: string) => (
 );
 
 /** up and down controls for any list with a sort column. menu: as rows inside the "⋯" item menu */
-export function MoveButtons({ table, id, first, last, menu }: { table: string; id: number; first: boolean; last: boolean; menu?: boolean }) {
+export function MoveButtons({
+  table,
+  id,
+  first,
+  last,
+  menu,
+  name,
+}: {
+  table: string;
+  id: number;
+  first: boolean;
+  last: boolean;
+  menu?: boolean;
+  name?: string;
+}) {
+  const what = name ? `${name} ` : "";
   const btn =
-    "grid size-8 place-items-center border border-line text-ink-muted transition-colors hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-30";
+    "grid size-10 place-items-center border border-line md:size-8 text-ink-muted transition-colors hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text disabled:opacity-30";
   return (
-    <form action={moveRow} className={menu ? "flex flex-col" : "flex gap-1"} data-close-menu={menu || undefined}>
+    <form action={moveRow} className={menu ? "flex flex-col" : "flex gap-2 md:gap-1"} data-close-menu={menu || undefined}>
       <input type="hidden" name="table" value={table} />
       <input type="hidden" name="id" value={id} />
-      <button type="submit" name="dir" value="up" disabled={first} className={menu ? menuItemClass : btn} aria-label={menu ? undefined : "Move up"}>
+      <button type="submit" name="dir" value="up" disabled={first} className={menu ? menuItemClass : btn} aria-label={menu ? undefined : `Move ${what}up`}>
         {icon(up, menu ? "size-4 text-ink-muted" : "size-4")}
         {menu && "Move up"}
       </button>
-      <button type="submit" name="dir" value="down" disabled={last} className={menu ? menuItemClass : btn} aria-label={menu ? undefined : "Move down"}>
+      <button type="submit" name="dir" value="down" disabled={last} className={menu ? menuItemClass : btn} aria-label={menu ? undefined : `Move ${what}down`}>
         {icon(down, menu ? "size-4 text-ink-muted" : "size-4")}
         {menu && "Move down"}
       </button>

@@ -36,7 +36,7 @@ export default async function TeamPage() {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <span className="flex flex-wrap items-center gap-2 font-semibold break-all">
                       {m.email}
-                      <span className="type-data border border-line px-1.5 text-[0.6875rem] font-normal tracking-wide text-ink-muted uppercase">{m.role}</span>
+                      <span className="type-data border border-line px-1.5 text-xs font-normal tracking-wide text-ink-muted uppercase">{m.role}</span>
                       {self && <span className="text-xs font-normal text-ink-muted">(you)</span>}
                     </span>
                     <span className="text-xs text-ink-muted">
@@ -50,18 +50,20 @@ export default async function TeamPage() {
                         <option value="editor">Editor</option>
                         <option value="admin">Admin</option>
                       </select>
-                      {!self && <SubmitButton variant="secondary">Save role</SubmitButton>}
+                      {!self && <SubmitButton variant="secondary" srLabel={`Save role for ${m.email}`}>Save role</SubmitButton>}
                     </ActionForm>
                     <ActionForm action={resetLink} className="flex flex-col gap-2">
                       <input type="hidden" name="email" value={m.email} />
-                      <SubmitButton variant="secondary" pendingText="Making link…">
+                      <SubmitButton variant="secondary" pendingText="Making link…" srLabel={`${seen ? "Password reset link" : "New invite link"} for ${m.email}`}>
                         {seen ? "Password reset link" : "New invite link"}
                       </SubmitButton>
                     </ActionForm>
                     {!self && (
                       <ActionForm action={removeMember} className="flex flex-col gap-2">
                         <input type="hidden" name="id" value={m.id} />
-                        <ConfirmButton message={`Remove ${m.email}? They won't be able to sign in anymore.`}>Remove</ConfirmButton>
+                        <ConfirmButton message={`Remove ${m.email}? They won't be able to sign in anymore.`} srLabel={`Remove ${m.email}`}>
+                          Remove
+                        </ConfirmButton>
                       </ActionForm>
                     )}
                   </div>

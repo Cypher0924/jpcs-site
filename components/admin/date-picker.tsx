@@ -60,6 +60,16 @@ export function DatePicker({
     return () => form?.removeEventListener("reset", reset);
   }, [defaultValue, defaultTime]);
 
+  const hidden = useRef<HTMLInputElement>(null);
+  const mounted = useRef(false);
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+    hidden.current?.dispatchEvent(new Event("input", { bubbles: true }));
+  }, [value]);
+
   // close on outside click
   useEffect(() => {
     if (!open) return;
@@ -84,10 +94,15 @@ export function DatePicker({
     const next = new Date(y, m - 1 + by, Math.min(d, last));
     setFocus(iso(next.getFullYear(), next.getMonth(), next.getDate()));
   }
+  // closing from inside hands focus back to the field, so keyboard users don't land on <body>
+  function close() {
+    setOpen(false);
+    trigger.current?.focus();
+  }
   function pick(day: string) {
     setDate(day);
     setFocus(day);
-    if (!withTime) setOpen(false);
+    if (!withTime) close();
   }
   function onKey(e: KeyboardEvent) {
     const keys: Record<string, () => void> = {
@@ -119,7 +134,7 @@ export function DatePicker({
   const setClock = (h: number, m: number, isPm: boolean) => setTime(`${pad((h % 12) + (isPm ? 12 : 0))}:${pad(m)}`);
 
   const arrow =
-    "grid size-8 place-items-center border border-line text-ink-muted hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-accent";
+    "grid size-10 place-items-center border border-line text-ink-muted md:size-8 hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-accent-text";
 
   const shown = date
     ? `${MONTHS[parts(date)[1] - 1].slice(0, 3)} ${parts(date)[2]}, ${parts(date)[0]}${withTime ? `, ${hour12}:${pad(min)} ${pm ? "PM" : "AM"}` : ""}`
@@ -130,7 +145,7 @@ export function DatePicker({
       <span id={`${id}-label`} className="text-sm font-semibold text-ink">
         {label}
       </span>
-      <input type="hidden" name={name} value={value} />
+      <input ref={hidden} type="hidden" name={name} value={value} />
       <button
         ref={trigger}
         type="button"
@@ -154,6 +169,8 @@ export function DatePicker({
           role="dialog"
           aria-label={`Choose ${label.toLowerCase()}`}
           onKeyDown={onKey}
+          // tabbing out closes it. clicks inside (no related target) don't
+          onBlur={(e) => e.relatedTarget && !root.current?.contains(e.relatedTarget) && setOpen(false)}
           className="absolute top-full left-0 z-30 mt-1 w-72 border border-line-strong bg-surface p-3 shadow-[0_12px_32px_rgb(0_0_0/0.25)]"
         >
           <div className="mb-2 flex items-center justify-between">
@@ -187,7 +204,7 @@ export function DatePicker({
                   aria-pressed={day === date}
                   aria-label={`${MONTHS[fm - 1]} ${parts(day)[2]}, ${fy}`}
                   onClick={() => pick(day)}
-                  className={`type-data grid h-8 place-items-center text-sm outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                  className={`type-data grid h-10 place-items-center text-sm md:h-8 outline-none focus-visible:ring-2 focus-visible:ring-accent-text ${
                     day === date ? "bg-accent font-semibold text-accent-ink" : day === today ? "border border-accent text-ink" : "hover:bg-surface-2"
                   }`}
                 >
@@ -228,7 +245,7 @@ export function DatePicker({
               type="button"
               onClick={() => {
                 setDate("");
-                setOpen(false);
+                close();
               }}
               className={buttonClass("secondary", "sm")}
             >
@@ -239,7 +256,7 @@ export function DatePicker({
                 Today
               </button>
               {withTime && (
-                <button type="button" onClick={() => setOpen(false)} className={buttonClass("primary", "sm")}>
+                <button type="button" onClick={close} className={buttonClass("primary", "sm")}>
                   Done
                 </button>
               )}

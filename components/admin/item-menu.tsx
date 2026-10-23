@@ -52,7 +52,7 @@ export function ItemMenu({ label = "More actions", children }: { label?: string;
         popoverTarget={id}
         aria-label={label}
         title={label}
-        className="grid size-8 place-items-center border border-line text-ink-muted transition-colors hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="grid size-10 place-items-center border border-line md:size-8 text-ink-muted transition-colors hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text"
       >
         <svg aria-hidden viewBox="0 0 16 16" className="size-4" fill="currentColor">
           <circle cx="3.5" cy="8" r="1.25" />
