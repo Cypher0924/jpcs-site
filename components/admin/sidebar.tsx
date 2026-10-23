@@ -7,6 +7,7 @@ import type { Role } from "@/lib/auth";
 import { ThemeToggle } from "../theme-toggle";
 import { LogoMark } from "../ui";
 import { phase, pickNext, type Timing } from "@/lib/rounds";
+import { CollapseButton } from "./collapse-button";
 import { sectionFor, sections, settingsSection, type Section } from "./sections";
 
 export type TowerRound = Timing & { id: number; round: number };
@@ -88,7 +89,7 @@ export function AdminSidebar({ role, rounds = [], account }: { role: Role | null
       data-theme="dark"
       className="sticky top-0 z-40 overflow-hidden border-b border-line bg-surface text-ink md:flex md:h-dvh md:flex-col md:border-r md:border-b-0"
     >
-      <div className="flex items-center gap-3 px-4 py-3 md:h-16 md:py-0 md:collapsed:justify-center md:collapsed:px-0">
+      <div className="flex items-center gap-3 px-4 py-3 md:h-16 md:py-0 md:collapsed:justify-center md:collapsed:gap-2 md:collapsed:px-2">
         <Link href="/admin" onClick={close} className="flex min-w-0 flex-1 items-center gap-3 focus-visible:outline-2 focus-visible:outline-accent md:collapsed:flex-none">
           <LogoMark size={32} />
           <span className="min-w-0 leading-tight md:collapsed:hidden">
@@ -104,6 +105,8 @@ export function AdminSidebar({ role, rounds = [], account }: { role: Role | null
             <span className="hidden text-xs text-ink-muted md:block">Race control</span>
           </span>
         </Link>
+        {/* desktop only: phones open the tower with the menu button instead */}
+        <CollapseButton className="hidden md:grid" />
         {/* phones: theme and account live here, desktop has them in the top bar */}
         <span className="contents md:hidden">
           <ThemeToggle />

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AccountMenu } from "@/components/admin/account-menu";
 import { CloseMenusOnNavigate } from "@/components/admin/close-menus";
-import { CollapseButton } from "@/components/admin/collapse-button";
 import { AdminSidebar } from "@/components/admin/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getStaff } from "@/lib/auth";
@@ -22,8 +21,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
       </Suspense>
       <div className="min-w-0">
         {/* desktop top bar. phones get the same controls in the tower's own bar */}
-        <header className="sticky top-0 z-30 hidden h-16 items-center justify-between border-b border-line bg-canvas px-6 md:flex">
-          <CollapseButton />
+        <header className="sticky top-0 z-30 hidden h-16 items-center justify-end border-b border-line bg-canvas px-6 md:flex">
           <div className="flex items-center gap-3">
             <ThemeToggle />
             <Suspense fallback={<span className="size-10" />}>

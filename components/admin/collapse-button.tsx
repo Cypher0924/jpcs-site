@@ -11,7 +11,7 @@ function subscribe(onChange: () => void) {
 const isCollapsed = () => document.documentElement.getAttribute("data-tower") === "collapsed";
 
 /** folds the timing tower down to positions and codes, and remembers it */
-export function CollapseButton() {
+export function CollapseButton({ className = "" }: { className?: string }) {
   const collapsed = useSyncExternalStore(subscribe, isCollapsed, () => false);
 
   function toggle() {
@@ -30,7 +30,7 @@ export function CollapseButton() {
       aria-pressed={collapsed}
       aria-label={collapsed ? "Expand the menu" : "Collapse the menu"}
       title={collapsed ? "Expand the menu" : "Collapse the menu"}
-      className="grid size-10 place-items-center border border-line text-ink-muted transition-colors hover:border-ink-muted hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className={`size-8 shrink-0 place-items-center text-ink-muted transition-colors hover:text-ink focus-visible:outline-2 focus-visible:outline-accent ${className}`}
     >
       <svg aria-hidden viewBox="0 0 20 20" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.75">
         <rect x="2.5" y="3.5" width="15" height="13" />
