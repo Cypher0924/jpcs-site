@@ -7,7 +7,7 @@ import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
-import { deletePhoto, savePhoto } from "./actions";
+import { deletePhoto, replacePhoto, savePhoto, savePhotos } from "./actions";
 
 export const metadata = { title: "Paddock" };
 export const instant = false;
@@ -38,27 +38,30 @@ export default async function PaddockPage() {
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <ActionForm action={savePhoto} className="grid gap-3">
-                  <input type="hidden" name="id" value={g.id} />
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <Field label="Caption">
-                      <Input name="caption" defaultValue={g.caption} required />
-                    </Field>
-                    <Field label="Photo credit">
-                      <Input name="credit" defaultValue={g.credit} required />
-                    </Field>
-                  </div>
-                  <details>
-                    <summary className="cursor-pointer text-sm font-semibold">Replace photo</summary>
-                    <div className="mt-3">
-                      <ImageInput name="photo" label="New photo" current={g.src} />
+                {/* captions join the one "Save captions" form under the list */}
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <input type="hidden" name="id" value={g.id} form="paddock-form" />
+                  <Field label="Caption">
+                    <Input name="caption" defaultValue={g.caption} required form="paddock-form" />
+                  </Field>
+                  <Field label="Photo credit">
+                    <Input name="credit" defaultValue={g.credit} required form="paddock-form" />
+                  </Field>
+                </div>
+                {/* a new photo uploads on its own: one image per request keeps under the upload limit */}
+                <details className="mt-3">
+                  <summary className="cursor-pointer text-sm font-semibold">Replace photo</summary>
+                  <ActionForm action={replacePhoto} className="mt-3 flex flex-col gap-3">
+                    <input type="hidden" name="id" value={g.id} />
+                    <ImageInput name="photo" label="New photo" current={g.src} required />
+                    <div>
+                      <SubmitButton variant="secondary" pendingText="Uploading…">
+                        Upload new photo
+                      </SubmitButton>
                     </div>
-                  </details>
-                  <div>
-                    <SubmitButton>Save</SubmitButton>
-                  </div>
-                </ActionForm>
-                <ItemFooter edited={lastEdited(g, editors)}>
+                  </ActionForm>
+                </details>
+                <ItemFooter edited={lastEdited(g, editors)} name={g.caption}>
                   <MoveButtons menu table="gallery_items" id={g.id} first={i === 0} last={i === list.length - 1} />
                   <form action={deletePhoto}>
                     <input type="hidden" name="id" value={g.id} />
@@ -70,6 +73,15 @@ export default async function PaddockPage() {
               </div>
             </li>
           ))}
+          {list.length > 0 && (
+            <li>
+              <ActionForm id="paddock-form" action={savePhotos}>
+                <div>
+                  <SubmitButton>Save captions</SubmitButton>
+                </div>
+              </ActionForm>
+            </li>
+          )}
         </ul>
 
         <Panel title="Add a photo">
