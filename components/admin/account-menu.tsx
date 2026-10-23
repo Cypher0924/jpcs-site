@@ -12,9 +12,12 @@ export function AccountMenu({ id, email, role }: { id: string; email: string; ro
         popoverTarget={id}
         aria-label={`Account menu for ${email}`}
         title={email}
-        className="type-data grid size-10 shrink-0 place-items-center border border-line bg-surface-2 text-sm text-ink uppercase transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="grid size-10 shrink-0 place-items-center border border-line text-ink transition-colors hover:border-ink-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
-        {email.slice(0, 2)}
+        <svg aria-hidden viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21a8 8 0 0 1 16 0" />
+        </svg>
       </button>
       {/* opens under the top-right corner, where both the desktop bar and the phone bar keep this button */}
       <div
