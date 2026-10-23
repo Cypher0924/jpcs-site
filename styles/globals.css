@@ -3,6 +3,8 @@
 /* tokens: brand palette (fixed), theme roles (per data-theme), utilities */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/* admin: the timing tower folded down to positions and codes */
+@custom-variant collapsed (&:where([data-tower="collapsed"] *));
 
 /* brand palette */
 @theme {

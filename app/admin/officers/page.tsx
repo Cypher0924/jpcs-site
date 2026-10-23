@@ -128,11 +128,11 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
                 </div>
               </ActionForm>
               <ItemFooter edited={lastEdited(g, editors)}>
-                <MoveButtons table="officer_groups" id={g.id} first={i === 0} last={i === groups.length - 1} />
+                <MoveButtons menu table="officer_groups" id={g.id} first={i === 0} last={i === groups.length - 1} />
                 {members.length === 0 && (
                   <ActionForm action={deleteGroup} className="flex flex-col gap-1">
                     <input type="hidden" name="id" value={g.id} />
-                    <ConfirmButton message={`Delete the "${g.title}" group?`} small>
+                    <ConfirmButton message={`Delete the "${g.title}" group?`} menu>
                       Delete group
                     </ConfirmButton>
                   </ActionForm>
@@ -146,9 +146,9 @@ export default async function OfficersPage({ searchParams }: PageProps<"/admin/o
                 {members.length === 0 && <li className="py-3 text-sm text-ink-muted">No officers in this group.</li>}
               </ul>
 
-              <details className="mt-3 border border-line bg-canvas">
+              <details className="mt-3 bg-surface-2">
                 <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Add officer to {g.title}</summary>
-                <div className="border-t border-line p-3">
+                <div className="px-3 pb-3">
                   <OfficerForm groupId={g.id} />
                 </div>
               </details>
@@ -222,13 +222,13 @@ function OfficerRow({ o, groupId, first, last, editors }: { o: Officer; groupId:
       </div>
       <details className="mt-2">
         <summary className="cursor-pointer py-1 text-sm font-semibold">Edit</summary>
-        <div className="mt-3 border border-line bg-canvas p-3">
+        <div className="mt-3 bg-surface-2 p-3">
           <OfficerForm groupId={groupId} o={o} />
           <ItemFooter edited={lastEdited(o, editors)}>
             <ActionForm action={deleteOfficer} className="flex flex-col gap-1">
               <input type="hidden" name="id" value={o.id} />
-              <ConfirmButton message={`Delete ${o.name}?`} small>
-                Delete
+              <ConfirmButton message={`Delete ${o.name}?`} menu>
+                Delete officer
               </ConfirmButton>
             </ActionForm>
           </ItemFooter>

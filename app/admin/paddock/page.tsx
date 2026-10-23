@@ -59,11 +59,11 @@ export default async function PaddockPage() {
                   </div>
                 </ActionForm>
                 <ItemFooter edited={lastEdited(g, editors)}>
-                  <MoveButtons table="gallery_items" id={g.id} first={i === 0} last={i === list.length - 1} />
+                  <MoveButtons menu table="gallery_items" id={g.id} first={i === 0} last={i === list.length - 1} />
                   <form action={deletePhoto}>
                     <input type="hidden" name="id" value={g.id} />
-                    <ConfirmButton message={`Remove "${g.caption}" from the Paddock?`} small>
-                      Remove
+                    <ConfirmButton message={`Remove "${g.caption}" from the Paddock?`} menu>
+                      Remove from Paddock
                     </ConfirmButton>
                   </form>
                 </ItemFooter>

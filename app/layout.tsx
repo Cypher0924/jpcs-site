@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 // runs before first paint. saved theme wins, else OS setting. also sets data-splash (skipped on repeat visits and reduced motion)
-const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}try{document.documentElement.setAttribute("data-splash",sessionStorage.getItem("splash")||matchMedia("(prefers-reduced-motion: reduce)").matches?"skip":"play")}catch(e){}})()`;
+const themeScript = `(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}try{if(localStorage.getItem("tower")==="collapsed")document.documentElement.setAttribute("data-tower","collapsed")}catch(e){}try{document.documentElement.setAttribute("data-splash",sessionStorage.getItem("splash")||matchMedia("(prefers-reduced-motion: reduce)").matches?"skip":"play")}catch(e){}})()`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (

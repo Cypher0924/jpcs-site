@@ -27,7 +27,7 @@ export default async function SettingsPage() {
           <p className="mb-4 text-sm text-ink-muted">Leave a value empty to show 000 until the real number is known.</p>
           <ul className="flex flex-col gap-3">
             {(stats ?? []).map((s, i, all) => (
-              <li key={s.id} className="border border-line bg-canvas p-3">
+              <li key={s.id} className="bg-surface-2 p-3">
                 <ActionForm action={saveStat} className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem_auto] sm:items-end">
                   <input type="hidden" name="id" value={s.id} />
                   <Field label="Label">
@@ -42,18 +42,18 @@ export default async function SettingsPage() {
                   <SubmitButton>Save</SubmitButton>
                 </ActionForm>
                 <ItemFooter edited={lastEdited(s, editors)}>
-                  <MoveButtons table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
+                  <MoveButtons menu table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
                   <form action={deleteStat}>
                     <input type="hidden" name="id" value={s.id} />
-                    <ConfirmButton message={`Delete the "${s.label}" stat?`} small>
-                      Delete
+                    <ConfirmButton message={`Delete the "${s.label}" stat?`} menu>
+                      Delete stat
                     </ConfirmButton>
                   </form>
                 </ItemFooter>
               </li>
             ))}
           </ul>
-          <div className="mt-4 border-t border-line pt-4">
+          <div className="mt-6">
             <h3 className="mb-3 text-sm font-semibold">Add a stat</h3>
             <ActionForm action={saveStat} className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem_auto] sm:items-end">
               <Field label="Label">

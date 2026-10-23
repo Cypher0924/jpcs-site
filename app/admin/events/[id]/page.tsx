@@ -63,7 +63,7 @@ export default async function EditEventPage({ params }: PageProps<"/admin/events
           <PhotoUploader eventId={event.id} />
           <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {(photos ?? []).map((p, i, all) => (
-              <li key={p.id} className="flex flex-col gap-2 border border-line bg-canvas p-2">
+              <li key={p.id} className="flex flex-col gap-2 bg-surface-2 p-2">
                 {/* eslint-disable-next-line @next/next/no-img-element -- small admin thumbnails */}
                 <img src={p.src} alt="" loading="lazy" className={`w-full bg-surface-2 object-cover ${event.square ? "aspect-square" : "aspect-video"}`} />
                 <div className="flex items-center justify-between gap-2">

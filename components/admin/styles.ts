@@ -31,5 +31,9 @@ export const tableClass = {
   td: "h-11 px-3",
 };
 
+/** a row in a dropdown menu (account menu, the "⋯" item menu) */
+export const menuItemClass =
+  "flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-ink transition-colors hover:bg-surface-2 focus-visible:bg-surface-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-40";
+
 /** text link. orange stays for the active row and main actions, so links use an underline */
 export const linkClass = `font-semibold text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:decoration-accent ${focus}`;

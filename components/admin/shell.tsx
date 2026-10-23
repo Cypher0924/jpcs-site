@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { LogoMark } from "../ui";
+import { ItemMenu } from "./item-menu";
 import { sectionByCode, type Code } from "./sections";
 
 /** the active tower row, repeated as a slanted chip: position and code */
@@ -55,7 +56,7 @@ export function Panel({ title, meta, children }: { title?: string; meta?: ReactN
   return (
     <section className="border border-line bg-surface">
       {title && (
-        <header className="flex min-h-11 items-center justify-between gap-3 border-b border-line bg-surface-2 px-4 py-2">
+        <header className="flex min-h-11 items-center justify-between gap-3 bg-surface-2 px-4 py-2">
           <h2 className="text-sm font-semibold">{title}</h2>
           {meta != null && (
             <span className={`text-xs text-ink-muted ${typeof meta === "string" || typeof meta === "number" ? "type-data" : ""}`}>{meta}</span>
@@ -67,12 +68,12 @@ export function Panel({ title, meta, children }: { title?: string; meta?: ReactN
   );
 }
 
-/** the row under an item: who edited it last on the left, its controls on the right */
+/** the row under an item: who edited it last, and its secondary actions (move, delete) in a "⋯" menu */
 export function ItemFooter({ edited, children }: { edited: string; children?: ReactNode }) {
   return (
-    <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-3">
+    <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
       <span className="text-xs text-ink-muted">{edited}</span>
-      {children && <div className="flex flex-wrap items-center gap-3">{children}</div>}
+      {children && <ItemMenu>{children}</ItemMenu>}
     </div>
   );
 }

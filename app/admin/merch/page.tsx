@@ -78,20 +78,20 @@ export default async function MerchPage() {
                 </div>
               </ActionForm>
               <ItemFooter edited={lastEdited(g, editors)}>
-                <MoveButtons table="merch_groups" id={g.id} first={gi === 0} last={gi === list.length - 1} />
+                <MoveButtons menu table="merch_groups" id={g.id} first={gi === 0} last={gi === list.length - 1} />
                 <form action={deleteGroup}>
                   <input type="hidden" name="id" value={g.id} />
-                  <ConfirmButton message={`Delete the "${g.title}" group? Its ${mine.length} item(s) are deleted too.`} small>
+                  <ConfirmButton message={`Delete the "${g.title}" group? Its ${mine.length} item(s) are deleted too.`} menu>
                     Delete group
                   </ConfirmButton>
                 </form>
               </ItemFooter>
 
-              <div className="mt-5 border-t border-line pt-4">
+              <div className="mt-6">
                 <h3 className="mb-3 text-sm font-semibold">Items</h3>
                 <ul className="flex flex-col gap-2">
                   {mine.map((it, ii) => (
-                    <li key={it.id} className="border border-line bg-canvas">
+                    <li key={it.id} className="bg-surface-2">
                       <details>
                         <summary className="flex cursor-pointer items-center gap-3 p-2">
                           {/* eslint-disable-next-line @next/next/no-img-element -- admin thumbnail, already optimised on upload */}
@@ -104,7 +104,7 @@ export default async function MerchPage() {
                           </span>
                           <span className="text-xs font-semibold text-ink-muted">Edit</span>
                         </summary>
-                        <div className="border-t border-line p-3">
+                        <div className="px-3 pb-3">
                           <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
                             <input type="hidden" name="id" value={it.id} />
                             <input type="hidden" name="group_id" value={g.id} />
@@ -114,11 +114,11 @@ export default async function MerchPage() {
                             </div>
                           </ActionForm>
                           <ItemFooter edited={lastEdited(it, editors)}>
-                            <MoveButtons table="merch_items" id={it.id} first={ii === 0} last={ii === mine.length - 1} />
+                            <MoveButtons menu table="merch_items" id={it.id} first={ii === 0} last={ii === mine.length - 1} />
                             <form action={deleteItem}>
                               <input type="hidden" name="id" value={it.id} />
-                              <ConfirmButton message={`Delete "${it.name}"?`} small>
-                                Delete
+                              <ConfirmButton message={`Delete "${it.name}"?`} menu>
+                                Delete item
                               </ConfirmButton>
                             </form>
                           </ItemFooter>
@@ -127,9 +127,9 @@ export default async function MerchPage() {
                     </li>
                   ))}
                 </ul>
-                <details className="mt-3 border border-line">
+                <details className="mt-3 bg-surface-2">
                   <summary className="cursor-pointer p-3 text-sm font-semibold">Add item</summary>
-                  <div className="border-t border-line p-3">
+                  <div className="px-3 pb-3">
                     <ActionForm action={saveItem} className="grid gap-3 md:grid-cols-2">
                       <input type="hidden" name="group_id" value={g.id} />
                       <ItemFields />

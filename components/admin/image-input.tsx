@@ -65,7 +65,7 @@ export function ImageInput({
     <div className="flex flex-col gap-1.5">
       <span className="text-sm font-semibold text-ink">{label}</span>
       <div className="flex flex-wrap items-center gap-4">
-        <div className={`grid shrink-0 place-items-center overflow-hidden border border-line bg-surface-2 bg-[linear-gradient(45deg,transparent_48%,var(--line)_48%,var(--line)_52%,transparent_52%)] ${square ? "size-24" : "h-24 w-40"}`}>
+        <div className={`grid shrink-0 place-items-center overflow-hidden border border-line bg-surface-2 ${square ? "size-24" : "h-24 w-40"}`}>
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element -- local blob previews, next/image can't load those
             <img src={preview} alt="" className="size-full object-cover" />

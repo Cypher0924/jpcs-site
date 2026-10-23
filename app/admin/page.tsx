@@ -2,7 +2,9 @@ import Link from "next/link";
 import { sections, type Code } from "@/components/admin/sections";
 import { PageHeader, Panel } from "@/components/admin/shell";
 import { StatusChip } from "@/components/admin/status";
-import { linkClass } from "@/components/admin/styles";
+import { buttonClass, linkClass } from "@/components/admin/styles";
+import { Countdown } from "@/components/countdown";
+import { InProgress } from "@/components/ui";
 import { getEditors, lastEdited, requestNow } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
@@ -27,12 +29,22 @@ export default async function DashboardPage() {
     // numbered like the site: by date, cancelled rounds left out
     db
       .from("events")
-      .select("title, starts_at, ends_at, status")
+      .select("id, slug, title, venue, cover, starts_at, ends_at, status")
       .neq("status", "cancelled")
       .order("starts_at", { nullsFirst: false })
       .order("id")
       .then((r) =>
-        (r.data ?? []).map((e, i) => ({ round: i + 1, title: e.title as string, startsAt: e.starts_at, endsAt: e.ends_at, status: e.status as Status })),
+        (r.data ?? []).map((e, i) => ({
+          round: i + 1,
+          id: e.id as number,
+          slug: e.slug as string,
+          title: e.title as string,
+          venue: e.venue as string,
+          cover: e.cover as string | null,
+          startsAt: e.starts_at as string | null,
+          endsAt: e.ends_at as string | null,
+          status: e.status as Status,
+        })),
       ),
     // officers in the current school year only
     db
@@ -57,17 +69,17 @@ export default async function DashboardPage() {
   const [next] = pickNext(rounds, now);
   const nextPhase = next && phase(next, now);
   const nextChip: { status: "live" | "pending"; text: string } = !next
-    ? { status: "pending", text: "Next round to be announced" }
+    ? { status: "pending", text: "To be announced" }
     : nextPhase === "live"
-      ? { status: "live", text: `R${next.round} in progress` }
+      ? { status: "live", text: "In progress" }
       : nextPhase === "upcoming"
-        ? { status: "live", text: `Next: R${next.round} · ${dateRange(next.startsAt, next.endsAt)}` }
-        : { status: "pending", text: `Next: R${next.round} ${nextPhase === "postponed" ? "postponed" : "date TBA"}` };
+        ? { status: "live", text: "Upcoming" }
+        : { status: "pending", text: nextPhase === "postponed" ? "Postponed" : "Date TBA" };
 
   // what each tower row reports on the board: a number in timing type, then words
   type Line = { num?: string; label: string; chip?: { status: "live" | "pending"; text: string }; edited?: Edited };
   const board: Partial<Record<Code, Line>> = {
-    EVT: { num: String(events), label: events === 1 ? "round" : "rounds", chip: nextChip, edited: edited[0] },
+    EVT: { num: String(events), label: events === 1 ? "round" : "rounds", edited: edited[0] },
     OFF: { num: String(officers), label: year ? `officers in ${year}` : "officers, no current year", edited: edited[1] },
     PAD: { num: String(gallery), label: gallery === 1 ? "photo" : "photos", edited: edited[2] },
     MER: {
@@ -89,6 +101,66 @@ export default async function DashboardPage() {
         title="Dashboard"
         sub={`Signed in as ${staff.email} (${staff.role}). Changes go live on the public site as soon as you save, and each one is recorded with your name.`}
       />
+
+
+      {/* the round the homepage card is showing right now */}
+      <div className="mb-8">
+        <Panel title="Next round" meta={<StatusChip status={nextChip.status}>{nextChip.text}</StatusChip>}>
+          {next ? (
+            <div className="grid gap-5 sm:grid-cols-[14rem_minmax(0,1fr)]">
+              <div className="grid aspect-[16/9] place-items-center overflow-hidden bg-surface-2">
+                {next.cover ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- admin thumbnail, already optimised on upload
+                  <img src={next.cover} alt="" className="size-full object-contain" />
+                ) : (
+                  <span className="text-xs text-ink-muted">No pubmat yet</span>
+                )}
+              </div>
+              <div className="flex min-w-0 flex-col gap-2">
+                <p className="text-lg font-semibold">
+                  <span className="type-data mr-2 text-ink-muted">R{next.round}</span>
+                  {next.title}
+                </p>
+                <p className="type-data text-sm text-ink-muted">
+                  {nextPhase === "postponed" ? "Postponed · new date to be announced" : dateRange(next.startsAt, next.endsAt)}
+                  {next.venue && ` · ${next.venue}`}
+                </p>
+                <div className="mt-1">
+                  {nextPhase === "upcoming" ? (
+                    <Countdown to={next.startsAt!} />
+                  ) : nextPhase === "live" ? (
+                    <InProgress />
+                  ) : (
+                    <p className="text-sm text-ink-muted">
+                      {nextPhase === "postponed"
+                        ? "No countdown while it's postponed. Set the new start date and status Scheduled to bring it back."
+                        : "Set a start date to show a countdown on the homepage."}
+                    </p>
+                  )}
+                </div>
+                <div className="mt-auto flex flex-wrap items-center gap-4 pt-2">
+                  <Link href={`/admin/events/${next.id}`} className={buttonClass("secondary")}>
+                    Edit event
+                  </Link>
+                  <Link href={`/events/${next.slug}`} target="_blank" className={linkClass}>
+                    View on site
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="max-w-[60ch] text-sm text-ink-muted">
+                Nothing is scheduled, so the homepage says &ldquo;To be announced&rdquo;. Add the next round in Events with its start date
+                and it shows up here and on the homepage.
+              </p>
+              <Link href="/admin/events/new" className={buttonClass()}>
+                New event
+              </Link>
+            </div>
+          )}
+        </Panel>
+      </div>
 
       <section aria-labelledby="board-title" className="border border-line bg-surface">
         <header className="flex min-h-11 items-center justify-between gap-3 border-b border-line bg-surface-2 px-4 py-2">
