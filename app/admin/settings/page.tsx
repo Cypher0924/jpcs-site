@@ -5,7 +5,7 @@ import { ItemFooter, PageHeader, Panel } from "@/components/admin/shell";
 import { getEditors, lastEdited } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
-import { deleteStat, saveContact, saveStat } from "./actions";
+import { deleteStat, saveContact, saveStat, saveStats } from "./actions";
 
 export const metadata = { title: "Stats and contact" };
 export const instant = false;
@@ -28,19 +28,19 @@ export default async function SettingsPage() {
           <ul className="flex flex-col gap-3">
             {(stats ?? []).map((s, i, all) => (
               <li key={s.id} className="bg-surface-2 p-3">
-                <ActionForm action={saveStat} className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem_auto] sm:items-end">
-                  <input type="hidden" name="id" value={s.id} />
+                {/* fields join the "Save stats" form below, so the move and delete menu can keep its own forms */}
+                <div className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem]">
+                  <input type="hidden" name="id" value={s.id} form="stats-form" />
                   <Field label="Label">
-                    <Input name="label" defaultValue={s.label} required />
+                    <Input name="label" defaultValue={s.label} required form="stats-form" />
                   </Field>
                   <Field label="Value">
-                    <Input name="value" type="number" min={0} step={1} defaultValue={s.value ?? ""} />
+                    <Input name="value" type="number" min={0} step={1} defaultValue={s.value ?? ""} form="stats-form" />
                   </Field>
                   <Field label="Unit">
-                    <Input name="unit" defaultValue={s.unit ?? ""} placeholder="e.g. yrs" />
+                    <Input name="unit" defaultValue={s.unit ?? ""} placeholder="e.g. yrs" form="stats-form" />
                   </Field>
-                  <SubmitButton>Save</SubmitButton>
-                </ActionForm>
+                </div>
                 <ItemFooter edited={lastEdited(s, editors)}>
                   <MoveButtons menu table="stats" id={s.id} first={i === 0} last={i === all.length - 1} />
                   <form action={deleteStat}>
@@ -53,6 +53,13 @@ export default async function SettingsPage() {
               </li>
             ))}
           </ul>
+          {!!stats?.length && (
+            <ActionForm id="stats-form" action={saveStats} className="mt-4 flex flex-col gap-3">
+              <div>
+                <SubmitButton>Save stats</SubmitButton>
+              </div>
+            </ActionForm>
+          )}
           <div className="mt-6">
             <h3 className="mb-3 text-sm font-semibold">Add a stat</h3>
             <ActionForm action={saveStat} className="grid gap-3 sm:grid-cols-[1fr_7rem_6rem_auto] sm:items-end">

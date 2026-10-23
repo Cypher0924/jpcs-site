@@ -56,10 +56,13 @@ export function ActionForm({
   action,
   children,
   className = "flex flex-col gap-4",
+  id,
 }: {
   action: (state: State, form: FormData) => Promise<State>;
   children: ReactNode;
   className?: string;
+  // lets fields elsewhere on the page join this form with form={id}
+  id?: string;
 }) {
   const [state, formAction, pending] = useActionState(action, null);
   const ref = useRef<HTMLFormElement>(null);
@@ -72,6 +75,7 @@ export function ActionForm({
   return (
     <form
       ref={ref}
+      id={id}
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget, e.nativeEvent.submitter);
