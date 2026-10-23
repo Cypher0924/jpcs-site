@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type ChangeEvent } from "react";
+import { useId, useState, type ChangeEvent } from "react";
 import { downscale } from "@/components/admin/image-input";
 import { addEventPhoto } from "../actions";
 
@@ -11,6 +11,7 @@ export function PhotoUploader({ eventId }: { eventId: number }) {
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const inputId = useId();
 
   async function onChange(e: ChangeEvent<HTMLInputElement>) {
     const input = e.currentTarget;
@@ -40,13 +41,17 @@ export function PhotoUploader({ eventId }: { eventId: number }) {
 
   return (
     <div className="flex flex-col gap-1.5">
+      <label htmlFor={inputId} className="text-sm font-semibold text-ink">
+        Add photos
+      </label>
       <input
+        id={inputId}
         type="file"
         accept="image/*"
         multiple
         disabled={busy}
         onChange={onChange}
-        className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-60"
+        className="w-full min-w-0 text-sm file:mr-3 file:h-9 file:cursor-pointer file:border file:border-line-strong file:bg-surface-2 file:px-3 file:text-sm file:font-semibold file:text-ink hover:file:bg-canvas focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text disabled:opacity-60"
       />
       {status && (
         <p role="status" className="text-sm text-ink-muted">

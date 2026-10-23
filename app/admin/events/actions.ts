@@ -37,8 +37,17 @@ const create = z.object({
   slug: z
     .string()
     .trim()
-    .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "Slug can only have lowercase letters, numbers and hyphens."),
+    .refine((v) => v === "" || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(v), "The page address can only have lowercase letters, numbers and hyphens."),
 }).refine(endAfterStart, endMessage);
+
+// "Officers' Clean-up Drive" -> "officers-clean-up-drive"
+const slugify = (title: string) =>
+  title
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 60) || "event";
 const update = z.object({ ...fields, id }).refine(endAfterStart, endMessage);
 
 type Fields = Omit<z.infer<typeof update>, "id">;
@@ -61,19 +70,23 @@ export async function createEvent(_: ActionState, form: FormData): Promise<Actio
   await requireStaff();
   const p = parse(create, form);
   if ("error" in p) return p;
-  const { slug, ...rest } = p.data;
+  const { slug: typed, ...rest } = p.data;
   let newId: number;
   try {
     const file = pickImage(form, "cover");
     const cover = file ? await uploadImage(file, "event") : null;
-    const { data, error } = await (await sessionClient())
-      .from("events")
-      .insert({ ...toRow(rest, cover), slug })
-      .select("id")
-      .single();
-    if (error?.code === "23505") return { error: "That slug is already used by another event." };
-    if (error) return failed(error);
-    newId = data.id;
+    const db = await sessionClient();
+    // a typed address must be free. a generated one gets -2, -3… when the title was used before
+    const base = typed || slugify(rest.title);
+    let inserted: { id: number } | null = null;
+    for (let i = 1; i <= (typed ? 1 : 9) && !inserted; i++) {
+      const slug = i === 1 ? base : `${base}-${i}`;
+      const { data, error } = await db.from("events").insert({ ...toRow(rest, cover), slug }).select("id").single();
+      if (error && error.code !== "23505") return failed(error);
+      inserted = data;
+    }
+    if (!inserted) return { error: typed ? "That page address is already used by another event." : "Couldn't make a free page address. Type one under Page address." };
+    newId = inserted.id;
   } catch (e) {
     return failed(e);
   }
@@ -130,6 +143,20 @@ export async function addEventPhoto(form: FormData): Promise<{ error?: string }>
   } catch (e) {
     return { error: failed(e)?.error };
   }
+}
+
+/** the order picked on the event page, saved in one go. only this event's photos are accepted */
+export async function saveEventPhotoOrder(eventId: number, ids: number[]): Promise<{ error?: string; ok?: string }> {
+  await requireStaff();
+  const db = await sessionClient();
+  const { data, error } = await db.from("event_photos").select("id").eq("event_id", eventId);
+  if (error) return { error: error.message };
+  const own = new Set((data ?? []).map((r) => r.id as number));
+  if (ids.length !== own.size || !ids.every((i) => own.has(i))) return { error: "The photos changed while you were editing. Reload and try again." };
+  const { error: orderError } = await db.rpc("reorder", { tbl: "event_photos", ids });
+  if (orderError) return { error: orderError.message };
+  saved("events");
+  return { ok: "Order saved." };
 }
 
 export async function deleteEventPhoto(form: FormData) {

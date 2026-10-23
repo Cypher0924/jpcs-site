@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { PageHeader, Panel } from "@/components/admin/shell";
-import { StatusChip } from "@/components/admin/status";
+import { PhaseChip } from "@/components/admin/status";
 import { buttonClass, linkClass, tableClass } from "@/components/admin/styles";
 import { getEditors, lastEdited, requestNow } from "@/lib/admin";
 import { requireStaff } from "@/lib/auth";
-import { dateRange, phase, type Phase } from "@/lib/rounds";
+import { dateRange, phase } from "@/lib/rounds";
 import { sessionClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "Events" };
@@ -29,15 +29,7 @@ export default async function EventsPage() {
     const p = phase({ startsAt: e.starts_at, endsAt: e.ends_at, status: e.status }, now);
     return { ...e, phase: p, round: p === "cancelled" ? "—" : `R${++n}`, when: dateRange(e.starts_at, e.ends_at) };
   });
-  const chip: Record<Phase, [ "finished" | "live" | "pending" | "cancelled", string]> = {
-    finished: ["finished", "Finished"],
-    live: ["live", "In progress"],
-    upcoming: ["live", "Upcoming"],
-    tba: ["pending", "Date TBA"],
-    postponed: ["pending", "Postponed"],
-    cancelled: ["cancelled", "Cancelled"],
-  };
-  const status = (e: (typeof list)[number]) => <StatusChip status={chip[e.phase][0]}>{chip[e.phase][1]}</StatusChip>;
+  const status = (e: (typeof list)[number]) => <PhaseChip phase={e.phase} />;
   const th = tableClass.th;
   const td = tableClass.td;
 

@@ -2,7 +2,8 @@ import { DatePicker } from "@/components/admin/date-picker";
 import { Field, Input, Textarea } from "@/components/admin/form";
 import { ImageInput } from "@/components/admin/image-input";
 import { checkboxClass, selectClass } from "@/components/admin/styles";
-import { toManilaInput, type Status } from "@/lib/rounds";
+import { PhaseChip } from "@/components/admin/status";
+import { toManilaInput, type Phase, type Status } from "@/lib/rounds";
 
 export type EventRow = {
   id: number;
@@ -24,19 +25,10 @@ export type EventRow = {
 
 const check = "flex items-center gap-2 text-sm font-semibold text-ink";
 
-/** fields shared by the new and edit forms. slug is only editable on new */
-export function EventFields({ event }: { event?: EventRow }) {
+/** fields shared by the new and edit forms. shows: how the site sees the round right now (edit only) */
+export function EventFields({ event, shows }: { event?: EventRow; shows?: Phase }) {
   return (
     <>
-      {event ? (
-        <Field label="Slug" hint="Used in the page address /events/<slug>. Can't be changed.">
-          <Input value={event.slug} readOnly disabled />
-        </Field>
-      ) : (
-        <Field label="Slug" hint="Used in the page address /events/<slug>. Can't be changed later.">
-          <Input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="e.g. hackathon-2026" />
-        </Field>
-      )}
       <Field label="Title">
         <Input name="title" defaultValue={event?.title} required />
       </Field>
@@ -60,13 +52,20 @@ export function EventFields({ event }: { event?: EventRow }) {
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Status" hint="Postponed keeps it as the next round with no countdown. Cancelled hides it from the site.">
-          <select name="status" defaultValue={event?.status ?? "scheduled"} className={`${selectClass} w-full`}>
-            <option value="scheduled">Scheduled</option>
-            <option value="postponed">Postponed, new date to be announced</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-        </Field>
+        <div className="flex flex-col gap-1.5">
+          <Field label="Status" hint="Finished and In progress follow the dates by themselves. Postponed keeps it as the next round with no countdown. Cancelled hides it.">
+            <select name="status" defaultValue={event?.status ?? "scheduled"} className={`${selectClass} w-full`}>
+              <option value="scheduled">On schedule</option>
+              <option value="postponed">Postponed, new date to be announced</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </Field>
+          {shows && (
+            <p className="flex flex-wrap items-center gap-2 text-xs text-ink-muted">
+              Shows on the site as <PhaseChip phase={shows} />
+            </p>
+          )}
+        </div>
         <Field label="Venue" hint="Short line under the title.">
           <Input name="venue" defaultValue={event?.venue} />
         </Field>
@@ -92,6 +91,23 @@ export function EventFields({ event }: { event?: EventRow }) {
           <Input name="label" defaultValue={event?.link_label ?? ""} />
         </Field>
       </div>
+      {event ? (
+        <p className="text-xs text-ink-muted">
+          Page address <span className="type-data text-ink">/events/{event.slug}</span>, set when the event was created.
+        </p>
+      ) : (
+        <details className="bg-surface-2">
+          <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Page address (optional)</summary>
+          <div className="px-3 pb-3">
+            <Field label="Address" hint="Made from the title if you leave it empty. It can't be changed after the event is created.">
+              <span className="flex items-center gap-2">
+                <span className="type-data shrink-0 text-sm text-ink-muted">/events/</span>
+                <Input name="slug" pattern="[a-z0-9]+(-[a-z0-9]+)*" placeholder="made from the title" />
+              </span>
+            </Field>
+          </div>
+        </details>
+      )}
     </>
   );
 }

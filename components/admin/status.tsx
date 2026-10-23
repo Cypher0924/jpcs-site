@@ -1,4 +1,5 @@
 // status chips in timing-screen colours: green live, amber pending, chequered finished
+import type { Phase } from "@/lib/rounds";
 
 type Status = "finished" | "live" | "pending" | "cancelled";
 
@@ -23,4 +24,18 @@ export function StatusChip({ status, children }: { status: Status; children: str
       {children}
     </span>
   );
+}
+
+const phases: Record<Phase, [Status, string]> = {
+  finished: ["finished", "Finished"],
+  live: ["live", "In progress"],
+  upcoming: ["live", "Upcoming"],
+  tba: ["pending", "Date TBA"],
+  postponed: ["pending", "Postponed"],
+  cancelled: ["cancelled", "Cancelled"],
+};
+
+/** where a round stands right now, the way the site shows it */
+export function PhaseChip({ phase }: { phase: Phase }) {
+  return <StatusChip status={phases[phase][0]}>{phases[phase][1]}</StatusChip>;
 }
