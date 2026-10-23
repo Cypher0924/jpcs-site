@@ -1,16 +1,57 @@
 "use client";
 
-import { createContext, startTransition, useActionState, useContext, useEffect, useRef, useState, type ComponentProps, type ReactNode } from "react";
+import {
+  cloneElement,
+  createContext,
+  isValidElement,
+  startTransition,
+  useActionState,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type ComponentProps,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { useFormStatus } from "react-dom";
 import { buttonClass, inputClass, type ButtonVariant } from "./styles";
 
 // dashboard controls on the site's tokens: square, dense, no decorative motion
 
+// problems from the last failed save, by input name. ActionForm fills it, fields read their own
+const FieldErrors = createContext<Record<string, string>>({});
+
+/** the save problem for one input, if the last save failed because of it */
+export const useFieldError = (name?: string) => {
+  const errors = useContext(FieldErrors);
+  return name ? errors[name] : undefined;
+};
+
+/** the problem under a field, read out by screen readers through aria-describedby */
+export function FieldError({ id, message }: { id: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <span id={id} className="flex items-start gap-1.5 text-xs font-semibold text-signal">
+      <svg aria-hidden viewBox="0 0 16 16" className="mt-px size-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M8 4v5M8 11.5v.5" />
+      </svg>
+      {message}
+    </span>
+  );
+}
+
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+  const errorId = useId();
+  // the input inside, so a failed save can point at it
+  const input = isValidElement<{ name?: string }>(children) ? (children as ReactElement<Record<string, unknown>>) : null;
+  const error = useFieldError(input?.props.name as string | undefined);
   return (
     <label className="flex flex-col gap-1.5">
       <span className="text-sm font-semibold text-ink">{label}</span>
-      {children}
+      {input && error ? cloneElement(input, { "aria-invalid": true, "aria-describedby": errorId }) : children}
+      <FieldError id={errorId} message={error} />
       {hint && <span className="text-xs text-ink-muted">{hint}</span>}
     </label>
   );
@@ -46,7 +87,7 @@ export function SubmitButton({
   );
 }
 
-type State = { error?: string; ok?: string; link?: string } | null;
+type State = { error?: string; ok?: string; link?: string; fields?: Record<string, string> } | null;
 
 const Pending = createContext<boolean | null>(null);
 
@@ -71,18 +112,27 @@ export function ActionForm({
   const ref = useRef<HTMLFormElement>(null);
   // the last edit, and which save result was on screen when it happened
   const [edit, setEdit] = useState<{ after: State } | null>(null);
+  // inputs changed since the last save: their error goes away, the others stay marked
+  const [touched, setTouched] = useState<string[]>([]);
   const latest = useRef<State>(null);
 
   // back to the saved values (or empty, on add forms) once a save works
   useEffect(() => {
     latest.current = state;
     if (state?.ok) ref.current?.reset();
+    // take the officer to the first field that needs fixing
+    const first = state?.fields && Object.keys(state.fields)[0];
+    const el = first ? ref.current?.elements.namedItem(first) : null;
+    if (el instanceof HTMLElement) el.focus();
   }, [state]);
 
   // fields can sit outside the <form> (form="id"), so listen on the page and match the field's form
   useEffect(() => {
     const onEdit = (e: Event) => {
-      if ((e.target as HTMLInputElement).form === ref.current) setEdit({ after: latest.current });
+      const target = e.target as HTMLInputElement;
+      if (target.form !== ref.current) return;
+      setEdit({ after: latest.current });
+      if (target.name) setTouched((t) => (t.includes(target.name) ? t : [...t, target.name]));
     };
     document.addEventListener("input", onEdit);
     document.addEventListener("change", onEdit);
@@ -104,11 +154,14 @@ export function ActionForm({
       onSubmit={(e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget, e.nativeEvent.submitter);
+        setTouched([]);
         startTransition(() => formAction(data));
       }}
       className={className}
     >
-      <Pending value={pending}>{children}</Pending>
+      <Pending value={pending}>
+        <FieldErrors value={Object.fromEntries(Object.entries(state?.fields ?? {}).filter(([k]) => !touched.includes(k)))}>{children}</FieldErrors>
+      </Pending>
       {showResult ? <FormMessage state={state} /> : dirty && <p className="text-xs font-semibold text-pending-text">Unsaved changes</p>}
     </form>
   );

@@ -31,7 +31,8 @@ export function lastEdited(row: { updated_at: string; updated_by: string | null 
 }
 
 // link: an invite or reset link for the admin to copy and send
-export type ActionState = { error?: string; ok?: string; link?: string } | null;
+// fields: the problem with each input, by its name, so the form can mark that field
+export type ActionState = { error?: string; ok?: string; link?: string; fields?: Record<string, string> } | null;
 
 // optional form text: "" becomes null so the column stays empty
 export const optional = z
@@ -41,9 +42,19 @@ export const optional = z
 export const required = (label: string) => z.string().trim().min(1, `${label} is required.`);
 
 /** validate a form against a zod schema. returns data, or the first problem as a sentence */
-export function parse<T extends z.ZodType>(schema: T, form: FormData): { data: z.infer<T> } | { error: string } {
+export function parse<T extends z.ZodType>(
+  schema: T,
+  form: FormData,
+): { data: z.infer<T> } | { error: string; fields: Record<string, string> } {
   const result = schema.safeParse(Object.fromEntries(form));
-  return result.success ? { data: result.data } : { error: result.error.issues[0]?.message ?? "Check the form." };
+  if (result.success) return { data: result.data };
+  // first problem per input, keyed by the input's name
+  const fields: Record<string, string> = {};
+  for (const issue of result.error.issues) {
+    const key = issue.path[0];
+    if (typeof key === "string" && !(key in fields)) fields[key] = issue.message;
+  }
+  return { error: result.error.issues[0]?.message ?? "Check the form.", fields };
 }
 
 /** after a save: refresh the public page that shows it and the admin page you're on */

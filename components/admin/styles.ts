@@ -2,7 +2,7 @@
 
 const focus = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-text";
 
-export const inputClass = `w-full border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-muted hover:border-ink-muted focus:border-accent-text focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30 disabled:opacity-60`;
+export const inputClass = `w-full border border-line bg-surface px-3 py-2 text-sm text-ink placeholder:text-ink-muted hover:border-ink-muted focus:border-accent-text focus:outline-none aria-invalid:border-signal focus-visible:ring-2 focus-visible:ring-accent/30 disabled:opacity-60`;
 
 // same control without the full width, for inline role and filter selects
 export const selectClass = inputClass.replace("w-full ", "") + " h-10 pr-8";

@@ -30,7 +30,7 @@ const fields = {
 const id = z.coerce.number().int().positive();
 const endAfterStart = (v: { starts_at: string | null; ends_at: string | null }) =>
   !v.ends_at || (!!v.starts_at && new Date(v.ends_at) >= new Date(v.starts_at));
-const endMessage = "Set a start before the end, and make the end come after it.";
+const endRule = { message: "Set a start before the end, and make the end come after it.", path: ["ends_at"] };
 
 const create = z.object({
   ...fields,
@@ -38,7 +38,7 @@ const create = z.object({
     .string()
     .trim()
     .refine((v) => v === "" || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(v), "The page address can only have lowercase letters, numbers and hyphens."),
-}).refine(endAfterStart, endMessage);
+}).refine(endAfterStart, endRule);
 
 // "Officers' Clean-up Drive" -> "officers-clean-up-drive"
 const slugify = (title: string) =>
@@ -48,7 +48,7 @@ const slugify = (title: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 60) || "event";
-const update = z.object({ ...fields, id }).refine(endAfterStart, endMessage);
+const update = z.object({ ...fields, id }).refine(endAfterStart, endRule);
 
 type Fields = Omit<z.infer<typeof update>, "id">;
 const toRow = (p: Fields, cover: string | null) => ({

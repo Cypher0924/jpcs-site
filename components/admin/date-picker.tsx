@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
+import { FieldError, useFieldError } from "./form";
 import { buttonClass, inputClass } from "./styles";
 
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -45,6 +46,7 @@ export function DatePicker({
   const grid = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const id = useId();
+  const error = useFieldError(name);
 
   const [fy, fm] = parts(focus);
   const value = date ? (withTime ? `${date}T${time}` : date) : "";
@@ -152,8 +154,10 @@ export function DatePicker({
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-labelledby={`${id}-label ${id}-value`}
+        data-invalid={error ? "" : undefined}
+        aria-describedby={error ? `${id}-error` : undefined}
         onClick={() => setOpen((o) => !o)}
-        className={`${inputClass} flex h-10 items-center justify-between text-left`}
+        className={`${inputClass} flex h-10 items-center justify-between text-left data-invalid:border-signal`}
       >
         <span id={`${id}-value`} className={date ? "text-ink" : "text-ink-muted"}>
           {shown}
@@ -162,6 +166,7 @@ export function DatePicker({
           <path d="M4 6h16v14H4zM4 10h16M9 3v4M15 3v4" />
         </svg>
       </button>
+      <FieldError id={`${id}-error`} message={error} />
       {hint && <span className="text-xs text-ink-muted">{hint}</span>}
 
       {open && (
