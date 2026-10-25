@@ -2,6 +2,7 @@ import { Hero } from "@/components/hero";
 import { Motion } from "@/components/motion";
 import { Nav } from "@/components/nav";
 import { About, Events, Faq, Footer, Gallery, Join, Merch, Officers, Stats } from "@/components/sections";
+import { Slipstream } from "@/components/slipstream";
 import { Splash } from "@/components/splash";
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
         Skip to content
       </a>
       <Splash />
+      <Slipstream />
       <Nav />
       <main id="main" tabIndex={-1} className="overflow-x-clip outline-none">
         <Hero />

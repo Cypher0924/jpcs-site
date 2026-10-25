@@ -82,7 +82,11 @@
 
   --grid-line: rgb(22 21 26 / 0.06);
   --glow: 0 0 0 transparent;
-  --hero-wash: linear-gradient(180deg, #fff3e6 0%, var(--color-paper-50) 100%);
+  /* see-through so the homepage streaks show behind the hero */
+  --hero-wash: linear-gradient(180deg, rgb(255 243 230 / 0.85) 0%, transparent 100%);
+  /* homepage slipstream streaks, as "r g b" */
+  --streak: 22 21 26;
+  --streak-hot: 180 71 26;
 }
 
 [data-theme="dark"] {
@@ -110,7 +114,9 @@
 
   --grid-line: rgb(244 241 236 / 0.05);
   --glow: 0 0 24px rgb(240 138 53 / 0.35);
-  --hero-wash: radial-gradient(120% 80% at 80% 0%, #3a1608 0%, var(--color-carbon-950) 60%);
+  --hero-wash: radial-gradient(120% 80% at 80% 0%, rgb(58 22 8 / 0.85) 0%, transparent 60%);
+  --streak: 244 241 236;
+  --streak-hot: 240 138 53;
 }
 
 /* utilities */
