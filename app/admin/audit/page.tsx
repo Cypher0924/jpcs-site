@@ -4,7 +4,7 @@ import { buttonClass, selectClass } from "@/components/admin/styles";
 import { requireAdmin } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
 import { entities, group, type AuditRow } from "./describe";
-import { Message } from "./message";
+import { eventTitles, Message } from "./message";
 
 export const metadata = { title: "Audit log" };
 export const instant = false;
@@ -22,9 +22,10 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
   let q = db.from("audit_log").select("*", { count: "exact" }).order("at", { ascending: false }).order("id", { ascending: false });
   if (entity) q = q.eq("entity", entity);
   if (actor) q = q.eq("actor_email", actor);
-  const [{ data, count }, { data: people }] = await Promise.all([
+  const [{ data, count }, { data: people }, events] = await Promise.all([
     q.range((page - 1) * PAGE, page * PAGE - 1),
     db.from("profiles").select("email").order("email"),
+    eventTitles(db),
   ]);
   const rows = (data ?? []) as AuditRow[];
   const pages = Math.max(1, Math.ceil((count ?? 0) / PAGE));
@@ -69,7 +70,7 @@ export default async function AuditPage({ searchParams }: PageProps<"/admin/audi
         ) : (
           <ul className="flex flex-col divide-y divide-line">
             {group(rows).map((rows) => (
-              <Message key={rows[0].id} rows={rows} detail />
+              <Message key={rows[0].id} rows={rows} events={events} detail />
             ))}
           </ul>
         )}

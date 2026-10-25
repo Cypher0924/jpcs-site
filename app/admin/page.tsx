@@ -10,7 +10,7 @@ import { requireStaff } from "@/lib/auth";
 import { sessionClient } from "@/lib/supabase/server";
 import { dateRange, phase, pickNext, type Status } from "@/lib/rounds";
 import { group, type AuditRow } from "./audit/describe";
-import { Message } from "./audit/message";
+import { eventTitles, Message } from "./audit/message";
 
 export const metadata = { title: { absolute: "Dashboard · Admin · JPCS-TSU" } };
 // admin pages wait for the session check on navigation, which is fine here
@@ -25,7 +25,7 @@ export default async function DashboardPage() {
   const latest = async (table: string) =>
     (await db.from(table).select("updated_at, updated_by").order("updated_at", { ascending: false }).limit(1).maybeSingle()).data as Edited;
 
-  const [rounds, officers, year, gallery, merch, merchOpen, stats, team, editors, recent, edited] = await Promise.all([
+  const [rounds, officers, year, gallery, merch, merchOpen, stats, team, editors, recent, edited, eventNames] = await Promise.all([
     // numbered like the site: by date, cancelled rounds left out
     db
       .from("events")
@@ -62,6 +62,7 @@ export default async function DashboardPage() {
     // RLS returns nothing here for editors, the audit log is admin-only
     db.from("audit_log").select("*").order("at", { ascending: false }).limit(10).then((r) => (r.data ?? []) as AuditRow[]),
     Promise.all(["events", "officers", "gallery_items", "merch_items", "stats"].map(latest)),
+    eventTitles(db),
   ]);
 
   const now = await requestNow();
@@ -239,7 +240,7 @@ export default async function DashboardPage() {
             ) : (
               <ul className="flex flex-col divide-y divide-line">
                 {group(recent).map((rows) => (
-                  <Message key={rows[0].id} rows={rows} />
+                  <Message key={rows[0].id} rows={rows} events={eventNames} />
                 ))}
               </ul>
             )}

@@ -78,6 +78,9 @@ export function changes(row: AuditRow) {
     .map((k) => `${field(k)}: ${show(row.before![k])} → ${show(row.after![k])}`);
 }
 
+/** the event an event photo belongs to. photos have no name of their own */
+export const eventOf = (row: AuditRow) => (row.entity === "event_photos" ? Number((row.after ?? row.before)?.event_id) || null : null);
+
 /** who did it. no person means the change came from the initial import or a database setup step */
 export const actor = (row: AuditRow) => row.actor_email ?? "Site setup";
 
@@ -90,7 +93,8 @@ export function group(rows: AuditRow[]) {
   for (const r of rows) {
     const last = out.at(-1)?.[0];
     const close = last && Math.abs(new Date(last.at).getTime() - new Date(r.at).getTime()) < 60_000;
-    if (last && close && last.actor_email === r.actor_email && last.entity === r.entity && last.action === r.action) out.at(-1)!.push(r);
+    if (last && close && last.actor_email === r.actor_email && last.entity === r.entity && last.action === r.action && eventOf(last) === eventOf(r))
+      out.at(-1)!.push(r);
     else out.push([r]);
   }
   return out;

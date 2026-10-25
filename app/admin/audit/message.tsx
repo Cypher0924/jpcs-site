@@ -1,4 +1,5 @@
-import { actor, changes, describe, when, type AuditRow } from "./describe";
+import type { sessionClient } from "@/lib/supabase/server";
+import { actor, changes, describe, eventOf, when, type AuditRow } from "./describe";
 
 const tone: Record<string, string> = {
   added: "border-live/40 text-live-text",
@@ -6,13 +7,18 @@ const tone: Record<string, string> = {
   deleted: "border-signal/50 text-signal",
 };
 
+/** event titles by id, so photo messages can say which event they belong to */
+export const eventTitles = async (db: Awaited<ReturnType<typeof sessionClient>>) =>
+  Object.fromEntries(((await db.from("events").select("id, title")).data ?? []).map((e) => [e.id, e.title])) as Record<number, string>;
+
 // "stat" -> "2 stats"
 const plural = (what: string, n: number) => (n === 1 ? what : `${n} ${what.endsWith("s") ? what : `${what}s`}`);
 
-/** one save, set like a race control message: time, action, what happened. rows: one or more audit rows of the same save */
-export function Message({ rows, detail }: { rows: AuditRow[]; detail?: boolean }) {
+/** one save, set like a race control message: time, action, what happened. rows: one or more audit rows of the same save. events: id to title */
+export function Message({ rows, detail, events }: { rows: AuditRow[]; detail?: boolean; events: Record<number, string> }) {
   const first = rows[0];
   const d = describe(first);
+  const event = eventOf(first);
   const names = rows.map((r) => describe(r).name).filter(Boolean);
   return (
     <li className="grid gap-x-4 gap-y-1 py-3 text-sm first:pt-0 last:pb-0 sm:grid-cols-[8.5rem_5rem_1fr]">
@@ -25,6 +31,7 @@ export function Message({ rows, detail }: { rows: AuditRow[]; detail?: boolean }
       <div className="min-w-0">
         <p>
           <span className="font-semibold">{actor(first)}</span> {d.verb} {plural(d.what.toLowerCase(), rows.length)}
+          {event && (events[event] ? ` of “${events[event]}”` : " of a deleted event")}
           {names.length > 0 && (
             <>
               {" "}
