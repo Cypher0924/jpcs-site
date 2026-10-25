@@ -71,12 +71,15 @@ const show = (v: unknown) => {
 /** for updates: the fields that changed, "field: old → new" */
 export function changes(row: AuditRow) {
   if (row.action !== "update" || !row.before || !row.after) return [];
-  const sortOnly = Object.keys(row.after).every((k) => hidden.has(k) || JSON.stringify(row.before![k]) === JSON.stringify(row.after![k]));
-  if (sortOnly && JSON.stringify(row.before.sort) !== JSON.stringify(row.after.sort)) return ["moved in the list"];
   return Object.keys(row.after)
     .filter((k) => !hidden.has(k) && JSON.stringify(row.before![k]) !== JSON.stringify(row.after![k]))
     .map((k) => `${field(k)}: ${show(row.before![k])} → ${show(row.after![k])}`);
 }
+
+/** a save that only changed the order: every row is an update with no visible change, and at least one moved */
+export const isReorder = (rows: AuditRow[]) =>
+  rows.every((r) => r.action === "update" && r.before && r.after && changes(r).length === 0) &&
+  rows.some((r) => JSON.stringify(r.before!.sort) !== JSON.stringify(r.after!.sort));
 
 /** the event an event photo belongs to. photos have no name of their own */
 export const eventOf = (row: AuditRow) => (row.entity === "event_photos" ? Number((row.after ?? row.before)?.event_id) || null : null);
