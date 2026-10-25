@@ -119,7 +119,7 @@ proxy.ts                 Redirects signed-out users away from /admin
 
 ### Migrations
 
-There is no migration runner. Add schema changes as a new numbered file in `supabase/migrations/` and run it in the SQL Editor. The current schema is up to `0007_drop_next_event.sql`.
+There is no migration runner. Add schema changes as a new numbered file in `supabase/migrations/` and run it in the SQL Editor. The current schema is up to `0008_reorder_skip_unchanged.sql`.
 
 ## Admin
 
