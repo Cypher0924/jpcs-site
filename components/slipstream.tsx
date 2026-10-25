@@ -55,7 +55,8 @@ export function Slipstream() {
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
-      const lift = Math.min(1, 0.35 + boost / 25);
+      // phones: text runs full width, so streaks stretch but never brighten over it
+      const lift = w < 768 ? 0.35 : Math.min(1, 0.35 + boost / 25);
       for (const s of streaks) {
         const len = s.len * (1 + boost / 14);
         const g = ctx.createLinearGradient(s.x, 0, s.x + len, 0);
